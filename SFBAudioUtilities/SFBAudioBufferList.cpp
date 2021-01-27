@@ -16,9 +16,11 @@ AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioFormat& format, UInt3
 	auto bufferListSize = offsetof(AudioBufferList, mBuffers) + (sizeof(AudioBuffer) * bufferCount);
 	auto allocationSize = bufferListSize + (bufferDataSize * bufferCount);
 
-	AudioBufferList *abl = static_cast<AudioBufferList *>(std::calloc(1, allocationSize));
+	AudioBufferList *abl = static_cast<AudioBufferList *>(std::malloc(allocationSize));
 	if(!abl)
 		return nullptr;
+
+	memset(abl, 0, allocationSize);
 
 	abl->mNumberBuffers = bufferCount;
 
