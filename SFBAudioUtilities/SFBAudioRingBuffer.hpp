@@ -6,7 +6,6 @@
 #pragma once
 
 #import <atomic>
-#import <memory>
 
 #import <CoreAudio/CoreAudioTypes.h>
 
