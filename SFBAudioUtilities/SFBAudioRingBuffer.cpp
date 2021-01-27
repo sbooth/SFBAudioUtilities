@@ -11,35 +11,41 @@
 namespace {
 
 	/*!
-	 * Copy non-interleaved audio from \c bufferList to \c buffers
+	 * Copies non-interleaved audio from \c bufferList to \c buffers
 	 * @param buffers The destination buffers
 	 * @param dstOffset The byte offset in \c buffers to begin writing
 	 * @param bufferList The source buffers
 	 * @param srcOffset The byte offset in \c bufferList to begin reading
-	 * @param byteCount The number of bytes per non-interleaved buffer to read and write
+	 * @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 	 */
 	inline void StoreABL(uint8_t * const * const buffers, size_t dstOffset, const AudioBufferList * const bufferList, size_t srcOffset, size_t byteCount) noexcept
 	{
-		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex)
-			memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, byteCount);
+		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
+			if(srcOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
+				continue;
+			memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
+		}
 	}
 
 	/*!
-	 * Copy non-interleaved audio from \c buffers to \c bufferList
+	 * Copies non-interleaved audio from \c buffers to \c bufferList
 	 * @param bufferList The destination buffers
 	 * @param dstOffset The byte offset in \c bufferList to begin writing
 	 * @param buffers The source buffers
 	 * @param srcOffset The byte offset in \c bufferList to begin reading
-	 * @param byteCount The number of bytes per non-interleaved buffer to read and write
+	 * @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 	 */
 	inline void FetchABL(AudioBufferList * const bufferList, size_t dstOffset, const uint8_t * const * const buffers, size_t srcOffset, size_t byteCount) noexcept
 	{
-		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex)
-			memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, byteCount);
+		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
+			if(dstOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
+				continue;
+			memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - dstOffset));
+		}
 	}
 
 	/*!
-	 * Return the smallest power of two value greater than \c x
+	 * Returns the smallest power of two greater than \c x
 	 * @param x A value in the range [2..2147483648]
 	 * @return The smallest power of two greater than \c x
 	 */
@@ -153,6 +159,8 @@ size_t SFBAudioRingBuffer::FramesAvailableToWrite() const noexcept
 	else
 		return mCapacityFrames - 1;
 }
+
+#pragma mark Reading and Writing Audio
 
 size_t SFBAudioRingBuffer::Read(AudioBufferList * const bufferList, size_t frameCount) noexcept
 {
