@@ -20,7 +20,7 @@ namespace {
 	 */
 	inline void StoreABL(uint8_t * const * const buffers, size_t dstOffset, const AudioBufferList * const bufferList, size_t srcOffset, size_t byteCount) noexcept
 	{
-		for(UInt32 bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex)
+		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex)
 			memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, byteCount);
 	}
 
@@ -34,7 +34,7 @@ namespace {
 	 */
 	inline void FetchABL(AudioBufferList * const bufferList, size_t dstOffset, const uint8_t * const * const buffers, size_t srcOffset, size_t byteCount) noexcept
 	{
-		for(UInt32 bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex)
+		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex)
 			memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, byteCount);
 	}
 
@@ -67,7 +67,7 @@ SFBAudioRingBuffer::~SFBAudioRingBuffer()
 
 #pragma mark Buffer Management
 
-bool SFBAudioRingBuffer::Allocate(const class SFBAudioFormat& format, size_t capacityFrames) noexcept
+bool SFBAudioRingBuffer::Allocate(const SFBAudioFormat& format, size_t capacityFrames) noexcept
 {
 	// Only non-interleaved formats are supported
 	if(format.IsInterleaved())
@@ -113,6 +113,8 @@ void SFBAudioRingBuffer::Deallocate() noexcept
 	if(mBuffers) {
 		std::free(mBuffers);
 		mBuffers = nullptr;
+
+		mFormat = {};
 
 		mCapacityFrames = 0;
 		mCapacityFramesMask = 0;
