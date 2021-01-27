@@ -28,9 +28,6 @@ public:
 	/*! @name Creation and Destruction */
 	//@{
 
-	/*! @brief A \c std::unique_ptr for \c SFBAudioRingBuffer objects */
-	using unique_ptr = std::unique_ptr<SFBAudioRingBuffer>;
-
 	/*!
 	 * @brief Create a new \c SFBAudioRingBuffer
 	 * @note Allocate() must be called before the object may be used.
@@ -82,7 +79,7 @@ public:
 	void Reset() noexcept;
 
 
-	/*! @brief Returns the capacity of this SFBAudioRingBuffer in frames */
+	/*! @brief Returns the capacity of this \c SFBAudioRingBuffer in frames */
 	inline size_t CapacityFrames() const noexcept
 	{
 		return mCapacityFrames;
