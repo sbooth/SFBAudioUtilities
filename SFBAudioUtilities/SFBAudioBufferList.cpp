@@ -49,6 +49,29 @@ SFBAudioBufferList::~SFBAudioBufferList()
 	std::free(mBufferList);
 }
 
+SFBAudioBufferList::SFBAudioBufferList(SFBAudioBufferList&& rhs)
+: mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity)
+{
+	rhs.mBufferList = nullptr;
+	rhs.mFrameCapacity = 0;
+	rhs.mFormat = {};
+}
+
+SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
+{
+	Deallocate();
+
+	mBufferList = rhs.mBufferList;
+	mFrameCapacity = rhs.mFrameCapacity;
+	mFormat = rhs.mFormat;
+
+	rhs.mBufferList = nullptr;
+	rhs.mFrameCapacity = 0;
+	rhs.mFormat = {};
+
+	return *this;
+}
+
 bool SFBAudioBufferList::Allocate(const SFBAudioFormat& format, UInt32 frameCapacity) noexcept
 {
 	if(mBufferList)
@@ -100,4 +123,15 @@ bool SFBAudioBufferList::SetFrameLength(UInt32 frameLength) noexcept
 		mBufferList->mBuffers[bufferIndex].mDataByteSize = frameLength * mFormat.mBytesPerFrame;
 
 	return true;
+}
+
+AudioBufferList * SFBAudioBufferList::RelinquishABL() noexcept
+{
+	auto bufferList = mBufferList;
+
+	mBufferList = nullptr;
+	mFrameCapacity = 0;
+	mFormat = {};
+
+	return bufferList;
 }

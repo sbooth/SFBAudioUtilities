@@ -44,6 +44,12 @@ public:
 
 	/*! @cond */
 
+	/*! @brief Creates a new \c SFBAudioBufferList */
+	SFBAudioBufferList(SFBAudioBufferList&& rhs);
+
+	/*! @brief Replaces the buffer */
+	SFBAudioBufferList& operator=(SFBAudioBufferList&& rhs);
+
 	/*! @internal This class is non-copyable */
 	SFBAudioBufferList(const SFBAudioBufferList& rhs) = delete;
 
@@ -119,6 +125,12 @@ public:
 	// ========================================
 	/*! @name AudioBufferList access */
 	//@{
+
+	/*!
+	 * @brief Relinquishes ownership of the object's internal \c AudioBufferList and returns it
+	 * @note The caller assumes responsiblity for deallocating the returned \c AudioBufferList using \c std::free
+	 */
+	AudioBufferList * RelinquishABL() noexcept;
 
 	/*! @brief Retrieve a pointer to this object's internal \c AudioBufferList */
 	inline AudioBufferList * const ABL() noexcept
