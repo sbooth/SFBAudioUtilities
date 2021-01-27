@@ -5,8 +5,6 @@
 
 #pragma once
 
-#import <memory>
-
 #import <AudioToolbox/AudioToolbox.h>
 
 #import "SFBAudioFormat.hpp"
