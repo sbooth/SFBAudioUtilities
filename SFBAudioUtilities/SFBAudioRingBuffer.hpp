@@ -36,8 +36,6 @@ public:
 	/*! @brief Destroy the \c SFBAudioRingBuffer and release all associated resources. */
 	~SFBAudioRingBuffer();
 
-	/*! @cond */
-
 	/*! @internal This class is non-copyable */
 	SFBAudioRingBuffer(const SFBAudioRingBuffer& rhs) = delete;
 
