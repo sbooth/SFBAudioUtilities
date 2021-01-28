@@ -42,8 +42,6 @@ public:
 	 */
 	SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity);
 
-	/*! @cond */
-
 	/*! @brief Creates a new \c SFBAudioBufferList */
 	SFBAudioBufferList(SFBAudioBufferList&& rhs);
 
@@ -55,8 +53,6 @@ public:
 
 	/*! @internal This class is non-assignable */
 	SFBAudioBufferList& operator=(const SFBAudioBufferList& rhs) = delete;
-
-	/*! @endcond */
 
 	//@}
 

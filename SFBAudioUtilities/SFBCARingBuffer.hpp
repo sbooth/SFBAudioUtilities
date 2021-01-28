@@ -34,15 +34,11 @@ public:
 	/*! @brief Destroys the \c SFBCARingBuffer and release all associated resources. */
 	~SFBCARingBuffer();
 
-	/*! @cond */
-
 	/*! @internal This class is non-copyable */
 	SFBCARingBuffer(const SFBCARingBuffer& rhs) = delete;
 
 	/*! @internal This class is non-assignable */
 	SFBCARingBuffer& operator=(const SFBCARingBuffer& rhs) = delete;
-
-	/*! @endcond */
 
 	//@}
 

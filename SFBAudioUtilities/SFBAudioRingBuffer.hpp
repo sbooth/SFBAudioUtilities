@@ -44,8 +44,6 @@ public:
 	/*! @internal This class is non-assignable */
 	SFBAudioRingBuffer& operator=(const SFBAudioRingBuffer& rhs) = delete;
 
-	/*! @endcond */
-
 	//@}
 
 
