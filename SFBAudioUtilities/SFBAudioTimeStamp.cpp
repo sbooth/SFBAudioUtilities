@@ -5,7 +5,7 @@
 
 #include "SFBAudioTimeStamp.hpp"
 
-constexpr bool operator<(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
+bool operator<(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
 {
 	if((lhs.mFlags & kAudioTimeStampSampleTimeValid) && (rhs.mFlags & kAudioTimeStampSampleTimeValid))
 		return lhs.mSampleTime < rhs.mSampleTime;
@@ -19,7 +19,7 @@ constexpr bool operator<(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) n
 	return false;
 }
 
-constexpr bool operator==(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
+bool operator==(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
 {
 	if((lhs.mFlags & kAudioTimeStampSampleTimeValid) && (rhs.mFlags & kAudioTimeStampSampleTimeValid))
 		return lhs.mSampleTime == rhs.mSampleTime;

@@ -52,12 +52,12 @@ public:
 
 	}
 
-	SFBAudioTimeStamp(Float64 sampleTime, UInt64 hostTime, Float64 inRateScalar) noexcept
+	SFBAudioTimeStamp(Float64 sampleTime, UInt64 hostTime, Float64 rateScalar) noexcept
 	: SFBAudioTimeStamp()
 	{
 		mSampleTime = sampleTime;
 		mHostTime = hostTime;
-		mRateScalar = inRateScalar;
+		mRateScalar = rateScalar;
 		mFlags = kAudioTimeStampSampleTimeValid | kAudioTimeStampHostTimeValid | kAudioTimeStampRateScalarValid;
 	}
 
@@ -94,25 +94,25 @@ public:
 
 };
 
-constexpr bool operator<(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept;
-constexpr bool operator==(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept;
+bool operator<(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept;
+bool operator==(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept;
 
-inline constexpr bool operator!=(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
+inline bool operator!=(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
 {
 	return !(lhs == rhs);
 }
 
-inline constexpr bool operator<=(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
+inline bool operator<=(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
 {
 	return (lhs < rhs) || (lhs == rhs);
 }
 
-inline constexpr bool operator>=(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
+inline bool operator>=(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
 {
 	return !(lhs < rhs);
 }
 
-inline constexpr bool operator>(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
+inline bool operator>(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
 {
 	return !((lhs < rhs) || (lhs == rhs));
 }
