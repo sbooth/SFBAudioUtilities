@@ -84,7 +84,7 @@ public:
 	/*! @brief Query whether this format represents interleaved data */
 	inline bool IsInterleaved() const noexcept
 	{
-		return !(kAudioFormatFlagIsNonInterleaved & mFormatFlags);
+		return (mFormatFlags & kAudioFormatFlagIsNonInterleaved) == 0;
 	}
 
 	/*! @brief Returns the number of interleaved channels */
@@ -114,7 +114,7 @@ public:
 	/*! @brief Query whether this format represents big-endian ordered data */
 	inline bool IsBigEndian() const noexcept
 	{
-		return kAudioFormatFlagIsBigEndian & mFormatFlags;
+		return (mFormatFlags & kAudioFormatFlagIsBigEndian) == kAudioFormatFlagIsBigEndian;
 	}
 
 	/*! @brief Query whether this format represents little-endian ordered data */
@@ -126,32 +126,32 @@ public:
 	/*! @brief Query whether this format represents native-endian ordered data */
 	inline bool IsNativeEndian() const noexcept
 	{
-		return kAudioFormatFlagsNativeEndian == (kAudioFormatFlagIsBigEndian & mFormatFlags);
+		return (mFormatFlags & kAudioFormatFlagIsBigEndian) == kAudioFormatFlagsNativeEndian;
 	}
 
 	/*! @brief Query whether this format represents floating-point data */
 	inline bool IsFloat() const noexcept
 	{
-		return kAudioFormatFlagIsFloat & mFormatFlags;
+		return (mFormatFlags & kAudioFormatFlagIsFloat) == kAudioFormatFlagIsFloat;
 	}
 
 	/*! @brief Query whether this format represents signed integer data */
 	inline bool IsSignedInteger() const noexcept
 	{
-		return kAudioFormatFlagIsSignedInteger & mFormatFlags;
+		return (mFormatFlags & kAudioFormatFlagIsSignedInteger) == kAudioFormatFlagIsSignedInteger;
 	}
 
 	/*! @brief Query whether this format represents packed data */
 	inline bool IsPacked() const noexcept
 	{
-		return kAudioFormatFlagIsPacked & mFormatFlags;
+		return (mFormatFlags & kAudioFormatFlagIsPacked) == kAudioFormatFlagIsPacked;
 	}
 
 
 	/*! @brief Query whether this format is high-aligned */
 	inline bool IsAlignedHigh() const noexcept
 	{
-		return kAudioFormatFlagIsAlignedHigh & mFormatFlags;
+		return (mFormatFlags & kAudioFormatFlagIsAlignedHigh) == kAudioFormatFlagIsAlignedHigh;
 	}
 
 	//@}
