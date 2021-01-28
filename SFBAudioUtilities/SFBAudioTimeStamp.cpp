@@ -5,30 +5,30 @@
 
 #include "SFBAudioTimeStamp.hpp"
 
-bool operator<(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
+bool SFBAudioTimeStamp::operator==(const SFBAudioTimeStamp& rhs) const noexcept
 {
-	if((lhs.mFlags & kAudioTimeStampSampleTimeValid) && (rhs.mFlags & kAudioTimeStampSampleTimeValid))
-		return lhs.mSampleTime < rhs.mSampleTime;
+	if(SampleTimeIsValid() && rhs.SampleTimeIsValid())
+		return mSampleTime == rhs.mSampleTime;
 
-	if((lhs.mFlags & kAudioTimeStampHostTimeValid) && (rhs.mFlags & kAudioTimeStampHostTimeValid))
-		return lhs.mHostTime < rhs.mHostTime;
+	if(HostTimeIsValid() && rhs.HostTimeIsValid())
+		return mHostTime == rhs.mHostTime;
 
-	if((lhs.mFlags & kAudioTimeStampWordClockTimeValid) && (rhs.mFlags & kAudioTimeStampWordClockTimeValid))
-		return lhs.mWordClockTime < rhs.mWordClockTime;
+	if(WordClockTimeIsValid() && rhs.WordClockTimeIsValid())
+		return mWordClockTime == rhs.mWordClockTime;
 
 	return false;
 }
 
-bool operator==(const AudioTimeStamp& lhs, const AudioTimeStamp& rhs) noexcept
+bool SFBAudioTimeStamp::operator<(const SFBAudioTimeStamp& rhs) const noexcept
 {
-	if((lhs.mFlags & kAudioTimeStampSampleTimeValid) && (rhs.mFlags & kAudioTimeStampSampleTimeValid))
-		return lhs.mSampleTime == rhs.mSampleTime;
+	if(SampleTimeIsValid() && rhs.SampleTimeIsValid())
+		return mSampleTime < rhs.mSampleTime;
 
-	if((lhs.mFlags & kAudioTimeStampHostTimeValid) && (rhs.mFlags & kAudioTimeStampHostTimeValid))
-		return lhs.mHostTime == rhs.mHostTime;
+	if(HostTimeIsValid() && rhs.HostTimeIsValid())
+		return mHostTime < rhs.mHostTime;
 
-	if((lhs.mFlags & kAudioTimeStampWordClockTimeValid) && (rhs.mFlags & kAudioTimeStampWordClockTimeValid))
-		return lhs.mWordClockTime == rhs.mWordClockTime;
+	if(WordClockTimeIsValid() && rhs.WordClockTimeIsValid())
+		return mWordClockTime < rhs.mWordClockTime;
 
 	return false;
 }
