@@ -71,8 +71,6 @@ public:
 	/*! @brief Create a new \c SFBAudioChannelLayout by performing a deep copy of \c channelLayout */
 	SFBAudioChannelLayout(const AudioChannelLayout *channelLayout);
 
-	/*! @cond */
-
 	/*! @internal Move constructor */
 	SFBAudioChannelLayout(SFBAudioChannelLayout&& rhs) noexcept;
 
@@ -88,7 +86,22 @@ public:
 	/*! @brief Makes a deep copy of rhs */
 	SFBAudioChannelLayout& operator=(const AudioChannelLayout *rhs);
 
-	/*! @endcond */
+	//@}
+
+
+	// ========================================
+	/*! @name Comparison */
+	//@{
+
+	/*! @brief Compare two \c ChannelLayout objects for equality*/
+	bool operator==(const SFBAudioChannelLayout& rhs) const noexcept;
+
+	/*! @brief Compare two \c ChannelLayout objects for inequality*/
+	inline bool operator!=(const SFBAudioChannelLayout& rhs) const noexcept
+	{
+		return !operator==(rhs);
+	}
+
 	//@}
 
 
@@ -144,16 +157,6 @@ public:
 	inline operator const AudioChannelLayout *() const noexcept
 	{
 		return mChannelLayout;
-	}
-
-
-	/*! @brief Compare two \c ChannelLayout objects for equality*/
-	bool operator==(const SFBAudioChannelLayout& rhs) const noexcept;
-
-	/*! @brief Compare two \c ChannelLayout objects for inequality*/
-	inline bool operator!=(const SFBAudioChannelLayout& rhs) const noexcept
-	{
-		return !operator==(rhs);
 	}
 
 	//@}

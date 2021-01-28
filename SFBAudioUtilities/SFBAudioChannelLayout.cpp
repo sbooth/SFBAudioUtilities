@@ -354,6 +354,31 @@ SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const AudioChannelLayout
 	return *this;
 }
 
+bool SFBAudioChannelLayout::operator==(const SFBAudioChannelLayout& rhs) const noexcept
+{
+	// Two empty channel layouts are considered equivalent
+	if(!mChannelLayout && !rhs.mChannelLayout)
+		return true;
+
+	if(!mChannelLayout || !rhs.mChannelLayout)
+		return false;
+
+	const AudioChannelLayout *layouts [] = {
+		rhs.mChannelLayout,
+		mChannelLayout
+	};
+
+	UInt32 layoutsEqual = false;
+	UInt32 propertySize = sizeof(layoutsEqual);
+	OSStatus result = AudioFormatGetProperty(kAudioFormatProperty_AreChannelLayoutsEquivalent, sizeof(layouts), (void *)layouts, &propertySize, &layoutsEqual);
+
+	if(noErr != result)
+		return false;
+	//os_log_error(OS_LOG_DEFAULT, "AudioFormatGetProperty (kAudioFormatProperty_AreChannelLayoutsEquivalent) failed: %d", result);
+
+	return layoutsEqual;
+}
+
 size_t SFBAudioChannelLayout::ChannelCount() const noexcept
 {
 	if(!mChannelLayout)
@@ -396,32 +421,6 @@ bool SFBAudioChannelLayout::MapToLayout(const SFBAudioChannelLayout& outputLayou
 
 	return true;
 }
-
-bool SFBAudioChannelLayout::operator==(const SFBAudioChannelLayout& rhs) const noexcept
-{
-	// Two empty channel layouts are considered equivalent
-	if(!mChannelLayout && !rhs.mChannelLayout)
-		return true;
-
-	if(!mChannelLayout || !rhs.mChannelLayout)
-		return false;
-
-	const AudioChannelLayout *layouts [] = {
-		rhs.mChannelLayout,
-		mChannelLayout
-	};
-
-	UInt32 layoutsEqual = false;
-	UInt32 propertySize = sizeof(layoutsEqual);
-	OSStatus result = AudioFormatGetProperty(kAudioFormatProperty_AreChannelLayoutsEquivalent, sizeof(layouts), (void *)layouts, &propertySize, &layoutsEqual);
-
-	if(noErr != result)
-		return false;
-		//os_log_error(OS_LOG_DEFAULT, "AudioFormatGetProperty (kAudioFormatProperty_AreChannelLayoutsEquivalent) failed: %d", result);
-
-	return layoutsEqual;
-}
-
 
 SFBCFString SFBAudioChannelLayout::Description(const char * const prefix) const noexcept
 {
