@@ -11,7 +11,7 @@
 namespace {
 
 	/*! @brief Get the size in bytes of an \c AudioChannelLayout with the specified number of channel descriptions */
-	size_t GetChannelLayoutSize(UInt32 numberChannelDescriptions) noexcept
+	size_t ChannelLayoutSize(UInt32 numberChannelDescriptions) noexcept
 	{
 		return offsetof(AudioChannelLayout, mChannelDescriptions) + (numberChannelDescriptions * sizeof(AudioChannelDescription));
 	}
@@ -22,14 +22,14 @@ namespace {
 	 * @return An \c AudioChannelLayout
 	 * @throws \c std::bad_alloc
 	 */
-	AudioChannelLayout * CreateChannelLayout(UInt32 numberChannelDescriptions)
+	AudioChannelLayout * CreateChannelLayout(UInt32 numberChannelDescriptions) noexcept(false)
 	{
-		size_t layoutSize = GetChannelLayoutSize(numberChannelDescriptions);
-		AudioChannelLayout *channelLayout = (AudioChannelLayout *)std::malloc(layoutSize);
+		size_t layoutSize = ChannelLayoutSize(numberChannelDescriptions);
+		AudioChannelLayout *channelLayout = static_cast<AudioChannelLayout *>(std::malloc(layoutSize));
 		if(!channelLayout)
 			throw std::bad_alloc();
 
-		memset(channelLayout, 0, layoutSize);
+		std::memset(channelLayout, 0, layoutSize);
 
 		return channelLayout;
 	}
@@ -40,23 +40,23 @@ namespace {
 	 * @return An \c AudioChannelLayout
 	 * @throws \c std::bad_alloc
 	 */
-	AudioChannelLayout * CopyChannelLayout(const AudioChannelLayout *rhs)
+	AudioChannelLayout * CopyChannelLayout(const AudioChannelLayout *rhs) noexcept(false)
 	{
 		if(!rhs)
 			return nullptr;
 
-		size_t layoutSize = GetChannelLayoutSize(rhs->mNumberChannelDescriptions);
-		AudioChannelLayout *channelLayout = (AudioChannelLayout *)std::malloc(layoutSize);
+		size_t layoutSize = ChannelLayoutSize(rhs->mNumberChannelDescriptions);
+		AudioChannelLayout *channelLayout = static_cast<AudioChannelLayout *>(std::malloc(layoutSize));
 		if(!channelLayout)
 			throw std::bad_alloc();
 
-		memcpy(channelLayout, rhs, layoutSize);
+		std::memcpy(channelLayout, rhs, layoutSize);
 
 		return channelLayout;
 	}
 
 	/*! @brief Get the string representation of an \c AudioChannelLayoutTag */
-	const char * GetChannelLayoutTagName(AudioChannelLayoutTag layoutTag)
+	const char * const GetChannelLayoutTagName(AudioChannelLayoutTag layoutTag) noexcept
 	{
 		switch(layoutTag) {
 			case kAudioChannelLayoutTag_Mono:					return "kAudioChannelLayoutTag_Mono";
@@ -166,7 +166,7 @@ namespace {
 	}
 
 	/*! @brief Get the string representation of an \c AudioChannelLabel */
-	const char * GetChannelLabelName(AudioChannelLabel label)
+	const char * const GetChannelLabelName(AudioChannelLabel label) noexcept
 	{
 		switch(label) {
 			case kAudioChannelLabel_Unknown:					return "kAudioChannelLabel_Unknown";
@@ -269,14 +269,14 @@ size_t SFBAudioChannelLayoutSize(const AudioChannelLayout *channelLayout) noexce
 {
 	if(!channelLayout)
 		return 0;
-	return GetChannelLayoutSize(channelLayout->mNumberChannelDescriptions);
+	return ChannelLayoutSize(channelLayout->mNumberChannelDescriptions);
 }
 
 // Constants
 const SFBAudioChannelLayout SFBAudioChannelLayout::Mono		= SFBAudioChannelLayout::ChannelLayoutWithTag(kAudioChannelLayoutTag_Mono);
 const SFBAudioChannelLayout SFBAudioChannelLayout::Stereo	= SFBAudioChannelLayout::ChannelLayoutWithTag(kAudioChannelLayoutTag_Stereo);
 
-SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithTag(AudioChannelLayoutTag layoutTag)
+SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithTag(AudioChannelLayoutTag layoutTag) noexcept(false)
 {
 	SFBAudioChannelLayout channelLayout{};
 	channelLayout.mChannelLayout = CreateChannelLayout(0);
@@ -284,7 +284,7 @@ SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithTag(AudioChannelLa
 	return channelLayout;
 }
 
-SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithChannelLabels(std::vector<AudioChannelLabel> channelLabels)
+SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithChannelLabels(std::vector<AudioChannelLabel> channelLabels) noexcept(false)
 {
 	SFBAudioChannelLayout channelLayout{};
 	channelLayout.mChannelLayout = CreateChannelLayout((UInt32)channelLabels.size());
@@ -300,7 +300,7 @@ SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithChannelLabels(std:
 	return channelLayout;
 }
 
-SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithBitmap(UInt32 channelBitmap)
+SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithBitmap(UInt32 channelBitmap) noexcept(false)
 {
 	SFBAudioChannelLayout channelLayout{};
 	channelLayout.mChannelLayout = CreateChannelLayout(0);
@@ -317,7 +317,7 @@ SFBAudioChannelLayout::~SFBAudioChannelLayout()
 	std::free(mChannelLayout);
 }
 
-SFBAudioChannelLayout::SFBAudioChannelLayout(const AudioChannelLayout *channelLayout)
+SFBAudioChannelLayout::SFBAudioChannelLayout(const AudioChannelLayout *channelLayout) noexcept(false)
 : mChannelLayout(CopyChannelLayout(channelLayout))
 {}
 
@@ -332,13 +332,13 @@ SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(SFBAudioChannelLayout&& 
 	return *this;
 }
 
-SFBAudioChannelLayout::SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs)
+SFBAudioChannelLayout::SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs) noexcept(false)
 : SFBAudioChannelLayout()
 {
 	*this = rhs;
 }
 
-SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const SFBAudioChannelLayout& rhs)
+SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const SFBAudioChannelLayout& rhs) noexcept(false)
 {
 	if(this != &rhs) {
 		std::free(mChannelLayout);
@@ -347,7 +347,7 @@ SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const SFBAudioChannelLay
 	return *this;
 }
 
-SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const AudioChannelLayout *rhs)
+SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const AudioChannelLayout *rhs) noexcept(false)
 {
 	std::free(mChannelLayout);
 	mChannelLayout = CopyChannelLayout(rhs);
