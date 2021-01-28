@@ -37,9 +37,9 @@ public:
 			mWhat[6] = '\0';
 		}
 		else if(mError > -200000 && mError < 200000)
-			std::snprintf(mWhat, sizeof(mWhat), "%d", static_cast<int>(mError));
+			snprintf(mWhat, sizeof(mWhat), "%d", static_cast<int>(mError));
 		else
-			std::snprintf(mWhat, sizeof(mWhat), "0x%x", static_cast<int>(mError));
+			snprintf(mWhat, sizeof(mWhat), "0x%x", static_cast<int>(mError));
 	}
 
 	inline SFBCAException(const SFBCAException& rhs) noexcept
