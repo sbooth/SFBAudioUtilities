@@ -18,7 +18,7 @@ typedef CF_ENUM(uint32_t, SFBCommonPCMFormat) {
 };
 
 /*! @brief A class extending the functionality of a Core %Audio \c AudioStreamBasicDescription */
-class SFBAudioFormat : public AudioStreamBasicDescription
+class SFBAudioStreamBasicDescription : public AudioStreamBasicDescription
 {
 
 public:
@@ -27,48 +27,49 @@ public:
 	/*! @name Creation and Destruction */
 	//@{
 
-	/*! @brief Create a new, empty \c AudioFormat */
-	inline SFBAudioFormat() noexcept
+	/*! @brief Create a new, empty \c SFBAudioStreamBasicDescription */
+	inline SFBAudioStreamBasicDescription() noexcept
 	{
 		memset(this, 0, sizeof(AudioStreamBasicDescription));
 	}
 
-	/*! @brief Create a new \c SFBAudioFormat for the specified \c AudioStreamBasicDescription */
-	inline SFBAudioFormat(const AudioStreamBasicDescription& asbd) noexcept
+	/*! @brief Create a new \c SFBAudioStreamBasicDescription for the specified \c AudioStreamBasicDescription */
+	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription& asbd) noexcept
 	{
 		memcpy(this, &asbd, sizeof(AudioStreamBasicDescription));
 	}
 
-	/*! @brief Create a new \c SFBAudioFormat for the specified \c AudioStreamBasicDescription */
-	inline SFBAudioFormat(const AudioStreamBasicDescription *asbd) noexcept
+	/*! @brief Create a new \c SFBAudioStreamBasicDescription for the specified \c AudioStreamBasicDescription */
+	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription * const asbd) noexcept
 	{
 		assert(asbd != nullptr);
 		memcpy(this, asbd, sizeof(AudioStreamBasicDescription));
 	}
 
-	/*! @brief Create a new \c SFBAudioFormat for the speciifed \c SFBCommonPCMFormat */
-	SFBAudioFormat(SFBCommonPCMFormat format, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
+	/*! @brief Create a new \c SFBAudioStreamBasicDescription for the speciifed \c SFBCommonPCMFormat */
+	SFBAudioStreamBasicDescription(SFBCommonPCMFormat format, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
 
 	/*! @brief Copy constructor */
-	inline SFBAudioFormat(const SFBAudioFormat& rhs) noexcept
+	inline SFBAudioStreamBasicDescription(const SFBAudioStreamBasicDescription& rhs) noexcept
 	{
 		*this = rhs;
 	}
 
 	/*! @brief Assignment operator */
-	inline SFBAudioFormat& operator=(const SFBAudioFormat& rhs) noexcept
+	inline SFBAudioStreamBasicDescription& operator=(const SFBAudioStreamBasicDescription& rhs) noexcept
 	{
-		memcpy(this, &rhs, sizeof(AudioStreamBasicDescription)); return *this;
+		memcpy(this, &rhs, sizeof(AudioStreamBasicDescription));
+		return *this;
 	}
 
-	/*! @brief Compare two \c SFBAudioFormat objects for equality*/
-	inline bool operator==(const SFBAudioFormat& rhs) const noexcept
+	/*! @brief Compare two \c SFBAudioStreamBasicDescription objects for equality*/
+	inline bool operator==(const SFBAudioStreamBasicDescription& rhs) const noexcept
 	{
 		return !memcmp(this, &rhs, sizeof(AudioStreamBasicDescription));
 	}
 
-	/*! @brief Compare two \c SFBAudioFormat objects for inequality*/
-	inline bool operator!=(const SFBAudioFormat& rhs) const noexcept
+	/*! @brief Compare two \c SFBAudioStreamBasicDescription objects for inequality*/
+	inline bool operator!=(const SFBAudioStreamBasicDescription& rhs) const noexcept
 	{
 		return !operator==(rhs);
 	}
@@ -161,18 +162,18 @@ public:
 	//@{
 
 	/*! @brief Sets \c format to the equivalent non-interleaved format of \c this. Fails for non-PCM formats. */
-	bool GetNonInterleavedEquivalent(SFBAudioFormat& format) const noexcept;
+	bool GetNonInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
 
 	/*! @brief Sets \c format to the equivalent interleaved format of \c this. Fails for non-PCM formats. */
-	bool GetInterleavedEquivalent(SFBAudioFormat& format) const noexcept;
+	bool GetInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
 
 	/*! @brief Sets \c format to the equivalent standard format of \c this. Fails for non-PCM formats. */
-	bool GetStandardEquivalent(SFBAudioFormat& format) const noexcept;
+	bool GetStandardEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
 
 	//@}
 
 
 	/*! @brief Returns a string representation of this format suitable for logging */
-	SFBCFString Description(const char *prefix = nullptr) const noexcept;
+	SFBCFString Description(const char * const prefix = nullptr) const noexcept;
 
 };

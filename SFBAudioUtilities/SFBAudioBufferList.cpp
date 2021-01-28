@@ -9,7 +9,7 @@
 
 #import "SFBAudioBufferList.hpp"
 
-AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioFormat& format, UInt32 frameCapacity) noexcept
+AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept
 {
 	auto bufferDataSize = frameCapacity * format.mBytesPerFrame;
 	auto bufferCount = format.ChannelStreamCount();
@@ -37,7 +37,7 @@ SFBAudioBufferList::SFBAudioBufferList() noexcept
 : mBufferList(nullptr), mFrameCapacity(0)
 {}
 
-SFBAudioBufferList::SFBAudioBufferList(const SFBAudioFormat& format, UInt32 frameCapacity)
+SFBAudioBufferList::SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity)
 : SFBAudioBufferList()
 {
 	if(!Allocate(format, frameCapacity))
@@ -72,7 +72,7 @@ SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
 	return *this;
 }
 
-bool SFBAudioBufferList::Allocate(const SFBAudioFormat& format, UInt32 frameCapacity) noexcept
+bool SFBAudioBufferList::Allocate(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept
 {
 	if(mBufferList)
 		Deallocate();

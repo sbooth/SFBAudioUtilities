@@ -7,7 +7,7 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 
-#import "SFBAudioFormat.hpp"
+#import "SFBAudioStreamBasicDescription.hpp"
 
 /*!
  * @brief Allocates and returns a new \c AudioBufferList in a single allocation
@@ -16,7 +16,7 @@
  * @param frameCapacity The desired buffer capacity in audio frames
  * @return A newly-allocated \c AudioBufferList or \c nullptr
  */
-AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioFormat& format, UInt32 frameCapacity) noexcept;
+AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
 
 /*! @brief A class wrapping a Core Audio \c AudioBufferList */
 class SFBAudioBufferList
@@ -40,7 +40,7 @@ public:
 	 * @param frameCapacity The desired buffer capacity in audio frames
 	 * @throws \c std::bad_alloc
 	 */
-	SFBAudioBufferList(const SFBAudioFormat& format, UInt32 frameCapacity);
+	SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity);
 
 	/*! @cond */
 
@@ -70,7 +70,7 @@ public:
 	 * @param frameCapacity The desired buffer capacity in audio frames
 	 * @return \c true on sucess, \c false otherwise
 	 */
-	bool Allocate(const SFBAudioFormat& format, UInt32 frameCapacity) noexcept;
+	bool Allocate(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
 
 	/*! @brief Deallocate the memory associated with this \c SFBAudioBufferList */
 	bool Deallocate() noexcept;
@@ -114,7 +114,7 @@ public:
 	}
 
 	/*! @brief Get the format of this \c SFBAudioBufferList */
-	inline const SFBAudioFormat& Format() const noexcept
+	inline const SFBAudioStreamBasicDescription& Format() const noexcept
 	{
 		return mFormat;
 	}
@@ -187,7 +187,7 @@ public:
 private:
 
 	AudioBufferList *mBufferList;
-	SFBAudioFormat mFormat;
+	SFBAudioStreamBasicDescription mFormat;
 	UInt32 mFrameCapacity;
 
 };

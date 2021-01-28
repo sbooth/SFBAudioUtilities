@@ -159,7 +159,7 @@ public:
 	//@}
 
 	/*! @brief Returns a string representation of this channel layout suitable for logging */
-	SFBCFString Description(const char *prefix = nullptr) const noexcept;
+	SFBCFString Description(const char * const prefix = nullptr) const noexcept;
 
 private:
 	

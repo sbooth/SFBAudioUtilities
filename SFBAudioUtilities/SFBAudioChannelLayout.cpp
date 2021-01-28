@@ -423,7 +423,7 @@ bool SFBAudioChannelLayout::operator==(const SFBAudioChannelLayout& rhs) const n
 }
 
 
-SFBCFString SFBAudioChannelLayout::Description(const char *prefix) const noexcept
+SFBCFString SFBAudioChannelLayout::Description(const char * const prefix) const noexcept
 {
 	if(!mChannelLayout)
 		return SFBCFString(prefix, kCFStringEncodingUTF8);

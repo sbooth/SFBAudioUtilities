@@ -3,9 +3,9 @@
  * MIT license
  */
 
-#import "SFBAudioFormat.hpp"
+#import "SFBAudioStreamBasicDescription.hpp"
 
-SFBAudioFormat::SFBAudioFormat(SFBCommonPCMFormat format, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
+SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMFormat format, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
 {
 	assert(0 < sampleRate);
 	assert(0 < channelsPerFrame);
@@ -28,7 +28,7 @@ SFBAudioFormat::SFBAudioFormat(SFBCommonPCMFormat format, Float32 sampleRate, UI
 	}
 }
 
-bool SFBAudioFormat::GetNonInterleavedEquivalent(SFBAudioFormat& format) const noexcept
+bool SFBAudioStreamBasicDescription::GetNonInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept
 {
 	if(!IsPCM())
 		return false;
@@ -44,7 +44,7 @@ bool SFBAudioFormat::GetNonInterleavedEquivalent(SFBAudioFormat& format) const n
 	return true;
 }
 
-bool SFBAudioFormat::GetInterleavedEquivalent(SFBAudioFormat& format) const noexcept
+bool SFBAudioStreamBasicDescription::GetInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept
 {
 	if(!IsPCM())
 		return false;
@@ -60,7 +60,7 @@ bool SFBAudioFormat::GetInterleavedEquivalent(SFBAudioFormat& format) const noex
 	return true;
 }
 
-bool SFBAudioFormat::GetStandardEquivalent(SFBAudioFormat& format) const noexcept
+bool SFBAudioStreamBasicDescription::GetStandardEquivalent(SFBAudioStreamBasicDescription& format) const noexcept
 {
 	if(!IsPCM())
 		return false;
@@ -71,7 +71,7 @@ bool SFBAudioFormat::GetStandardEquivalent(SFBAudioFormat& format) const noexcep
 }
 
 // Most of this is stolen from Apple's CAStreamBasicDescription::Print()
-SFBCFString SFBAudioFormat::Description(const char *prefix) const noexcept
+SFBCFString SFBAudioStreamBasicDescription::Description(const char * const prefix) const noexcept
 {
 	SFBCFMutableString result{ CFStringCreateMutable(kCFAllocatorDefault, 0) };
 

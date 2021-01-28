@@ -9,7 +9,7 @@
 
 #import <CoreAudio/CoreAudioTypes.h>
 
-#import "SFBAudioFormat.hpp"
+#import "SFBAudioStreamBasicDescription.hpp"
 
 /*!
  * @brief A ring buffer supporting non-interleaved audio based on Apple's \c CARingBuffer.
@@ -60,7 +60,7 @@ public:
 	 * @param capacityFrames The desired capacity, in frames
 	 * @return \c true on success, \c false on error
 	 */
-	bool Allocate(const SFBAudioFormat& format, size_t capacityFrames) noexcept;
+	bool Allocate(const SFBAudioStreamBasicDescription& format, size_t capacityFrames) noexcept;
 
 	/*!
 	 * @brief Frees the resources used by this \c SFBCARingBuffer
@@ -76,7 +76,7 @@ public:
 	}
 
 	/*! @brief Returns the format of this \c SFBCARingBuffer */
-	inline const SFBAudioFormat& Format() const noexcept
+	inline const SFBAudioStreamBasicDescription& Format() const noexcept
 	{
 		return mFormat;
 	}
@@ -149,7 +149,7 @@ protected:
 
 private:
 
-	SFBAudioFormat		mFormat;				// The format of the audio
+	SFBAudioStreamBasicDescription		mFormat;				// The format of the audio
 
 	uint8_t				**mBuffers;				// The channel pointers and buffers, allocated in one chunk of memory
 
