@@ -11,7 +11,15 @@ class SFBAudioUnitRecorder
 {
 
 public:
-	
+
+	/*!
+	 * @brief Creates a new \c SFBAudioUnitRecorder that asynchronously writes the render output from an \c AudioUnit to a file
+	 * @param au The \c AudioUnit to record
+	 * @param outputFileURL The URL of the output audio file
+	 * @param fileType The type of the file to create
+	 * @param format The format of the audio data to be written to the file
+	 * @param busNumber The bus number of \c au to record
+	 */
 	SFBAudioUnitRecorder(AudioUnit au, CFURLRef outputFileURL, AudioFileTypeID fileType, const AudioStreamBasicDescription& format, UInt32 busNumber = 0)
 	: mFileIsOpen(false), mClientFormatIsSet(false), mAudioUnit(au), mExtAudioFile(nullptr), mBusNumber(busNumber)
 	{
@@ -21,6 +29,7 @@ public:
 		mFileIsOpen = true;
 	}
 
+	/*! @brief Destroys the \c SFBAudioUnitRecorder and release all associated resources. */
 	~SFBAudioUnitRecorder()
 	{
 		if(mExtAudioFile) {
@@ -31,6 +40,7 @@ public:
 		}
 	}
 
+	/*! @brief Starts recording */
 	void Start() {
 		if(mFileIsOpen) {
 			if(!mClientFormatIsSet) {
@@ -49,6 +59,7 @@ public:
 		}
 	}
 
+	/*! @brief Stops recording */
 	void Stop() {
 		if(mFileIsOpen) {
 			OSStatus result = AudioUnitRemoveRenderNotify(mAudioUnit, RenderCallback, this);
