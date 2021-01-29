@@ -4,6 +4,7 @@
  */
 
 #import <cstdlib>
+#import <cstring>
 #import <new>
 
 #import "SFBAudioChannelLayout.hpp"
@@ -30,6 +31,8 @@ namespace {
 			throw std::bad_alloc();
 
 		std::memset(channelLayout, 0, layoutSize);
+
+		channelLayout->mNumberChannelDescriptions = numberChannelDescriptions;
 
 		return channelLayout;
 	}
@@ -273,37 +276,14 @@ size_t SFBAudioChannelLayoutSize(const AudioChannelLayout *channelLayout) noexce
 }
 
 // Constants
-const SFBAudioChannelLayout SFBAudioChannelLayout::Mono		= SFBAudioChannelLayout::ChannelLayoutWithTag(kAudioChannelLayoutTag_Mono);
-const SFBAudioChannelLayout SFBAudioChannelLayout::Stereo	= SFBAudioChannelLayout::ChannelLayoutWithTag(kAudioChannelLayoutTag_Stereo);
-
-SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithTag(AudioChannelLayoutTag layoutTag)
-{
-	SFBAudioChannelLayout channelLayout{};
-	channelLayout.mChannelLayout = CreateChannelLayout(0);
-	channelLayout.mChannelLayout->mChannelLayoutTag = layoutTag;
-	return channelLayout;
-}
-
-SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithChannelLabels(std::vector<AudioChannelLabel> channelLabels)
-{
-	SFBAudioChannelLayout channelLayout{};
-	channelLayout.mChannelLayout = CreateChannelLayout((UInt32)channelLabels.size());
-
-	channelLayout.mChannelLayout->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
-	channelLayout.mChannelLayout->mChannelBitmap = 0;
-
-	channelLayout.mChannelLayout->mNumberChannelDescriptions = (UInt32)channelLabels.size();
-
-	for(std::vector<AudioChannelLabel>::size_type i = 0; i != channelLabels.size(); ++i)
-		channelLayout.mChannelLayout->mChannelDescriptions[i].mChannelLabel = channelLabels[i];
-
-	return channelLayout;
-}
+const SFBAudioChannelLayout SFBAudioChannelLayout::Mono		= SFBAudioChannelLayout(kAudioChannelLayoutTag_Mono);
+const SFBAudioChannelLayout SFBAudioChannelLayout::Stereo	= SFBAudioChannelLayout(kAudioChannelLayoutTag_Stereo);
 
 SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithBitmap(UInt32 channelBitmap)
 {
 	SFBAudioChannelLayout channelLayout{};
 	channelLayout.mChannelLayout = CreateChannelLayout(0);
+	channelLayout.mChannelLayout->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelBitmap;
 	channelLayout.mChannelLayout->mChannelBitmap = channelBitmap;
 	return channelLayout;
 }
@@ -311,6 +291,20 @@ SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithBitmap(UInt32 chan
 SFBAudioChannelLayout::SFBAudioChannelLayout() noexcept
 : mChannelLayout(nullptr)
 {}
+
+SFBAudioChannelLayout::SFBAudioChannelLayout(AudioChannelLayoutTag layoutTag)
+: mChannelLayout(CreateChannelLayout(0))
+{
+	mChannelLayout->mChannelLayoutTag = layoutTag;
+}
+
+SFBAudioChannelLayout::SFBAudioChannelLayout(std::vector<AudioChannelLabel> channelLabels)
+: mChannelLayout(CreateChannelLayout(static_cast<UInt32>(channelLabels.size())))
+{
+	mChannelLayout->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
+	for(std::vector<AudioChannelLabel>::size_type i = 0; i != channelLabels.size(); ++i)
+		mChannelLayout->mChannelDescriptions[i].mChannelLabel = channelLabels[i];
+}
 
 SFBAudioChannelLayout::~SFBAudioChannelLayout()
 {
@@ -420,6 +414,13 @@ bool SFBAudioChannelLayout::MapToLayout(const SFBAudioChannelLayout& outputLayou
 	channelMap.assign(start, start + outputChannelCount);
 
 	return true;
+}
+
+AudioChannelLayout * SFBAudioChannelLayout::RelinquishACL() noexcept
+{
+	auto channelLayout = mChannelLayout;
+	mChannelLayout = nullptr;
+	return channelLayout;
 }
 
 SFBCFString SFBAudioChannelLayout::Description(const char * const prefix) const noexcept
