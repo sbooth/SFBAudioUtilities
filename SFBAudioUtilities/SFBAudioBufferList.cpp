@@ -5,12 +5,16 @@
 
 #import <algorithm>
 #import <cstdlib>
+#import <limits>
 #import <new>
 
 #import "SFBAudioBufferList.hpp"
 
 AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept
 {
+	if(frameCapacity > (std::numeric_limits<UInt32>::max() / format.mBytesPerFrame))
+		return nullptr;
+
 	auto bufferDataSize = frameCapacity * format.mBytesPerFrame;
 	auto bufferCount = format.ChannelStreamCount();
 	auto bufferListSize = offsetof(AudioBufferList, mBuffers) + (sizeof(AudioBuffer) * bufferCount);

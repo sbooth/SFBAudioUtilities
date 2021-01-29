@@ -5,6 +5,7 @@
 
 #import <algorithm>
 #import <cstdlib>
+#import <limits>
 
 #import "SFBCARingBuffer.hpp"
 
@@ -88,7 +89,7 @@ namespace {
 	inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 	{
 		assert(x > 1);
-		assert(x <= ((UINT32_MAX / 2) + 1));
+		assert(x <= ((std::numeric_limits<uint32_t>::max() / 2) + 1));
 		return static_cast<uint32_t>(1 << (32 - __builtin_clz(x - 1)));
 	}
 
