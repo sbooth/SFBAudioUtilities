@@ -6,6 +6,7 @@
 #import <algorithm>
 #import <cstdlib>
 #import <cstring>
+#import <limits>
 
 #import "SFBRingBuffer.hpp"
 
