@@ -5,6 +5,8 @@
 
 #pragma once
 
+#import <stdexcept>
+
 #import <os/log.h>
 
 #import <AudioToolbox/ExtendedAudioFile.h>
