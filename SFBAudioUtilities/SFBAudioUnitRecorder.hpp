@@ -5,15 +5,20 @@
 
 #pragma once
 
+#import <os/log.h>
+
 #import <AudioToolbox/ExtendedAudioFile.h>
 
+#import "SFBExtAudioFile.hpp"
+
+/*! A class that asynchronously writes the output from an \c AudioUnit to a file */
 class SFBAudioUnitRecorder
 {
 
 public:
 
 	/*!
-	 * @brief Creates a new \c SFBAudioUnitRecorder that asynchronously writes the render output from an \c AudioUnit to a file
+	 * @brief Creates a new \c SFBAudioUnitRecorder that asynchronously writes the output from an \c AudioUnit to a file
 	 * @param au The \c AudioUnit to record
 	 * @param outputFileURL The URL of the output audio file
 	 * @param fileType The type of the file to create
@@ -21,49 +26,35 @@ public:
 	 * @param busNumber The bus number of \c au to record
 	 */
 	SFBAudioUnitRecorder(AudioUnit au, CFURLRef outputFileURL, AudioFileTypeID fileType, const AudioStreamBasicDescription& format, UInt32 busNumber = 0)
-	: mFileIsOpen(false), mClientFormatIsSet(false), mAudioUnit(au), mExtAudioFile(nullptr), mBusNumber(busNumber)
+	: mClientFormatIsSet(false), mAudioUnit(au), mBusNumber(busNumber)
 	{
-		assert(au != nullptr);
-		OSStatus result = ExtAudioFileCreateWithURL(outputFileURL, fileType, &format, nullptr, kAudioFileFlags_EraseFile, &mExtAudioFile);
-		assert(result == noErr);
-		mFileIsOpen = true;
-	}
-
-	/*! @brief Destroys the \c SFBAudioUnitRecorder and release all associated resources. */
-	~SFBAudioUnitRecorder()
-	{
-		if(mExtAudioFile) {
-			OSStatus result = ExtAudioFileDispose(mExtAudioFile);
-			assert(result == noErr);
-			mFileIsOpen = false;
-			mExtAudioFile = nullptr;
-		}
+		if(!au)
+			throw std::invalid_argument("au == nullptr");
+		mExtAudioFile.CreateWithURL(outputFileURL, fileType, format, nullptr, kAudioFileFlags_EraseFile);
 	}
 
 	/*! @brief Starts recording */
 	void Start() {
-		if(mFileIsOpen) {
+		if(mExtAudioFile.IsValid()) {
 			if(!mClientFormatIsSet) {
 				AudioStreamBasicDescription clientFormat;
 				UInt32 size = sizeof(clientFormat);
 				OSStatus result = AudioUnitGetProperty(mAudioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, mBusNumber, &clientFormat, &size);
-				assert(result == noErr);
-				result = ExtAudioFileSetProperty(mExtAudioFile, kExtAudioFileProperty_ClientDataFormat, size, &clientFormat);
-				assert(result == noErr);
+				SFBCAException::ThrowIfError(result, "AudioUnitGetProperty");
+				mExtAudioFile.SetClientDataFormat(clientFormat);
 				mClientFormatIsSet = true;
 			}
-			OSStatus result = ExtAudioFileWriteAsync(mExtAudioFile, 0, nullptr);
-			assert(result == noErr);
-			result = AudioUnitAddRenderNotify(mAudioUnit, RenderCallback, this);
-			assert(result == noErr);
+			mExtAudioFile.WriteAsync(0, nullptr);
+			auto result = AudioUnitAddRenderNotify(mAudioUnit, RenderCallback, this);
+			SFBCAException::ThrowIfError(result, "AudioUnitAddRenderNotify");
 		}
 	}
 
 	/*! @brief Stops recording */
 	void Stop() {
-		if(mFileIsOpen) {
+		if(mExtAudioFile.IsValid()) {
 			OSStatus result = AudioUnitRemoveRenderNotify(mAudioUnit, RenderCallback, this);
-			assert(result == noErr);
+			SFBCAException::ThrowIfError(result, "AudioUnitRemoveRenderNotify");
 		}
 	}
 
@@ -74,17 +65,20 @@ private:
 		SFBAudioUnitRecorder *THIS = static_cast<SFBAudioUnitRecorder *>(inRefCon);
 		if(*ioActionFlags & kAudioUnitRenderAction_PostRender) {
 			if(THIS->mBusNumber == inBusNumber && !(*ioActionFlags & kAudioUnitRenderAction_PostRenderError)) {
-				OSStatus result = ExtAudioFileWriteAsync(THIS->mExtAudioFile, inNumberFrames, ioData);
-				assert(result == noErr);
+				try {
+					THIS->mExtAudioFile.WriteAsync(inNumberFrames, ioData);
+				}
+				catch(const std::exception& e) {
+					os_log_debug(OS_LOG_DEFAULT, "Error writing frames: %{public}s", e.what());
+				}
 			}
 		}
 		return noErr;
 	}
 
-	bool				mFileIsOpen;
+	SFBExtAudioFile 	mExtAudioFile;
 	bool				mClientFormatIsSet;
 	AudioUnit			mAudioUnit;
-	ExtAudioFileRef		mExtAudioFile;
 	UInt32				mBusNumber;
 
 };
