@@ -70,8 +70,7 @@ SFBAudioRingBuffer::SFBAudioRingBuffer() noexcept
 
 SFBAudioRingBuffer::~SFBAudioRingBuffer()
 {
-	if(mBuffers)
-		std::free(mBuffers);
+	std::free(mBuffers);
 }
 
 #pragma mark Buffer Management

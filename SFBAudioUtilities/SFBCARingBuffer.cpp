@@ -104,7 +104,7 @@ SFBCARingBuffer::SFBCARingBuffer() noexcept
 
 SFBCARingBuffer::~SFBCARingBuffer()
 {
-	Deallocate();
+	std::free(mBuffers);
 }
 
 #pragma mark Buffer Management
