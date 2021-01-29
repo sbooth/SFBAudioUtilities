@@ -5,6 +5,7 @@
 
 #import <algorithm>
 #import <cstdlib>
+#import <cstring>
 #import <limits>
 
 #import "SFBAudioRingBuffer.hpp"
@@ -24,7 +25,7 @@ namespace {
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(srcOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
 				continue;
-			memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
+			std::memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
 		}
 	}
 
@@ -41,7 +42,7 @@ namespace {
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(dstOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
 				continue;
-			memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - dstOffset));
+			std::memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - dstOffset));
 		}
 	}
 
@@ -100,7 +101,7 @@ bool SFBAudioRingBuffer::Allocate(const SFBAudioStreamBasicDescription& format, 
 		return false;
 
 	// Zero the entire allocation
-	memset(memoryChunk, 0, allocationSize);
+	std::memset(memoryChunk, 0, allocationSize);
 
 	// Assign the pointers and channel buffers
 	mBuffers = reinterpret_cast<uint8_t **>(memoryChunk);

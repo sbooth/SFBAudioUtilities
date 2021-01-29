@@ -5,6 +5,7 @@
 
 #import <algorithm>
 #import <cstdlib>
+#import <cstring>
 
 #import "SFBRingBuffer.hpp"
 
@@ -126,11 +127,11 @@ size_t SFBRingBuffer::Read(void * const destinationBuffer, size_t byteCount) noe
 	size_t bytesToRead = std::min(bytesAvailable, byteCount);
 	if(readPosition + bytesToRead > mCapacityBytes) {
 		auto bytesAfterReadPointer = mCapacityBytes - readPosition;
-		memcpy(destinationBuffer, mBuffer + readPosition, bytesAfterReadPointer);
-		memcpy((uint8_t *)destinationBuffer + bytesAfterReadPointer, mBuffer, bytesToRead - bytesAfterReadPointer);
+		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesAfterReadPointer);
+		std::memcpy((uint8_t *)destinationBuffer + bytesAfterReadPointer, mBuffer, bytesToRead - bytesAfterReadPointer);
 	}
 	else
-		memcpy(destinationBuffer, mBuffer + readPosition, bytesToRead);
+		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesToRead);
 
 	mReadPosition.store((readPosition + bytesToRead) & mCapacityBytesMask, std::memory_order_release);
 
@@ -157,11 +158,11 @@ size_t SFBRingBuffer::Peek(void * const destinationBuffer, size_t byteCount) con
 	size_t bytesToRead = std::min(bytesAvailable, byteCount);
 	if(readPosition + bytesToRead > mCapacityBytes) {
 		auto bytesAfterReadPointer = mCapacityBytes - readPosition;
-		memcpy(destinationBuffer, mBuffer + readPosition, bytesAfterReadPointer);
-		memcpy((uint8_t *)destinationBuffer + bytesAfterReadPointer, mBuffer, bytesToRead - bytesAfterReadPointer);
+		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesAfterReadPointer);
+		std::memcpy((uint8_t *)destinationBuffer + bytesAfterReadPointer, mBuffer, bytesToRead - bytesAfterReadPointer);
 	}
 	else
-		memcpy(destinationBuffer, mBuffer + readPosition, bytesToRead);
+		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesToRead);
 
 	return bytesToRead;
 }
@@ -188,11 +189,11 @@ size_t SFBRingBuffer::Write(const void * const sourceBuffer, size_t byteCount) n
 	size_t bytesToWrite = std::min(bytesAvailable, byteCount);
 	if(writePosition + bytesToWrite > mCapacityBytes) {
 		auto bytesAfterWritePointer = mCapacityBytes - writePosition;
-		memcpy(mBuffer + writePosition, sourceBuffer, bytesAfterWritePointer);
-		memcpy(mBuffer, (uint8_t *)sourceBuffer + bytesAfterWritePointer, bytesToWrite - bytesAfterWritePointer);
+		std::memcpy(mBuffer + writePosition, sourceBuffer, bytesAfterWritePointer);
+		std::memcpy(mBuffer, (uint8_t *)sourceBuffer + bytesAfterWritePointer, bytesToWrite - bytesAfterWritePointer);
 	}
 	else
-		memcpy(mBuffer + writePosition, sourceBuffer, bytesToWrite);
+		std::memcpy(mBuffer + writePosition, sourceBuffer, bytesToWrite);
 
 	mWritePosition.store((writePosition + bytesToWrite) & mCapacityBytesMask, std::memory_order_release);
 

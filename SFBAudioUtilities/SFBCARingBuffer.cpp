@@ -5,6 +5,7 @@
 
 #import <algorithm>
 #import <cstdlib>
+#import <cstring>
 #import <limits>
 
 #import "SFBCARingBuffer.hpp"
@@ -29,7 +30,7 @@ namespace {
 	inline void ZeroRange(uint8_t * const * const buffers, size_t bufferCount, size_t byteOffset, size_t byteCount)
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
-			memset(buffers[bufferIndex] + byteOffset, 0, byteCount);
+			std::memset(buffers[bufferIndex] + byteOffset, 0, byteCount);
 	}
 
 	/*!
@@ -43,7 +44,7 @@ namespace {
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(byteOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
 				continue;
-			memset(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + byteOffset, 0, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - byteOffset));
+			std::memset(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + byteOffset, 0, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - byteOffset));
 		}
 	}
 
@@ -60,7 +61,7 @@ namespace {
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(srcOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
 				continue;
-			memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
+			std::memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
 		}
 	}
 
@@ -77,7 +78,7 @@ namespace {
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(dstOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
 				continue;
-			memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - dstOffset));
+			std::memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - dstOffset));
 		}
 	}
 
@@ -133,7 +134,7 @@ bool SFBCARingBuffer::Allocate(const SFBAudioStreamBasicDescription& format, siz
 		return false;
 
 	// Zero the entire allocation
-	memset(memoryChunk, 0, allocationSize);
+	std::memset(memoryChunk, 0, allocationSize);
 
 	// Assign the pointers and channel buffers
 	mBuffers = reinterpret_cast<uint8_t **>(memoryChunk);
