@@ -3,16 +3,20 @@
  * MIT license
  */
 
+//#import <stdexcept>
+
 #import "SFBAudioStreamBasicDescription.hpp"
 
-SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMFormat format, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
+SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
 {
-	assert(0 < sampleRate);
-	assert(0 < channelsPerFrame);
+//	if(sampleRate < 0)
+//		throw std::invalid_argument("sampleRate < 0");
+//	if(channelsPerFrame < 0)
+//		throw std::invalid_argument("channelsPerFrame < 0");
 
 	memset(this, 0, sizeof(AudioStreamBasicDescription));
 
-	switch(format) {
+	switch(commonPCMFormat) {
 		case kSFBCommonPCMFormatFloat32:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;

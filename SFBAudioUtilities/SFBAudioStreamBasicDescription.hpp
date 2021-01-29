@@ -27,27 +27,27 @@ public:
 	/*! @name Creation and Destruction */
 	//@{
 
-	/*! @brief Create a new, empty \c SFBAudioStreamBasicDescription */
+	/*! @brief Creates a new, empty \c SFBAudioStreamBasicDescription */
 	inline SFBAudioStreamBasicDescription() noexcept
 	{
 		memset(this, 0, sizeof(AudioStreamBasicDescription));
 	}
 
-	/*! @brief Create a new \c SFBAudioStreamBasicDescription for the specified \c AudioStreamBasicDescription */
+	/*! @brief Creates a new \c SFBAudioStreamBasicDescription for the specified \c AudioStreamBasicDescription */
 	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription& asbd) noexcept
 	{
 		memcpy(this, &asbd, sizeof(AudioStreamBasicDescription));
 	}
 
-	/*! @brief Create a new \c SFBAudioStreamBasicDescription for the specified \c AudioStreamBasicDescription */
+	/*! @brief Creates a new \c SFBAudioStreamBasicDescription for the specified \c AudioStreamBasicDescription */
 	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription * const asbd) noexcept
 	{
 		assert(asbd != nullptr);
 		memcpy(this, asbd, sizeof(AudioStreamBasicDescription));
 	}
 
-	/*! @brief Create a new \c SFBAudioStreamBasicDescription for the speciifed \c SFBCommonPCMFormat */
-	SFBAudioStreamBasicDescription(SFBCommonPCMFormat format, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
+	/*! @brief Creates a new \c SFBAudioStreamBasicDescription for the speciifed \c SFBCommonPCMFormat */
+	SFBAudioStreamBasicDescription(SFBCommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
 
 	/*! @brief Copy constructor */
 	inline SFBAudioStreamBasicDescription(const SFBAudioStreamBasicDescription& rhs) noexcept
@@ -62,13 +62,13 @@ public:
 		return *this;
 	}
 
-	/*! @brief Compare two \c SFBAudioStreamBasicDescription objects for equality*/
+	/*! @brief Returns \c true if \c rhs is equal to \c this */
 	inline bool operator==(const SFBAudioStreamBasicDescription& rhs) const noexcept
 	{
 		return !memcmp(this, &rhs, sizeof(AudioStreamBasicDescription));
 	}
 
-	/*! @brief Compare two \c SFBAudioStreamBasicDescription objects for inequality*/
+	/*! @brief Returns \c true if \c rhs is not equal to \c this */
 	inline bool operator!=(const SFBAudioStreamBasicDescription& rhs) const noexcept
 	{
 		return !operator==(rhs);
@@ -81,7 +81,7 @@ public:
 	/*! @name Format information */
 	//@{
 
-	/*! @brief Query whether this format represents interleaved data */
+	/*! @brief Returns \c true if this format is interleaved */
 	inline bool IsInterleaved() const noexcept
 	{
 		return (mFormatFlags & kAudioFormatFlagIsNonInterleaved) == 0;
@@ -105,50 +105,49 @@ public:
 		return mChannelsPerFrame;
 	}
 
-	/*! @brief Query whether this format represents PCM audio data */
+	/*! @brief Returns \c true if this format is PCM */
 	inline bool IsPCM() const noexcept
 	{
 		return kAudioFormatLinearPCM == mFormatID;
 	}
 
-	/*! @brief Query whether this format represents big-endian ordered data */
+	/*! @brief Returns \c true if this format is big-endian */
 	inline bool IsBigEndian() const noexcept
 	{
 		return (mFormatFlags & kAudioFormatFlagIsBigEndian) == kAudioFormatFlagIsBigEndian;
 	}
 
-	/*! @brief Query whether this format represents little-endian ordered data */
+	/*! @brief Returns \c true if this format is little-endian */
 	inline bool IsLittleEndian() const noexcept
 	{
 		return !IsBigEndian();
 	}
 
-	/*! @brief Query whether this format represents native-endian ordered data */
+	/*! @brief Returns \c true if this format is native-endian */
 	inline bool IsNativeEndian() const noexcept
 	{
 		return (mFormatFlags & kAudioFormatFlagIsBigEndian) == kAudioFormatFlagsNativeEndian;
 	}
 
-	/*! @brief Query whether this format represents floating-point data */
+	/*! @brief Returns \c true if this format is floating-point */
 	inline bool IsFloat() const noexcept
 	{
 		return (mFormatFlags & kAudioFormatFlagIsFloat) == kAudioFormatFlagIsFloat;
 	}
 
-	/*! @brief Query whether this format represents signed integer data */
+	/*! @brief Returns \c true if this format is signed integer */
 	inline bool IsSignedInteger() const noexcept
 	{
 		return (mFormatFlags & kAudioFormatFlagIsSignedInteger) == kAudioFormatFlagIsSignedInteger;
 	}
 
-	/*! @brief Query whether this format represents packed data */
+	/*! @brief Returns \c true if this format is packed */
 	inline bool IsPacked() const noexcept
 	{
 		return (mFormatFlags & kAudioFormatFlagIsPacked) == kAudioFormatFlagIsPacked;
 	}
 
-
-	/*! @brief Query whether this format is high-aligned */
+	/*! @brief Returns \c true if this format ia high-aligned */
 	inline bool IsAlignedHigh() const noexcept
 	{
 		return (mFormatFlags & kAudioFormatFlagIsAlignedHigh) == kAudioFormatFlagIsAlignedHigh;
