@@ -11,7 +11,7 @@
 
 namespace {
 
-	/*! @brief Returns \c v clamped to the interval \c [lo,hi] */
+	/*! @brief Returns @c v clamped to the interval @c [lo,hi] */
 	template<typename T>
 	constexpr const T& clamp(const T& v, const T& lo, const T& hi)
 	{
@@ -20,10 +20,10 @@ namespace {
 	}
 
 	/*!
-	 * Zeroes a range of bytes in \c buffers
+	 * Zeroes a range of bytes in @c buffers
 	 * @param buffers The destination buffers
 	 * @param bufferCount The number of buffers
-	 * @param byteOffset The byte offset in \c buffers to begin writing
+	 * @param byteOffset The byte offset in @c buffers to begin writing
 	 * @param byteCount The number of bytes per non-interleaved buffer to write
 	 */
 	inline void ZeroRange(uint8_t * const * const buffers, size_t bufferCount, size_t byteOffset, size_t byteCount)
@@ -33,9 +33,9 @@ namespace {
 	}
 
 	/*!
-	 * Zeroes a range of bytes in \c bufferList
+	 * Zeroes a range of bytes in @c bufferList
 	 * @param bufferList The destination buffers
-	 * @param byteOffset The byte offset in \c bufferList to begin writing
+	 * @param byteOffset The byte offset in @c bufferList to begin writing
 	 * @param byteCount The maximum number of bytes per non-interleaved buffer to write
 	 */
 	inline void ZeroABL(AudioBufferList * const bufferList, size_t byteOffset, size_t byteCount)
@@ -48,11 +48,11 @@ namespace {
 	}
 
 	/*!
-	 * Copies non-interleaved audio from \c bufferList to \c buffers
+	 * Copies non-interleaved audio from @c bufferList to @c buffers
 	 * @param buffers The destination buffers
-	 * @param dstOffset The byte offset in \c buffers to begin writing
+	 * @param dstOffset The byte offset in @c buffers to begin writing
 	 * @param bufferList The source buffers
-	 * @param srcOffset The byte offset in \c bufferList to begin reading
+	 * @param srcOffset The byte offset in @c bufferList to begin reading
 	 * @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 	 */
 	inline void StoreABL(uint8_t * const * const buffers, size_t dstOffset, const AudioBufferList * const bufferList, size_t srcOffset, size_t byteCount) noexcept
@@ -65,11 +65,11 @@ namespace {
 	}
 
 	/*!
-	 * Copies non-interleaved audio from \c buffers to \c bufferList
+	 * Copies non-interleaved audio from @c buffers to @c bufferList
 	 * @param bufferList The destination buffers
-	 * @param dstOffset The byte offset in \c bufferList to begin writing
+	 * @param dstOffset The byte offset in @c bufferList to begin writing
 	 * @param buffers The source buffers
-	 * @param srcOffset The byte offset in \c bufferList to begin reading
+	 * @param srcOffset The byte offset in @c bufferList to begin reading
 	 * @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 	 */
 	inline void FetchABL(AudioBufferList * const bufferList, size_t dstOffset, const uint8_t * const * const buffers, size_t srcOffset, size_t byteCount) noexcept
@@ -82,9 +82,9 @@ namespace {
 	}
 
 	/*!
-	 * Returns the smallest power of two greater than \c x
+	 * Returns the smallest power of two greater than @c x
 	 * @param x A value in the range [2..2147483648]
-	 * @return The smallest power of two greater than \c x
+	 * @return The smallest power of two greater than @c x
 	 */
 	inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 	{

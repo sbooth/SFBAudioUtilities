@@ -12,13 +12,13 @@
 #import "SFBCFWrapper.hpp"
 
 /*!
- * @brief Returns the size of an \c AudioChannelLayout struct
- * @param channelLayout A pointer to an \c AudioChannelLayout struct
- * @return The size of \c channelLayout in bytes
+ * @brief Returns the size of an @c AudioChannelLayout struct
+ * @param channelLayout A pointer to an @c AudioChannelLayout struct
+ * @return The size of @c channelLayout in bytes
  */
 size_t SFBAudioChannelLayoutSize(const AudioChannelLayout *channelLayout) noexcept;
 
-/*! @brief A class wrapping a Core %Audio \c AudioChannelLayout */
+/*! @brief A class wrapping a Core %Audio @c AudioChannelLayout */
 class SFBAudioChannelLayout
 {
 
@@ -35,23 +35,23 @@ public:
 	//@{
 
 	/*!
-	 * @brief Create a \c SFBAudioChannelLayout
+	 * @brief Create a @c SFBAudioChannelLayout
 	 * @param layoutTag The layout tag for the channel layout
-	 * @return A \c SFBAudioChannelLayout
+	 * @return A @c SFBAudioChannelLayout
 	 */
 	static SFBAudioChannelLayout ChannelLayoutWithTag(AudioChannelLayoutTag layoutTag);
 
 	/*!
-	 * @brief Create a \c SFBAudioChannelLayout
-	 * @param channelLabels A \c std::vector of the desired channel labels
-	 * @return A \c SFBAudioChannelLayout
+	 * @brief Create a @c SFBAudioChannelLayout
+	 * @param channelLabels A @c std::vector of the desired channel labels
+	 * @return A @c SFBAudioChannelLayout
 	 */
 	static SFBAudioChannelLayout ChannelLayoutWithChannelLabels(std::vector<AudioChannelLabel> channelLabels);
 
 	/*!
-	 * @brief Create a \c SFBAudioChannelLayout
+	 * @brief Create a @c SFBAudioChannelLayout
 	 * @param channelBitmap The channel bitmap for the channel layout
-	 * @return A \c SFBAudioChannelLayout
+	 * @return A @c SFBAudioChannelLayout
 	 */
 	static SFBAudioChannelLayout ChannelLayoutWithBitmap(UInt32 channelBitmap);
 
@@ -62,13 +62,13 @@ public:
 	/*! @name Creation and Destruction */
 	//@{
 
-	/*! @brief Create a new, empty \c SFBAudioChannelLayout */
+	/*! @brief Create a new, empty @c SFBAudioChannelLayout */
 	SFBAudioChannelLayout() noexcept;
 
-	/*! @brief Destroy the \c SFBAudioChannelLayout and release all associated resources. */
+	/*! @brief Destroy the @c SFBAudioChannelLayout and release all associated resources. */
 	~SFBAudioChannelLayout();
 
-	/*! @brief Create a new \c SFBAudioChannelLayout by performing a deep copy of \c channelLayout */
+	/*! @brief Create a new @c SFBAudioChannelLayout by performing a deep copy of @c channelLayout */
 	SFBAudioChannelLayout(const AudioChannelLayout *channelLayout);
 
 	/*! @internal Move constructor */
@@ -93,10 +93,10 @@ public:
 	/*! @name Comparison */
 	//@{
 
-	/*! @brief Compare two \c ChannelLayout objects for equality*/
+	/*! @brief Compare two @c ChannelLayout objects for equality*/
 	bool operator==(const SFBAudioChannelLayout& rhs) const noexcept;
 
-	/*! @brief Compare two \c ChannelLayout objects for inequality*/
+	/*! @brief Compare two @c ChannelLayout objects for inequality*/
 	inline bool operator!=(const SFBAudioChannelLayout& rhs) const noexcept
 	{
 		return !operator==(rhs);
@@ -115,8 +115,8 @@ public:
 	/*!
 	 * @brief Create a channel map for converting audio from this channel layout
 	 * @param outputLayout The output channel layout
-	 * @param channelMap A \c std::vector to receive the channel map on success
-	 * @return \c true on success, \c false otherwise
+	 * @param channelMap A @c std::vector to receive the channel map on success
+	 * @return @c true on success, @c false otherwise
 	 */
 	bool MapToLayout(const SFBAudioChannelLayout& outputLayout, std::vector<SInt32>& channelMap) const;
 
@@ -127,39 +127,39 @@ public:
 	/*! @name AudioChannelLayout access */
 	//@{
 
-	/*! @brief Returns the size in bytes of this object's internal \c AudioChannelLayout */
+	/*! @brief Returns the size in bytes of this object's internal @c AudioChannelLayout */
 	inline const size_t Size() const noexcept
 	{
 		return SFBAudioChannelLayoutSize(mChannelLayout);
 	}
 
-	/*! @brief Retrieves a const pointer to this object's internal \c AudioChannelLayout */
+	/*! @brief Retrieves a const pointer to this object's internal @c AudioChannelLayout */
 	inline const AudioChannelLayout * const ACL() const noexcept
 	{
 		return mChannelLayout;
 	}
 
 
-	/*! @brief Returns \c true if this \c SFBAudioChannelLayout is empty */
+	/*! @brief Returns @c true if this @c SFBAudioChannelLayout is empty */
 	inline explicit operator bool() const noexcept
 	{
 		return mChannelLayout != nullptr;
 	}
 
-	/*! @brief Returns \c true if this \c SFBAudioChannelLayout is not empty */
+	/*! @brief Returns @c true if this @c SFBAudioChannelLayout is not empty */
 	inline bool operator!() const noexcept
 	{
 		return mChannelLayout == nullptr;
 	}
 
 
-	/*! @brief Retrieve a const pointer to this object's internal \c AudioChannelLayout */
+	/*! @brief Retrieve a const pointer to this object's internal @c AudioChannelLayout */
 	inline const AudioChannelLayout * const  operator->() const noexcept
 	{
 		return mChannelLayout;
 	}
 
-	/*! @brief Retrieve a const pointer to this object's internal \c AudioChannelLayout */
+	/*! @brief Retrieve a const pointer to this object's internal @c AudioChannelLayout */
 	inline operator const AudioChannelLayout * const () const noexcept
 	{
 		return mChannelLayout;

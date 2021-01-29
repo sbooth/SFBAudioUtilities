@@ -28,12 +28,12 @@ public:
 	//@{
 
 	/*!
-	 * @brief Create a new \c SFBAudioRingBuffer
+	 * @brief Create a new @c SFBAudioRingBuffer
 	 * @note Allocate() must be called before the object may be used.
 	 */
 	SFBAudioRingBuffer() noexcept;
 
-	/*! @brief Destroy the \c SFBAudioRingBuffer and release all associated resources. */
+	/*! @brief Destroy the @c SFBAudioRingBuffer and release all associated resources. */
 	~SFBAudioRingBuffer();
 
 	/*! @internal This class is non-copyable */
@@ -56,31 +56,31 @@ public:
 	 * @note Capacities from 2 to 2,147,483,648 (0x80000000) frames are supported
 	 * @param format The format of the audio that will be written to and read from this buffer.
 	 * @param capacityFrames The desired capacity, in frames
-	 * @return \c true on success, \c false on error
+	 * @return @c true on success, @c false on error
 	 */
 	bool Allocate(const SFBAudioStreamBasicDescription& format, size_t capacityFrames) noexcept;
 
 	/*!
-	 * @brief Free the resources used by this \c SFBAudioRingBuffer
+	 * @brief Free the resources used by this @c SFBAudioRingBuffer
 	 * @note This method is not thread safe.
 	 */
 	void Deallocate() noexcept;
 
 
 	/*!
-	 * @brief Reset this \c SFBAudioRingBuffer to its default state.
+	 * @brief Reset this @c SFBAudioRingBuffer to its default state.
 	 * @note This method is not thread safe.
 	 */
 	void Reset() noexcept;
 
 
-	/*! @brief Returns the capacity of this \c SFBAudioRingBuffer in frames */
+	/*! @brief Returns the capacity of this @c SFBAudioRingBuffer in frames */
 	inline size_t CapacityFrames() const noexcept
 	{
 		return mCapacityFrames;
 	}
 
-	/*! @brief Returns the format of this \c SFBAudioRingBuffer */
+	/*! @brief Returns the format of this @c SFBAudioRingBuffer */
 	inline const SFBAudioStreamBasicDescription& Format() const noexcept
 	{
 		return mFormat;
@@ -100,16 +100,16 @@ public:
 	//@{
 
 	/*!
-	 * @brief Read audio from the \c SFBAudioRingBuffer, advancing the read pointer.
-	 * @param bufferList An \c AudioBufferList to receive the audio
+	 * @brief Read audio from the @c SFBAudioRingBuffer, advancing the read pointer.
+	 * @param bufferList An @c AudioBufferList to receive the audio
 	 * @param frameCount The desired number of frames to read
 	 * @return The number of frames actually read
 	 */
 	size_t Read(AudioBufferList * const bufferList, size_t frameCount) noexcept;
 
 	/*!
-	 * @brief Write audio to the \c SFBAudioRingBuffer, advancing the write pointer.
-	 * @param bufferList An \c AudioBufferList containing the audio to copy
+	 * @brief Write audio to the @c SFBAudioRingBuffer, advancing the write pointer.
+	 * @param bufferList An @c AudioBufferList containing the audio to copy
 	 * @param frameCount The desired number of frames to write
 	 * @return The number of frames actually written
 	 */

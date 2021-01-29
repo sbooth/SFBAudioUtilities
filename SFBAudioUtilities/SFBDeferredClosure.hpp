@@ -8,8 +8,8 @@
 /*!
  * @brief A class that calls a closure upon destruction
  *
- * This allows similar functionality to \c defer  in Swift and Go.
- * This is useful to limit the lifetime of non-C++ objects and provides an alternative to \c std::unique_ptr  with a
+ * This allows similar functionality to @c defer  in Swift and Go.
+ * This is useful to limit the lifetime of non-C++ objects and provides an alternative to @c std::unique_ptr  with a
  * custom deleter.
  *
  * \code
@@ -30,7 +30,7 @@ class SFBDeferredClosure
 
 public:
 
-	/*! Creates a new \c SFBDeferredClosure executing \c closure when the destructor is called */
+	/*! Creates a new @c SFBDeferredClosure executing @c closure when the destructor is called */
 	inline SFBDeferredClosure(const F& closure)
 	: mClosure(closure)
 	{}

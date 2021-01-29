@@ -12,11 +12,11 @@
 namespace {
 
 	/*!
-	 * Copies non-interleaved audio from \c bufferList to \c buffers
+	 * Copies non-interleaved audio from @c bufferList to @c buffers
 	 * @param buffers The destination buffers
-	 * @param dstOffset The byte offset in \c buffers to begin writing
+	 * @param dstOffset The byte offset in @c buffers to begin writing
 	 * @param bufferList The source buffers
-	 * @param srcOffset The byte offset in \c bufferList to begin reading
+	 * @param srcOffset The byte offset in @c bufferList to begin reading
 	 * @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 	 */
 	inline void StoreABL(uint8_t * const * const buffers, size_t dstOffset, const AudioBufferList * const bufferList, size_t srcOffset, size_t byteCount) noexcept
@@ -29,11 +29,11 @@ namespace {
 	}
 
 	/*!
-	 * Copies non-interleaved audio from \c buffers to \c bufferList
+	 * Copies non-interleaved audio from @c buffers to @c bufferList
 	 * @param bufferList The destination buffers
-	 * @param dstOffset The byte offset in \c bufferList to begin writing
+	 * @param dstOffset The byte offset in @c bufferList to begin writing
 	 * @param buffers The source buffers
-	 * @param srcOffset The byte offset in \c bufferList to begin reading
+	 * @param srcOffset The byte offset in @c bufferList to begin reading
 	 * @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 	 */
 	inline void FetchABL(AudioBufferList * const bufferList, size_t dstOffset, const uint8_t * const * const buffers, size_t srcOffset, size_t byteCount) noexcept
@@ -46,9 +46,9 @@ namespace {
 	}
 
 	/*!
-	 * Returns the smallest power of two greater than \c x
+	 * Returns the smallest power of two greater than @c x
 	 * @param x A value in the range [2..2147483648]
-	 * @return The smallest power of two greater than \c x
+	 * @return The smallest power of two greater than @c x
 	 */
 	inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 	{
@@ -69,7 +69,8 @@ SFBAudioRingBuffer::SFBAudioRingBuffer() noexcept
 
 SFBAudioRingBuffer::~SFBAudioRingBuffer()
 {
-	Deallocate();
+	if(mBuffers)
+		std::free(mBuffers);
 }
 
 #pragma mark Buffer Management

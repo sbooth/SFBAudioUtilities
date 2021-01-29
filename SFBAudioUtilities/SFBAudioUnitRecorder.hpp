@@ -11,19 +11,19 @@
 
 #import "SFBExtAudioFile.hpp"
 
-/*! A class that asynchronously writes the output from an \c AudioUnit to a file */
+/*! A class that asynchronously writes the output from an @c AudioUnit to a file */
 class SFBAudioUnitRecorder
 {
 
 public:
 
 	/*!
-	 * @brief Creates a new \c SFBAudioUnitRecorder that asynchronously writes the output from an \c AudioUnit to a file
-	 * @param au The \c AudioUnit to record
+	 * @brief Creates a new @c SFBAudioUnitRecorder that asynchronously writes the output from an @c AudioUnit to a file
+	 * @param au The @c AudioUnit to record
 	 * @param outputFileURL The URL of the output audio file
 	 * @param fileType The type of the file to create
 	 * @param format The format of the audio data to be written to the file
-	 * @param busNumber The bus number of \c au to record
+	 * @param busNumber The bus number of @c au to record
 	 */
 	SFBAudioUnitRecorder(AudioUnit au, CFURLRef outputFileURL, AudioFileTypeID fileType, const AudioStreamBasicDescription& format, UInt32 busNumber = 0)
 	: mClientFormatIsSet(false), mAudioUnit(au), mBusNumber(busNumber)

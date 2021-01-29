@@ -10,17 +10,17 @@
 
 namespace {
 
-	/*! @brief Get the size in bytes of an \c AudioChannelLayout with the specified number of channel descriptions */
+	/*! @brief Get the size in bytes of an @c AudioChannelLayout with the specified number of channel descriptions */
 	size_t ChannelLayoutSize(UInt32 numberChannelDescriptions) noexcept
 	{
 		return offsetof(AudioChannelLayout, mChannelDescriptions) + (numberChannelDescriptions * sizeof(AudioChannelDescription));
 	}
 
 	/*!
-	 * @brief Allocates an \c AudioChannelLayout
+	 * @brief Allocates an @c AudioChannelLayout
 	 * @param numberChannelDescriptions The number of channel descriptions that will be stored in the channel layout
-	 * @return An \c AudioChannelLayout
-	 * @throws \c std::bad_alloc
+	 * @return An @c AudioChannelLayout
+	 * @throws @c std::bad_alloc
 	 */
 	AudioChannelLayout * CreateChannelLayout(UInt32 numberChannelDescriptions)
 	{
@@ -35,10 +35,10 @@ namespace {
 	}
 
 	/*!
-	 * @brief Creates and returns a copy of \c rhs
-	 * @param rhs The \c AudioChannelLayout to copy
-	 * @return An \c AudioChannelLayout
-	 * @throws \c std::bad_alloc
+	 * @brief Creates and returns a copy of @c rhs
+	 * @param rhs The @c AudioChannelLayout to copy
+	 * @return An @c AudioChannelLayout
+	 * @throws @c std::bad_alloc
 	 */
 	AudioChannelLayout * CopyChannelLayout(const AudioChannelLayout *rhs)
 	{
@@ -55,7 +55,7 @@ namespace {
 		return channelLayout;
 	}
 
-	/*! @brief Get the string representation of an \c AudioChannelLayoutTag */
+	/*! @brief Get the string representation of an @c AudioChannelLayoutTag */
 	const char * const GetChannelLayoutTagName(AudioChannelLayoutTag layoutTag) noexcept
 	{
 		switch(layoutTag) {
@@ -165,7 +165,7 @@ namespace {
 		return nullptr;
 	}
 
-	/*! @brief Get the string representation of an \c AudioChannelLabel */
+	/*! @brief Get the string representation of an @c AudioChannelLabel */
 	const char * const GetChannelLabelName(AudioChannelLabel label) noexcept
 	{
 		switch(label) {
