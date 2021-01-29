@@ -50,28 +50,28 @@ public:
 		return mExtAudioFile != nullptr;
 	}
 
-	void OpenURL(CFURLRef inURL) noexcept(false)
+	void OpenURL(CFURLRef inURL)
 	{
 		Close();
 		auto result = ExtAudioFileOpenURL(inURL, &mExtAudioFile);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileOpenURL");
 	}
 
-	void WrapAudioFileID(AudioFileID inFileID, bool inForWriting) noexcept(false)
+	void WrapAudioFileID(AudioFileID inFileID, bool inForWriting)
 	{
 		Close();
 		auto result = ExtAudioFileWrapAudioFileID(inFileID, inForWriting, &mExtAudioFile);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileWrapAudioFileID");
 	}
 
-	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFiletype, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * const inChannelLayout, UInt32 inFlags) noexcept(false)
+	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFiletype, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * const inChannelLayout, UInt32 inFlags)
 	{
 		Close();
 		auto result = ExtAudioFileCreateWithURL(inURL, inFiletype, &inStreamDesc, inChannelLayout, inFlags, &mExtAudioFile);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileCreateWithURL");
 	}
 
-	void Close() noexcept(false)
+	void Close()
 	{
 		if(mExtAudioFile) {
 			auto result = ExtAudioFileDispose(mExtAudioFile);
@@ -80,13 +80,13 @@ public:
 		}
 	}
 
-	void Read(UInt32& ioNumberFrames, AudioBufferList *ioData) noexcept(false)
+	void Read(UInt32& ioNumberFrames, AudioBufferList *ioData)
 	{
 		auto result = ExtAudioFileRead(mExtAudioFile, &ioNumberFrames, ioData);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileRead");
 	}
 
-	void Write(UInt32 inNumberFrames, const AudioBufferList *ioData) noexcept(false)
+	void Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
 	{
 		auto result = ExtAudioFileWrite(mExtAudioFile, inNumberFrames, ioData);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileWrite");
@@ -97,19 +97,19 @@ public:
 #endif
 	}
 
-	void WriteAsync(UInt32 inNumberFrames, const AudioBufferList *ioData) noexcept(false)
+	void WriteAsync(UInt32 inNumberFrames, const AudioBufferList *ioData)
 	{
 		auto result = ExtAudioFileWriteAsync(mExtAudioFile, inNumberFrames, ioData);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileOpenURL");
 	}
 
-	void Seek(SInt64 inFrameOffset) noexcept(false)
+	void Seek(SInt64 inFrameOffset)
 	{
 		auto result = ExtAudioFileSeek(mExtAudioFile, inFrameOffset);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileSeek");
 	}
 
-	SInt64 Tell() const noexcept(false)
+	SInt64 Tell() const
 	{
 		SInt64 pos;
 		auto result = ExtAudioFileTell(mExtAudioFile, &pos);
@@ -117,7 +117,7 @@ public:
 		return pos;
 	}
 
-	UInt32 GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, Boolean *outWritable) const noexcept(false)
+	UInt32 GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, Boolean *outWritable) const
 	{
 		UInt32 size;
 		auto result = ExtAudioFileGetPropertyInfo(mExtAudioFile, inPropertyID, &size, outWritable);
@@ -125,19 +125,19 @@ public:
 		return size;
 	}
 
-	void GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const noexcept(false)
+	void GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const
 	{
 		auto result = ExtAudioFileGetProperty(mExtAudioFile, inPropertyID, &ioPropertyDataSize, outPropertyData);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileGetProperty");
 	}
 
-	void SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData) noexcept(false)
+	void SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 	{
 		auto result = ExtAudioFileSetProperty(mExtAudioFile, inPropertyID, inPropertyDataSize, inPropertyData);
 		SFBCAException::ThrowIfError(result, "ExtAudioFileSetProperty");
 	}
 
-	SFBAudioChannelLayout FileChannelLayout() const noexcept(false)
+	SFBAudioChannelLayout FileChannelLayout() const
 	{
 		auto size = GetPropertyInfo(kExtAudioFileProperty_FileChannelLayout, nullptr);
 		std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
@@ -145,12 +145,12 @@ public:
 		return layout.get();
 	}
 
-	void SetFileChannelLayout(const SFBAudioChannelLayout& fileChannelLayout) noexcept(false)
+	void SetFileChannelLayout(const SFBAudioChannelLayout& fileChannelLayout)
 	{
 		SetProperty(kExtAudioFileProperty_FileChannelLayout, static_cast<UInt32>(fileChannelLayout.Size()), fileChannelLayout);
 	}
 
-	SFBAudioStreamBasicDescription FileDataFormat() const noexcept(false)
+	SFBAudioStreamBasicDescription FileDataFormat() const
 	{
 		SFBAudioStreamBasicDescription fileDataFormat;
 		UInt32 size = sizeof(fileDataFormat);
@@ -158,7 +158,7 @@ public:
 		return fileDataFormat;
 	}
 
-	SFBAudioStreamBasicDescription ClientDataFormat() const noexcept(false)
+	SFBAudioStreamBasicDescription ClientDataFormat() const
 	{
 		SFBAudioStreamBasicDescription clientDataFormat;
 		UInt32 size = sizeof(clientDataFormat);
@@ -166,7 +166,7 @@ public:
 		return clientDataFormat;
 	}
 
-	void SetClientDataFormat(const SFBAudioStreamBasicDescription& clientDataFormat, const SFBAudioChannelLayout * const clientChannelLayout = nullptr, UInt32 codecManufacturer = 0) noexcept(false)
+	void SetClientDataFormat(const SFBAudioStreamBasicDescription& clientDataFormat, const SFBAudioChannelLayout * const clientChannelLayout = nullptr, UInt32 codecManufacturer = 0)
 	{
 		if(codecManufacturer)
 			SetProperty(kExtAudioFileProperty_CodecManufacturer, sizeof(codecManufacturer), &codecManufacturer);
@@ -175,7 +175,7 @@ public:
 			SetClientChannelLayout(*clientChannelLayout);
 	}
 
-	SFBAudioChannelLayout ClientChannelLayout() const noexcept(false)
+	SFBAudioChannelLayout ClientChannelLayout() const
 	{
 		auto size = GetPropertyInfo(kExtAudioFileProperty_ClientChannelLayout, nullptr);
 		std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
@@ -183,12 +183,12 @@ public:
 		return layout.get();
 	}
 
-	void SetClientChannelLayout(const SFBAudioChannelLayout& clientChannelLayout) noexcept(false)
+	void SetClientChannelLayout(const SFBAudioChannelLayout& clientChannelLayout)
 	{
 		SetProperty(kExtAudioFileProperty_ClientChannelLayout, static_cast<UInt32>(clientChannelLayout.Size()), clientChannelLayout);
 	}
 
-	AudioConverterRef Converter() const noexcept(false)
+	AudioConverterRef Converter() const
 	{
 		UInt32 size = sizeof(AudioConverterRef);
 		AudioConverterRef converter = nullptr;
@@ -196,7 +196,7 @@ public:
 		return converter;
 	}
 
-	bool HasConverter() const noexcept(false)
+	bool HasConverter() const
 	{
 		return Converter() != nullptr;
 	}
@@ -209,7 +209,7 @@ public:
 		SetProperty(kExtAudioFileProperty_ConverterConfig, sizeof(config), &config);
 	}
 
-	SInt64 FrameLength() const noexcept(false)
+	SInt64 FrameLength() const
 	{
 		SInt64 frameLength;
 		UInt32 size = sizeof(frameLength);

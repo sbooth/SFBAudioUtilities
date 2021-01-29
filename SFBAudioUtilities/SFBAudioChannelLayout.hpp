@@ -39,21 +39,21 @@ public:
 	 * @param layoutTag The layout tag for the channel layout
 	 * @return A \c SFBAudioChannelLayout
 	 */
-	static SFBAudioChannelLayout ChannelLayoutWithTag(AudioChannelLayoutTag layoutTag) noexcept(false);
+	static SFBAudioChannelLayout ChannelLayoutWithTag(AudioChannelLayoutTag layoutTag);
 
 	/*!
 	 * @brief Create a \c SFBAudioChannelLayout
 	 * @param channelLabels A \c std::vector of the desired channel labels
 	 * @return A \c SFBAudioChannelLayout
 	 */
-	static SFBAudioChannelLayout ChannelLayoutWithChannelLabels(std::vector<AudioChannelLabel> channelLabels) noexcept(false);
+	static SFBAudioChannelLayout ChannelLayoutWithChannelLabels(std::vector<AudioChannelLabel> channelLabels);
 
 	/*!
 	 * @brief Create a \c SFBAudioChannelLayout
 	 * @param channelBitmap The channel bitmap for the channel layout
 	 * @return A \c SFBAudioChannelLayout
 	 */
-	static SFBAudioChannelLayout ChannelLayoutWithBitmap(UInt32 channelBitmap) noexcept(false);
+	static SFBAudioChannelLayout ChannelLayoutWithBitmap(UInt32 channelBitmap);
 
 	//@}
 
@@ -69,7 +69,7 @@ public:
 	~SFBAudioChannelLayout();
 
 	/*! @brief Create a new \c SFBAudioChannelLayout by performing a deep copy of \c channelLayout */
-	SFBAudioChannelLayout(const AudioChannelLayout *channelLayout) noexcept(false);
+	SFBAudioChannelLayout(const AudioChannelLayout *channelLayout);
 
 	/*! @internal Move constructor */
 	SFBAudioChannelLayout(SFBAudioChannelLayout&& rhs) noexcept;
@@ -78,13 +78,13 @@ public:
 	SFBAudioChannelLayout& operator=(SFBAudioChannelLayout&& rhs) noexcept;
 
 	/*! @internal Copy constructor */
-	SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs) noexcept(false);
+	SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs);
 
 	/*! @internal Assignment operator */
-	SFBAudioChannelLayout& operator=(const SFBAudioChannelLayout& rhs) noexcept(false);
+	SFBAudioChannelLayout& operator=(const SFBAudioChannelLayout& rhs);
 
 	/*! @brief Makes a deep copy of rhs */
-	SFBAudioChannelLayout& operator=(const AudioChannelLayout *rhs) noexcept(false);
+	SFBAudioChannelLayout& operator=(const AudioChannelLayout *rhs);
 
 	//@}
 

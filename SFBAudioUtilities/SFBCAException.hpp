@@ -14,7 +14,7 @@ class SFBCAException : public std::exception
 
 public:
 
-	static inline void ThrowIfError(OSStatus result, const char * const operation = nullptr) noexcept(false)
+	static inline void ThrowIfError(OSStatus result, const char * const operation = nullptr)
 	{
 		if(__builtin_expect(result != noErr, 0))
 			throw SFBCAException(result, operation);
@@ -26,7 +26,7 @@ public:
 		if(operation)
 			strlcpy(mOperation, operation, sizeof(mOperation));
 		// Missing C11 function:
-		//			strcpy_s(mOperation, sizeof(mOperation), operation);
+//			strcpy_s(mOperation, sizeof(mOperation), operation);
 		else
 			mOperation[0] = '\0';
 
