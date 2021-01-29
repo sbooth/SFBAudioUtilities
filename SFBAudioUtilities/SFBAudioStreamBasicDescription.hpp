@@ -5,6 +5,8 @@
 
 #pragma once
 
+#import <cstring>
+
 #import <CoreAudio/CoreAudioTypes.h>
 
 #import "SFBCFWrapper.hpp"
@@ -30,20 +32,20 @@ public:
 	/*! @brief Creates a new, empty @c SFBAudioStreamBasicDescription */
 	inline SFBAudioStreamBasicDescription() noexcept
 	{
-		memset(this, 0, sizeof(AudioStreamBasicDescription));
+		std::memset(this, 0, sizeof(AudioStreamBasicDescription));
 	}
 
 	/*! @brief Creates a new @c SFBAudioStreamBasicDescription for the specified @c AudioStreamBasicDescription */
 	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription& asbd) noexcept
 	{
-		memcpy(this, &asbd, sizeof(AudioStreamBasicDescription));
+		std::memcpy(this, &asbd, sizeof(AudioStreamBasicDescription));
 	}
 
 	/*! @brief Creates a new @c SFBAudioStreamBasicDescription for the specified @c AudioStreamBasicDescription */
 	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription * const asbd) noexcept
 	{
 		assert(asbd != nullptr);
-		memcpy(this, asbd, sizeof(AudioStreamBasicDescription));
+		std::memcpy(this, asbd, sizeof(AudioStreamBasicDescription));
 	}
 
 	/*! @brief Creates a new @c SFBAudioStreamBasicDescription for the speciifed @c SFBCommonPCMFormat */
@@ -58,7 +60,8 @@ public:
 	/*! @brief Assignment operator */
 	inline SFBAudioStreamBasicDescription& operator=(const SFBAudioStreamBasicDescription& rhs) noexcept
 	{
-		memcpy(this, &rhs, sizeof(AudioStreamBasicDescription));
+		if(this != &rhs)
+			std::memcpy(this, &rhs, sizeof(AudioStreamBasicDescription));
 		return *this;
 	}
 

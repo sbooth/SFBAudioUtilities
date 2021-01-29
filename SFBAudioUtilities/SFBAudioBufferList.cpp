@@ -24,7 +24,7 @@ AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescriptio
 	if(!abl)
 		return nullptr;
 
-	memset(abl, 0, allocationSize);
+	std::memset(abl, 0, allocationSize);
 
 	abl->mNumberBuffers = bufferCount;
 
@@ -63,15 +63,17 @@ SFBAudioBufferList::SFBAudioBufferList(SFBAudioBufferList&& rhs)
 
 SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
 {
-	Deallocate();
+	if(this != &rhs) {
+		Deallocate();
 
-	mBufferList = rhs.mBufferList;
-	mFrameCapacity = rhs.mFrameCapacity;
-	mFormat = rhs.mFormat;
+		mBufferList = rhs.mBufferList;
+		mFrameCapacity = rhs.mFrameCapacity;
+		mFormat = rhs.mFormat;
 
-	rhs.mBufferList = nullptr;
-	rhs.mFrameCapacity = 0;
-	rhs.mFormat = {};
+		rhs.mBufferList = nullptr;
+		rhs.mFrameCapacity = 0;
+		rhs.mFormat = {};
+	}
 
 	return *this;
 }

@@ -5,6 +5,8 @@
 
 #pragma once
 
+#import <cstring>
+
 #import <CoreAudio/CoreAudioTypes.h>
 
 /*! @brief A class extending the functionality of a Core %Audio @c AudioTimeStamp */
@@ -20,13 +22,13 @@ public:
 	/*! @brief Creates a new, empty @c SFBAudioTimeStamp */
 	inline SFBAudioTimeStamp() noexcept
 	{
-		memset(this, 0, sizeof(AudioTimeStamp));
+		std::memset(this, 0, sizeof(AudioTimeStamp));
 	}
 
 	/*! @brief Creates a new @c SFBAudioTimeStamp for the specified @c AudioTimeStamp */
 	inline SFBAudioTimeStamp(const AudioTimeStamp& timeStamp) noexcept
 	{
-		memcpy(this, &timeStamp, sizeof(AudioTimeStamp));
+		std::memcpy(this, &timeStamp, sizeof(AudioTimeStamp));
 	}
 
 	/*! @brief Creates a new @c SFBAudioTimeStamp with the specified sample time */
@@ -74,7 +76,8 @@ public:
 	/*! @brief Assignment operator */
 	inline SFBAudioTimeStamp& operator=(const AudioTimeStamp& rhs) noexcept
 	{
-		memcpy(this, &rhs, sizeof(AudioTimeStamp));
+		if(this != &rhs)
+			std::memcpy(this, &rhs, sizeof(AudioTimeStamp));
 		return *this;
 	}
 

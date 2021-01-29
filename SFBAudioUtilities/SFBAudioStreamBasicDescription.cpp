@@ -14,7 +14,7 @@ SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMForma
 //	if(channelsPerFrame < 0)
 //		throw std::invalid_argument("channelsPerFrame < 0");
 
-	memset(this, 0, sizeof(AudioStreamBasicDescription));
+	std::memset(this, 0, sizeof(AudioStreamBasicDescription));
 
 	switch(commonPCMFormat) {
 		case kSFBCommonPCMFormatFloat32:
