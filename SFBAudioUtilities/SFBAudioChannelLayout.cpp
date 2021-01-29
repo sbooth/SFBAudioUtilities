@@ -4,7 +4,7 @@
  */
 
 #import <cstdlib>
-#import <stdexcept>
+#import <new>
 
 #import "SFBAudioChannelLayout.hpp"
 

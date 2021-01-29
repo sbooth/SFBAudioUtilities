@@ -5,7 +5,7 @@
 
 #import <algorithm>
 #import <cstdlib>
-#import <stdexcept>
+#import <new>
 
 #import "SFBAudioBufferList.hpp"
 
