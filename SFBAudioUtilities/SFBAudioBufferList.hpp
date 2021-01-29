@@ -24,9 +24,7 @@ class SFBAudioBufferList
 	
 public:
 	
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*! Create a new, empty @c SFBAudioBufferList */
 	SFBAudioBufferList() noexcept;
@@ -54,11 +52,7 @@ public:
 	/*! @internal This class is non-assignable */
 	SFBAudioBufferList& operator=(const SFBAudioBufferList& rhs) = delete;
 
-	//@}
-
-	// ========================================
-	/*! @name Buffer management */
-	//@{
+#pragma mark Buffer management
 
 	/*!
 	 * Create a new @c SFBAudioBufferList
@@ -115,12 +109,7 @@ public:
 		return mFormat;
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name AudioBufferList access */
-	//@{
+#pragma mark AudioBufferList access
 
 	/*!
 	 * Relinquishes ownership of the object's internal @c AudioBufferList and returns it
@@ -177,8 +166,6 @@ public:
 	{
 		return mBufferList;
 	}
-
-	//@}
 
 private:
 

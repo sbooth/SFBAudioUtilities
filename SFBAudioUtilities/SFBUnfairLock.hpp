@@ -24,9 +24,7 @@ class SFBUnfairLock
 
 public:
 
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*! Create a new @c SFBUnfairLock */
 	inline SFBUnfairLock() noexcept
@@ -39,12 +37,7 @@ public:
 	/*! @internal This class is non-assignable */
 	SFBUnfairLock& operator=(const SFBUnfairLock& rhs) = delete;
 
-	//@}
-
-
-	// ========================================
-	/*! @name Lockable */
-	//@{
+#pragma mark Lockable
 
 	/*! Lock the lock. */
 	inline void lock() noexcept
@@ -66,8 +59,6 @@ public:
 	{
 		return os_unfair_lock_trylock(&mLock);
 	}
-
-	//@}
 
 private:
 

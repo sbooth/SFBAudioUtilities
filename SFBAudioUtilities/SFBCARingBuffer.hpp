@@ -21,9 +21,7 @@ class SFBCARingBuffer
 
 public:
 
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*!
 	 * Creates a new @c SFBCARingBuffer
@@ -40,12 +38,7 @@ public:
 	/*! @internal This class is non-assignable */
 	SFBCARingBuffer& operator=(const SFBCARingBuffer& rhs) = delete;
 
-	//@}
-
-
-	// ========================================
-	/*! @name Buffer management */
-	//@{
+#pragma mark Buffer management
 
 	/*!
 	 * Allocates space for audio data.
@@ -85,12 +78,7 @@ public:
 	 */
 	bool GetTimeBounds(int64_t& startTime, int64_t& endTime) const noexcept;
 
-	//@}
-
-
-	// ========================================
-	/*! @name Reading and writing audio */
-	//@{
+#pragma mark Reading and writing audio
 
 	/*!
 	 * Reads audio from the @c SFBCARingBuffer.
@@ -113,8 +101,6 @@ public:
 	 * @return @c true on success, @c false on error
 	 */
 	bool Write(const AudioBufferList * const bufferList, size_t frameCount, int64_t timeStamp) noexcept;
-
-	//@}
 
 protected:
 

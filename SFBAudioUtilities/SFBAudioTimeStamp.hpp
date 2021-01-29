@@ -15,9 +15,7 @@ class SFBAudioTimeStamp : public AudioTimeStamp
 
 public:
 
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*! Creates a new, empty @c SFBAudioTimeStamp */
 	inline SFBAudioTimeStamp() noexcept
@@ -81,12 +79,7 @@ public:
 		return *this;
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name Comparison */
-	//@{
+#pragma mark Comparison
 
 	/*! Compare two @c SFBAudioTimeStamp objects for equality*/
 	bool operator==(const SFBAudioTimeStamp& rhs) const noexcept;
@@ -118,12 +111,7 @@ public:
 		return !(operator<(rhs) || operator==(rhs));
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name Flags */
-	//@{
+#pragma mark Flags
 
 	/*! Returns @c true if the @c SFBAudioTimeStamp is valid */
 	inline bool IsValid() const noexcept
@@ -160,7 +148,5 @@ public:
 	{
 		return (mFlags & kAudioTimeStampSMPTETimeValid) == kAudioTimeStampSMPTETimeValid;
 	}
-
-	//@}
 
 };

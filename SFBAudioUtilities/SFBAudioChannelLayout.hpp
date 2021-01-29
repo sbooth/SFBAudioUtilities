@@ -30,9 +30,7 @@ public:
 	/*! Stereo layout */
 	static const SFBAudioChannelLayout Stereo;
 
-	// ========================================
-	/*! @name Factory Methods */
-	//@{
+#pragma mark Factory Methods
 
 	/*!
 	 * Creates a @c SFBAudioChannelLayout
@@ -41,12 +39,7 @@ public:
 	 */
 	static SFBAudioChannelLayout ChannelLayoutWithBitmap(UInt32 channelBitmap);
 
-	//@}
-
-
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*! Creates an empty @c SFBAudioChannelLayout */
 	SFBAudioChannelLayout() noexcept;
@@ -84,12 +77,7 @@ public:
 	/*! Makes a deep copy of rhs */
 	SFBAudioChannelLayout& operator=(const AudioChannelLayout *rhs);
 
-	//@}
-
-
-	// ========================================
-	/*! @name Comparison */
-	//@{
+#pragma mark Comparison
 
 	/*! Compare two @c ChannelLayout objects for equality*/
 	bool operator==(const SFBAudioChannelLayout& rhs) const noexcept;
@@ -100,12 +88,7 @@ public:
 		return !operator==(rhs);
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name Functionality */
-	//@{
+#pragma mark Functionality
 
 	/*! Get the number of channels contained in this channel layout */
 	size_t ChannelCount() const noexcept;
@@ -118,12 +101,7 @@ public:
 	 */
 	bool MapToLayout(const SFBAudioChannelLayout& outputLayout, std::vector<SInt32>& channelMap) const;
 
-	//@}
-
-
-	// ========================================
-	/*! @name AudioChannelLayout access */
-	//@{
+#pragma mark AudioChannelLayout access
 
 	/*! Returns the size in bytes of this object's internal @c AudioChannelLayout */
 	inline const size_t Size() const noexcept
@@ -168,8 +146,6 @@ public:
 	{
 		return mChannelLayout;
 	}
-
-	//@}
 
 
 	/*! Returns a string representation of this channel layout suitable for logging */

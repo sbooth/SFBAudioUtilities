@@ -23,9 +23,7 @@ class SFBAudioRingBuffer
 
 public:
 	
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*!
 	 * Create a new @c SFBAudioRingBuffer
@@ -42,12 +40,7 @@ public:
 	/*! @internal This class is non-assignable */
 	SFBAudioRingBuffer& operator=(const SFBAudioRingBuffer& rhs) = delete;
 
-	//@}
-
-
-	// ========================================
-	/*! @name Buffer management */
-	//@{
+#pragma mark Buffer management
 
 	/*!
 	 * Allocate space for audio data.
@@ -92,12 +85,7 @@ public:
 	/*! Returns the free space available for writing in frames */
 	size_t FramesAvailableToWrite() const noexcept;
 
-	//@}
-
-
-	// ========================================
-	/*! @name Reading and writing audio */
-	//@{
+#pragma mark Reading and writing audio
 
 	/*!
 	 * Read audio from the @c SFBAudioRingBuffer, advancing the read pointer.
@@ -114,8 +102,6 @@ public:
 	 * @return The number of frames actually written
 	 */
 	size_t Write(const AudioBufferList * const bufferList, size_t frameCount) noexcept;
-
-	//@}
 
 private:
 

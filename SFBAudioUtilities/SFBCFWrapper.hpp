@@ -25,9 +25,7 @@ class SFBCFWrapper
 	
 public:
 
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*! Create a new @c SFBCFWrapper */
 	inline SFBCFWrapper()
@@ -76,11 +74,7 @@ public:
 		mObject = nullptr;
 	}
 
-	//@}
-
-
-	/*! @name Assignment */
-	//@{
+#pragma mark Assignment
 
 	/*!
 	 * Replace the wrapped object
@@ -133,12 +127,7 @@ public:
 		return *this;
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name Pointer management */
-	//@{
+#pragma mark Pointer management
 
 	/*! Relinquish ownership of the wrapped object and return it */
 	inline T Relinquish()
@@ -149,12 +138,7 @@ public:
 		return object;
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name Equality testing */
-	//@{
+#pragma mark Equality testing
 
 	/*! Test two @c SFBCFWrapper objects for equality using @c CFEqual() */
 	inline bool operator==(const SFBCFWrapper& rhs) const
@@ -175,12 +159,7 @@ public:
 		return !operator==(rhs);
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name CoreFoundation object access */
-	//@{
+#pragma mark CoreFoundation object access
 
 	/*! Check whether the wrapped object is not @c nullptr */
 	inline explicit operator bool() const
@@ -214,12 +193,7 @@ public:
 		return mObject;
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name CoreFoundation object creation */
-	//@{
+#pragma mark CoreFoundation object creation
 
 	/*! Create a new wrapped @c CFStringRef using @c CFStringCreateWithCString with the default allocator */
 	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
@@ -274,49 +248,48 @@ public:
 	: SFBCFWrapper(CFDataCreate(kCFAllocatorDefault, bytes, length))
 	{}
 
-	//@}
-
 private:
+
 	T mObject;				/*!< The Core Foundation object */
 	bool mRelease;			/*!< Whether @c CFRelease should be called on destruction or reassignment */
+
 };
 
 // ========================================
 // Typedefs for common CoreFoundation types
 
-using SFBCFType = SFBCFWrapper<CFTypeRef>;											/*!< A wrapped @c CFTypeRef */
-using SFBCFData = SFBCFWrapper<CFDataRef>;											/*!< A wrapped @c CFDataRef */
-using SFBCFMutableData = SFBCFWrapper<CFMutableDataRef>;							/*!< A wrapped @c CFMutableDataRef */
-using SFBCFString = SFBCFWrapper<CFStringRef>;										/*!< A wrapped @c CFStringRef */
-using SFBCFMutableString = SFBCFWrapper<CFMutableStringRef>;						/*!< A wrapped @c CFMutableStringRef */
-using SFBCFAttributedString = SFBCFWrapper<CFAttributedStringRef>;					/*!< A wrapped @c CFAttributedStringRef */
-using SFBCFMutableAttributedString = SFBCFWrapper<CFMutableAttributedStringRef>; 	/*!< A wrapped @c CFMutableAttributedStringRef */
-using SFBCFDictionary = SFBCFWrapper<CFDictionaryRef>;								/*!< A wrapped @c CFDictionaryRef */
-using SFBCFMutableDictionary = SFBCFWrapper<CFMutableDictionaryRef>;				/*!< A wrapped @c CFMutableDictionaryRef */
-using SFBCFArray = SFBCFWrapper<CFArrayRef>;										/*!< A wrapped @c CFArrayRef */
-using SFBCFMutableArray = SFBCFWrapper<CFMutableArrayRef>;							/*!< A wrapped @c CFMutableArrayRef */
-using SFBCFSet = SFBCFWrapper<CFSetRef>;											/*!< A wrapped @c CFSetRef */
-using SFBCFMutableSet = SFBCFWrapper<CFMutableSetRef>;								/*!< A wrapped @c CFMutableSetRef */
-using SFBCFBag = SFBCFWrapper<CFBagRef>;											/*!< A wrapped @c CFBagRef */
-using SFBCFMutableBag = SFBCFWrapper<CFMutableBagRef>;								/*!< A wrapped @c CFMutableBagRef */
-using SFBCFPropertyList = SFBCFWrapper<CFPropertyListRef>;							/*!< A wrapped @c CFPropertyListRef */
-using SFBCFBitVector = SFBCFWrapper<CFBitVectorRef>;								/*!< A wrapped @c CFBitVectorRef */
-using SFBCFMutableBitVector = SFBCFWrapper<CFMutableBitVectorRef>;					/*!< A wrapped @c CFMutableBitVectorRef */
-using SFBCFCharacterSet = SFBCFWrapper<CFCharacterSetRef>;							/*!< A wrapped @c CFCharacterSetRef */
-using SFBCFMutableCharacterSet = SFBCFWrapper<CFMutableCharacterSetRef>;			/*!< A wrapped @c CFMutableCharacterSetRef */
-using SFBCFURL = SFBCFWrapper<CFURLRef>;											/*!< A wrapped @c CFURLRef */
-using SFBCFUUID = SFBCFWrapper<CFUUIDRef>;											/*!< A wrapped @c CFUUIDRef */
-using SFBCFNumber = SFBCFWrapper<CFNumberRef>;										/*!< A wrapped @c CFNumberRef */
-using SFBCFBoolean = SFBCFWrapper<CFBooleanRef>;									/*!< A wrapped @c CFBooleanRef */
-using SFBCFError = SFBCFWrapper<CFErrorRef>;										/*!< A wrapped @c CFErrorRef */
-using SFBCFDate = SFBCFWrapper<CFDateRef>;											/*!< A wrapped @c CFDateRef */
-using SFBCFReadStream = SFBCFWrapper<CFReadStreamRef>;								/*!< A wrapped @c CFReadStream */
-using SFBCFWriteStream = SFBCFWrapper<CFWriteStreamRef>;							/*!< A wrapped @c CFWriteStream */
-using SFBCFHTTPMessage = SFBCFWrapper<CFHTTPMessageRef>;							/*!< A wrapped @c CFHTTPMessageRef */
+using SFBCFType 					= SFBCFWrapper<CFTypeRef>;						/*!< A wrapped @c CFTypeRef */
+using SFBCFData 					= SFBCFWrapper<CFDataRef>;						/*!< A wrapped @c CFDataRef */
+using SFBCFMutableData 				= SFBCFWrapper<CFMutableDataRef>;				/*!< A wrapped @c CFMutableDataRef */
+using SFBCFString 					= SFBCFWrapper<CFStringRef>;					/*!< A wrapped @c CFStringRef */
+using SFBCFMutableString 			= SFBCFWrapper<CFMutableStringRef>;				/*!< A wrapped @c CFMutableStringRef */
+using SFBCFAttributedString 		= SFBCFWrapper<CFAttributedStringRef>;			/*!< A wrapped @c CFAttributedStringRef */
+using SFBCFMutableAttributedString 	= SFBCFWrapper<CFMutableAttributedStringRef>; 	/*!< A wrapped @c CFMutableAttributedStringRef */
+using SFBCFDictionary 				= SFBCFWrapper<CFDictionaryRef>;				/*!< A wrapped @c CFDictionaryRef */
+using SFBCFMutableDictionary 		= SFBCFWrapper<CFMutableDictionaryRef>;			/*!< A wrapped @c CFMutableDictionaryRef */
+using SFBCFArray 					= SFBCFWrapper<CFArrayRef>;						/*!< A wrapped @c CFArrayRef */
+using SFBCFMutableArray 			= SFBCFWrapper<CFMutableArrayRef>;				/*!< A wrapped @c CFMutableArrayRef */
+using SFBCFSet 						= SFBCFWrapper<CFSetRef>;						/*!< A wrapped @c CFSetRef */
+using SFBCFMutableSet 				= SFBCFWrapper<CFMutableSetRef>;				/*!< A wrapped @c CFMutableSetRef */
+using SFBCFBag 						= SFBCFWrapper<CFBagRef>;						/*!< A wrapped @c CFBagRef */
+using SFBCFMutableBag 				= SFBCFWrapper<CFMutableBagRef>;				/*!< A wrapped @c CFMutableBagRef */
+using SFBCFPropertyList 			= SFBCFWrapper<CFPropertyListRef>;				/*!< A wrapped @c CFPropertyListRef */
+using SFBCFBitVector 				= SFBCFWrapper<CFBitVectorRef>;					/*!< A wrapped @c CFBitVectorRef */
+using SFBCFMutableBitVector 		= SFBCFWrapper<CFMutableBitVectorRef>;			/*!< A wrapped @c CFMutableBitVectorRef */
+using SFBCFCharacterSet 			= SFBCFWrapper<CFCharacterSetRef>;				/*!< A wrapped @c CFCharacterSetRef */
+using SFBCFMutableCharacterSet 		= SFBCFWrapper<CFMutableCharacterSetRef>;		/*!< A wrapped @c CFMutableCharacterSetRef */
+using SFBCFURL 						= SFBCFWrapper<CFURLRef>;						/*!< A wrapped @c CFURLRef */
+using SFBCFUUID 					= SFBCFWrapper<CFUUIDRef>;						/*!< A wrapped @c CFUUIDRef */
+using SFBCFNumber 					= SFBCFWrapper<CFNumberRef>;					/*!< A wrapped @c CFNumberRef */
+using SFBCFBoolean 					= SFBCFWrapper<CFBooleanRef>;					/*!< A wrapped @c CFBooleanRef */
+using SFBCFError 					= SFBCFWrapper<CFErrorRef>;						/*!< A wrapped @c CFErrorRef */
+using SFBCFDate 					= SFBCFWrapper<CFDateRef>;						/*!< A wrapped @c CFDateRef */
+using SFBCFReadStream 				= SFBCFWrapper<CFReadStreamRef>;				/*!< A wrapped @c CFReadStream */
+using SFBCFWriteStream 				= SFBCFWrapper<CFWriteStreamRef>;				/*!< A wrapped @c CFWriteStream */
+using SFBCFHTTPMessage 				= SFBCFWrapper<CFHTTPMessageRef>;				/*!< A wrapped @c CFHTTPMessageRef */
 #if !TARGET_OS_IPHONE
-using SFBSecKeychainItem = SFBCFWrapper<SecKeychainItemRef>;						/*!< A wrapped @c SecKeychainItemRef */
-using SFBSecCertificate = SFBCFWrapper<SecCertificateRef>;							/*!< A wrapped @c SecCertificateRef */
-using SFBSecTransform = SFBCFWrapper<SecTransformRef>;								/*!< A wrapped @c SecTransformRef */
-using SFBCGImageSource = SFBCFWrapper<CGImageSourceRef>;							/*!< A wrapped @c CGImageSourceRef */
+using SFBSecKeychainItem 			= SFBCFWrapper<SecKeychainItemRef>;				/*!< A wrapped @c SecKeychainItemRef */
+using SFBSecCertificate 			= SFBCFWrapper<SecCertificateRef>;				/*!< A wrapped @c SecCertificateRef */
+using SFBSecTransform 				= SFBCFWrapper<SecTransformRef>;				/*!< A wrapped @c SecTransformRef */
+using SFBCGImageSource 				= SFBCFWrapper<CGImageSourceRef>;				/*!< A wrapped @c CGImageSourceRef */
 #endif
-

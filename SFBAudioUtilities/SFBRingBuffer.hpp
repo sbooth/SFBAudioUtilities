@@ -19,9 +19,7 @@ class SFBRingBuffer
 
 public:
 
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*!
 	 * Creates a new @c SFBRingBuffer
@@ -32,22 +30,13 @@ public:
 	/*! Destroy the @c SFBRingBuffer and release all associated resources. */
 	~SFBRingBuffer();
 
-	/*! @cond */
-
 	/*! @internal This class is non-copyable */
 	SFBRingBuffer(const SFBRingBuffer& rhs) = delete;
 
 	/*! @internal This class is non-assignable */
 	SFBRingBuffer& operator=(const SFBRingBuffer& rhs) = delete;
 
-	/*! @endcond */
-
-	//@}
-
-
-	// ========================================
-	/*! @name Buffer management */
-	//@{
+#pragma mark Buffer management
 
 	/*!
 	 * Allocate space for data.
@@ -84,12 +73,7 @@ public:
 	/*! Returns the free space available for writing in bytes */
 	size_t BytesAvailableToWrite() const noexcept;
 
-	//@}
-
-
-	// ========================================
-	/*! @name Reading and writing data */
-	//@{
+#pragma mark Reading and writing data
 
 	/*!
 	 * Read data from the @c SFBRingBuffer, advancing the read pointer.
@@ -152,8 +136,6 @@ public:
 	/*! Returns the write vector containing the current writeable data */
 	BufferPair WriteVector() const noexcept;
 
-	//@}
-
 private:
 
 	uint8_t				*mBuffer;				/*!< The memory buffer holding the data */
@@ -163,4 +145,5 @@ private:
 
 	std::atomic_size_t	mWritePosition;			/*!< The offset into @c mBuffer of the read location */
 	std::atomic_size_t	mReadPosition;			/*!< The offset into @c mBuffer of the write location */
+
 };

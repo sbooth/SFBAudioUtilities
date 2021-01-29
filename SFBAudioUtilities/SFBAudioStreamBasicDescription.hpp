@@ -25,9 +25,7 @@ class SFBAudioStreamBasicDescription : public AudioStreamBasicDescription
 
 public:
 	
-	// ========================================
-	/*! @name Creation and Destruction */
-	//@{
+#pragma mark Creation and Destruction
 
 	/*! Creates a new, empty @c SFBAudioStreamBasicDescription */
 	inline SFBAudioStreamBasicDescription() noexcept
@@ -77,12 +75,7 @@ public:
 		return !operator==(rhs);
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name Format information */
-	//@{
+#pragma mark Format information
 
 	/*! Returns @c true if this format is interleaved */
 	inline bool IsInterleaved() const noexcept
@@ -156,12 +149,7 @@ public:
 		return (mFormatFlags & kAudioFormatFlagIsAlignedHigh) == kAudioFormatFlagIsAlignedHigh;
 	}
 
-	//@}
-
-
-	// ========================================
-	/*! @name Format transformation */
-	//@{
+#pragma mark Format transformation
 
 	/*! Sets @c format to the equivalent non-interleaved format of @c this. Fails for non-PCM formats. */
 	bool GetNonInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
@@ -171,8 +159,6 @@ public:
 
 	/*! Sets @c format to the equivalent standard format of @c this. Fails for non-PCM formats. */
 	bool GetStandardEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
-
-	//@}
 
 
 	/*! Returns a string representation of this format suitable for logging */
