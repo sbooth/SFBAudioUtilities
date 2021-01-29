@@ -11,9 +11,16 @@ FOUNDATION_EXPORT double SFBAudioUtilitiesVersionNumber;
 //! Project version string for SFBAudioUtilities.
 FOUNDATION_EXPORT const unsigned char SFBAudioUtilitiesVersionString[];
 
-#import <SFBAudioUtilities/SFBAudioBufferList.h>
-#import <SFBAudioUtilities/SFBAudioChannelLayout.h>
-#import <SFBAudioUtilities/SFBAudioFormat.h>
-#import <SFBAudioUtilities/SFBAudioRingBuffer.h>
-#import <SFBAudioUtilities/SFBAudioUnitRecorder.h>
-#import <SFBAudioUtilities/SFBCFWrapper.h>
+#import <SFBAudioUtilities/SFBAudioBufferList.hpp>
+#import <SFBAudioUtilities/SFBAudioChannelLayout.hpp>
+#import <SFBAudioUtilities/SFBAudioRingBuffer.hpp>
+#import <SFBAudioUtilities/SFBAudioStreamBasicDescription.hpp>
+#import <SFBAudioUtilities/SFBAudioTimeStamp.hpp>
+#import <SFBAudioUtilities/SFBAudioUnitRecorder.hpp>
+#import <SFBAudioUtilities/SFBCAException.hpp>
+#import <SFBAudioUtilities/SFBCARingBuffer.hpp>
+#import <SFBAudioUtilities/SFBCFWrapper.hpp>
+#import <SFBAudioUtilities/SFBDeferredClosure.hpp>
+#import <SFBAudioUtilities/SFBExtAudioFile.hpp>
+#import <SFBAudioUtilities/SFBRingBuffer.hpp>
+#import <SFBAudioUtilities/SFBUnfairLock.hpp>
