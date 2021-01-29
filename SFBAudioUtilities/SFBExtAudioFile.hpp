@@ -38,11 +38,6 @@ public:
 	{
 		if(mExtAudioFile)
 			ExtAudioFileDispose(mExtAudioFile);
-//		try {
-//			Close();
-//		}
-//		catch(...)
-//		{}
 	}
 
 	inline bool IsValid() const noexcept
