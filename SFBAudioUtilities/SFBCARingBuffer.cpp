@@ -12,7 +12,7 @@
 
 namespace {
 
-	/*! @brief Returns @c v clamped to the interval @c [lo,hi] */
+	/*! Returns @c v clamped to the interval @c [lo,hi] */
 	template<typename T>
 	constexpr const T& clamp(const T& v, const T& lo, const T& hi)
 	{

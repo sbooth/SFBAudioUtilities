@@ -8,7 +8,7 @@
 #import <atomic>
 
 /*!
- * @brief A ring buffer.
+ * A ring buffer.
  *
  * This class is thread safe when used from one reader thread and one writer thread (single producer, single consumer model).
  *
@@ -24,12 +24,12 @@ public:
 	//@{
 
 	/*!
-	 * @brief Creates a new @c SFBRingBuffer
+	 * Creates a new @c SFBRingBuffer
 	 * @note @c Allocate() must be called before the object may be used.
 	 */
 	SFBRingBuffer() noexcept;
 
-	/*! @brief Destroy the @c SFBRingBuffer and release all associated resources. */
+	/*! Destroy the @c SFBRingBuffer and release all associated resources. */
 	~SFBRingBuffer();
 
 	/*! @cond */
@@ -50,7 +50,7 @@ public:
 	//@{
 
 	/*!
-	 * @brief Allocate space for data.
+	 * Allocate space for data.
 	 * @note This method is not thread safe.
 	 * @note Capacities from 2 to 2,147,483,648 (0x80000000) bytes are supported
 	 * @param byteCount The desired capacity, in bytes
@@ -59,29 +59,29 @@ public:
 	bool Allocate(size_t byteCount) noexcept;
 
 	/*!
-	 * @brief Free the resources used by this @c SFBRingBuffer
+	 * Free the resources used by this @c SFBRingBuffer
 	 * @note This method is not thread safe.
 	 */
 	void Deallocate() noexcept;
 
 
 	/*!
-	 * @brief Reset this @c SFBRingBuffer to its default state.
+	 * Reset this @c SFBRingBuffer to its default state.
 	 * @note This method is not thread safe.
 	 */
 	void Reset() noexcept;
 
 
-	/*! @brief Returns the capacity of this SFBRingBuffer in bytes */
+	/*! Returns the capacity of this SFBRingBuffer in bytes */
 	inline size_t CapacityBytes() const noexcept
 	{
 		return mCapacityBytes;		
 	}
 
-	/*! @brief Returns the number of bytes available for reading */
+	/*! Returns the number of bytes available for reading */
 	size_t BytesAvailableToRead() const noexcept;
 
-	/*! @brief Returns the free space available for writing in bytes */
+	/*! Returns the free space available for writing in bytes */
 	size_t BytesAvailableToWrite() const noexcept;
 
 	//@}
@@ -92,7 +92,7 @@ public:
 	//@{
 
 	/*!
-	 * @brief Read data from the @c SFBRingBuffer, advancing the read pointer.
+	 * Read data from the @c SFBRingBuffer, advancing the read pointer.
 	 * @param destinationBuffer An address to receive the data
 	 * @param byteCount The desired number of bytes to read
 	 * @return The number of bytes actually read
@@ -100,7 +100,7 @@ public:
 	size_t Read(void * const destinationBuffer, size_t byteCount) noexcept;
 
 	/*!
-	 * @brief Read data from the @c SFBRingBuffer without advancing the read pointer.
+	 * Read data from the @c SFBRingBuffer without advancing the read pointer.
 	 * @param destinationBuffer An address to receive the data
 	 * @param byteCount The desired number of bytes to read
 	 * @return The number of bytes actually read
@@ -108,7 +108,7 @@ public:
 	size_t Peek(void * const destinationBuffer, size_t byteCount) const noexcept;
 
 	/*!
-	 * @brief Write data to the @c SFBRingBuffer, advancing the write pointer.
+	 * Write data to the @c SFBRingBuffer, advancing the write pointer.
 	 * @param sourceBuffer An address containing the data to copy
 	 * @param byteCount The desired number of frames to write
 	 * @return The number of bytes actually written
@@ -116,25 +116,25 @@ public:
 	size_t Write(const void * const sourceBuffer, size_t byteCount) noexcept;
 
 
-	/*! @brief Advance the read position by the specified number of bytes */
+	/*! Advance the read position by the specified number of bytes */
 	void AdvanceReadPosition(size_t byteCount) noexcept;
 
-	/*! @brief Advance the write position by the specified number of bytes */
+	/*! Advance the write position by the specified number of bytes */
 	void AdvanceWritePosition(size_t byteCount) noexcept;
 
 
-	/*! @brief A struct wrapping a memory buffer location and capacity */
+	/*! A struct wrapping a memory buffer location and capacity */
 	struct Buffer {
 		uint8_t	* const mBuffer;	/*!< The memory buffer location */
 		size_t	mBufferCapacity;	/*!< The capacity of @c mBuffer in bytes */
 
-		/*! @brief Construct an empty Buffer */
+		/*! Construct an empty Buffer */
 		Buffer() noexcept
 		: Buffer(nullptr, 0)
 		{}
 
 		/*!
-		 * @brief Construct a Buffer for the specified location and capacity
+		 * Construct a Buffer for the specified location and capacity
 		 * @param buffer The memory buffer location
 		 * @param bufferCapacity The capacity of @c buffer in bytes
 		 */
@@ -143,13 +143,13 @@ public:
 		{}
 	};
 
-	/*! @brief A pair of @c Buffer objects */
+	/*! A pair of @c Buffer objects */
 	using BufferPair = std::pair<Buffer, Buffer>;
 
-	/*! @brief Returns the read vector containing the current readable data */
+	/*! Returns the read vector containing the current readable data */
 	BufferPair ReadVector() const noexcept;
 
-	/*! @brief Returns the write vector containing the current writeable data */
+	/*! Returns the write vector containing the current writeable data */
 	BufferPair WriteVector() const noexcept;
 
 	//@}

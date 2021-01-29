@@ -8,7 +8,7 @@
 #import <os/lock.h>
 
 /*!
- * @brief A wrapper around @c os_unfair_lock implementing C++ Lockable
+ * A wrapper around @c os_unfair_lock implementing C++ Lockable
  *
  * This class may be used with @c std::lock_guard for a scope-based lock.
  *
@@ -28,7 +28,7 @@ public:
 	/*! @name Creation and Destruction */
 	//@{
 
-	/*! @brief Create a new @c SFBUnfairLock */
+	/*! Create a new @c SFBUnfairLock */
 	inline SFBUnfairLock() noexcept
 	: mLock(OS_UNFAIR_LOCK_INIT)
 	{}
@@ -46,20 +46,20 @@ public:
 	/*! @name Lockable */
 	//@{
 
-	/*!@brief Lock the lock. */
+	/*! Lock the lock. */
 	inline void lock() noexcept
 	{
 		os_unfair_lock_lock(&mLock);
 	}
 
-	/*!@brief Unlock the lock. */
+	/*! Unlock the lock. */
 	inline void unlock() noexcept
 	{
 		os_unfair_lock_unlock(&mLock);
 	}
 
 	/*!
-	 * @brief Attempt to lock the lock.
+	 * Attempt to lock the lock.
 	 * @return @c true if the lock was successfully locked, @c false on error
 	 */
 	inline bool try_lock() noexcept

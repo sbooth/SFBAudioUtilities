@@ -20,7 +20,7 @@ class SFBAudioUnitRecorder
 public:
 
 	/*!
-	 * @brief Creates a new @c SFBAudioUnitRecorder that asynchronously writes the output from an @c AudioUnit to a file
+	 * Creates a new @c SFBAudioUnitRecorder that asynchronously writes the output from an @c AudioUnit to a file
 	 * @param au The @c AudioUnit to record
 	 * @param outputFileURL The URL of the output audio file
 	 * @param fileType The type of the file to create
@@ -35,7 +35,7 @@ public:
 		mExtAudioFile.CreateWithURL(outputFileURL, fileType, format, nullptr, kAudioFileFlags_EraseFile);
 	}
 
-	/*! @brief Starts recording */
+	/*! Starts recording */
 	void Start() {
 		if(mExtAudioFile.IsValid()) {
 			if(!mClientFormatIsSet) {
@@ -52,7 +52,7 @@ public:
 		}
 	}
 
-	/*! @brief Stops recording */
+	/*! Stops recording */
 	void Stop() {
 		if(mExtAudioFile.IsValid()) {
 			OSStatus result = AudioUnitRemoveRenderNotify(mAudioUnit, RenderCallback, this);
