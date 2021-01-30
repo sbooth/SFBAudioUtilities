@@ -38,7 +38,7 @@ AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescriptio
 }
 
 SFBAudioBufferList::SFBAudioBufferList() noexcept
-: mBufferList(nullptr), mFrameCapacity(0)
+: mBufferList(nullptr), mFrameCapacity(0), mFrameLength(0)
 {}
 
 SFBAudioBufferList::SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity)
@@ -54,11 +54,12 @@ SFBAudioBufferList::~SFBAudioBufferList()
 }
 
 SFBAudioBufferList::SFBAudioBufferList(SFBAudioBufferList&& rhs)
-: mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity)
+: mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity), mFrameLength(rhs.mFrameLength)
 {
 	rhs.mBufferList = nullptr;
-	rhs.mFrameCapacity = 0;
 	rhs.mFormat = {};
+	rhs.mFrameCapacity = 0;
+	rhs.mFrameLength = 0;
 }
 
 SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
@@ -67,16 +68,20 @@ SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
 		Deallocate();
 
 		mBufferList = rhs.mBufferList;
-		mFrameCapacity = rhs.mFrameCapacity;
 		mFormat = rhs.mFormat;
+		mFrameCapacity = rhs.mFrameCapacity;
+		mFrameLength = rhs.mFrameLength;
 
 		rhs.mBufferList = nullptr;
-		rhs.mFrameCapacity = 0;
 		rhs.mFormat = {};
+		rhs.mFrameCapacity = 0;
+		rhs.mFrameLength = 0;
 	}
 
 	return *this;
 }
+
+#pragma mark Buffer Management
 
 bool SFBAudioBufferList::Allocate(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept
 {
@@ -89,6 +94,7 @@ bool SFBAudioBufferList::Allocate(const SFBAudioStreamBasicDescription& format, 
 
 	mFormat = format;
 	mFrameCapacity = frameCapacity;
+	mFrameLength = 0;
 
 	return true;
 }
@@ -98,26 +104,12 @@ bool SFBAudioBufferList::Deallocate() noexcept
 	if(!mBufferList)
 		return false;
 
-	mFrameCapacity = 0;
-	mFormat = {};
-
 	std::free(mBufferList);
+	mFormat = {};
+	mFrameCapacity = 0;
+	mFrameLength = 0;
 
 	return true;
-}
-
-UInt32 SFBAudioBufferList::FrameLength() const noexcept
-{
-	if(!mBufferList)
-		return 0;
-
-#if DEBUG
-	auto buffer0FrameLength = mBufferList->mBuffers[0].mDataByteSize / mFormat.mBytesPerFrame;
-	for(UInt32 bufferIndex = 0; bufferIndex < mBufferList->mNumberBuffers; ++bufferIndex)
-		assert(mBufferList->mBuffers[bufferIndex].mDataByteSize / mFormat.mBytesPerFrame == buffer0FrameLength);
-#endif
-
-	return mBufferList->mBuffers[0].mDataByteSize / mFormat.mBytesPerFrame;
 }
 
 bool SFBAudioBufferList::SetFrameLength(UInt32 frameLength) noexcept
@@ -125,8 +117,83 @@ bool SFBAudioBufferList::SetFrameLength(UInt32 frameLength) noexcept
 	if(!mBufferList || frameLength > mFrameCapacity)
 		return false;
 
-	for(UInt32 bufferIndex = 0; bufferIndex < mBufferList->mNumberBuffers; ++bufferIndex)
-		mBufferList->mBuffers[bufferIndex].mDataByteSize = frameLength * mFormat.mBytesPerFrame;
+	mFrameLength = frameLength;
+
+	for(auto bufferIndex = 0; bufferIndex < mBufferList->mNumberBuffers; ++bufferIndex)
+		mBufferList->mBuffers[bufferIndex].mDataByteSize = mFrameLength * mFormat.mBytesPerFrame;
+
+	return true;
+}
+
+#pragma mark Buffer Utilities
+
+UInt32 SFBAudioBufferList::InsertFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength, UInt32 writeOffset) noexcept
+{
+	if(mFormat != buffer.mFormat)
+//		throw std::invalid_argument("mFormat != buffer.mFormat");
+		return 0;
+
+	if(readOffset > buffer.mFrameLength || writeOffset > mFrameLength || frameLength == 0 || buffer.mFrameLength == 0)
+		return 0;
+
+	auto framesToInsert = std::min(mFrameCapacity - mFrameLength, std::min(frameLength, buffer.mFrameLength - readOffset));
+
+	auto framesToMove = mFrameLength - writeOffset;
+	if(framesToMove) {
+		auto moveToOffset = writeOffset + framesToInsert;
+		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+			auto *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (moveToOffset * mFormat.mBytesPerFrame);
+			const auto *src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (writeOffset * mFormat.mBytesPerFrame);
+			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
+		}
+	}
+
+	if(framesToInsert) {
+		for(auto i = 0; i < buffer.mBufferList->mNumberBuffers; ++i) {
+			auto *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (writeOffset * mFormat.mBytesPerFrame);
+			const auto *src = static_cast<const uint8_t *>(buffer.mBufferList->mBuffers[i].mData) + (readOffset * mFormat.mBytesPerFrame);
+			std::memcpy(dst, src, framesToInsert * mFormat.mBytesPerFrame);
+		}
+
+		SetFrameLength(mFrameLength + framesToInsert);
+	}
+
+	return framesToInsert;
+}
+
+UInt32 SFBAudioBufferList::TrimAtOffset(UInt32 offset, UInt32 frameLength) noexcept
+{
+	if(offset > mFrameLength || frameLength == 0)
+		return 0;
+
+	auto framesToTrim = std::min(frameLength, mFrameLength - offset);
+
+	auto framesToMove = mFrameLength - (offset + framesToTrim);
+	if(framesToMove) {
+		auto moveFromOffset = offset + framesToTrim;
+		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+			auto *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
+			const auto *src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (moveFromOffset * mFormat.mBytesPerFrame);
+			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
+		}
+	}
+
+	SetFrameLength(mFrameLength - framesToTrim);
+
+	return framesToTrim;
+}
+
+bool SFBAudioBufferList::AdoptABL(AudioBufferList *bufferList, const AudioStreamBasicDescription& format, UInt32 frameCapacity, UInt32 frameLength) noexcept
+{
+	if(!bufferList || frameLength > frameCapacity)
+		return false;
+
+	Deallocate();
+
+	mBufferList = bufferList;
+	mFormat = format;
+	mFrameCapacity = frameCapacity;
+	SetFrameLength(frameLength);
 
 	return true;
 }
@@ -136,8 +203,9 @@ AudioBufferList * SFBAudioBufferList::RelinquishABL() noexcept
 	auto bufferList = mBufferList;
 
 	mBufferList = nullptr;
-	mFrameCapacity = 0;
 	mFormat = {};
+	mFrameCapacity = 0;
+	mFrameLength = 0;
 
 	return bufferList;
 }

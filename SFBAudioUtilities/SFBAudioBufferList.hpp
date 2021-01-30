@@ -80,13 +80,25 @@ public:
 
 
 	/// Returns the length in audio frames of the data in this @c SFBAudioBufferList
-	UInt32 FrameLength() const noexcept;
+	inline UInt32 FrameLength() const noexcept
+	{
+		return mFrameLength;
+	}
 
 	/// Set the length in audio frames of the data in this @c SFBAudioBufferList
 	/// @param frameLength The number of valid audio frames
 	/// @return @c true on sucess, @c false otherwise
 	bool SetFrameLength(UInt32 frameLength) noexcept;
 
+	inline bool IsEmpty() const noexcept
+	{
+		return mFrameLength == 0;
+	}
+
+	inline bool IsFull() const noexcept
+	{
+		return mFrameLength == mFrameCapacity;
+	}
 
 	/// Returns the audio frame capacity of this @c SFBAudioBufferList
 	inline UInt32 FrameCapacity() const noexcept
@@ -100,7 +112,126 @@ public:
 		return mFormat;
 	}
 
+#pragma mark Buffer utilities
+
+	/// Prepends the contents of \c buffer to \c self
+	/// @note The format of \c buffer must match the format of \c self
+	/// @param buffer A buffer of audio data
+	/// @return The number of frames prepended
+	inline UInt32 PrependContentsOfBuffer(const SFBAudioBufferList& buffer) noexcept
+	{
+		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, 0);
+	}
+
+	/// Prepends frames from \c buffer starting at \c readOffset to \c self
+	/// @note The format of \c buffer must match the format of \c self
+	/// @param buffer A buffer of audio data
+	/// @param readOffset The desired starting offset in \c buffer
+	/// @return The number of frames prepended
+	inline UInt32 PrependFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset) noexcept
+	{
+		if(readOffset > buffer.mFrameLength)
+			return 0;
+		return InsertFromBuffer(buffer, readOffset, (buffer.mFrameLength - readOffset), 0);
+	}
+
+	/// Prepends at most \c frameLength frames from \c buffer starting at \c readOffset to \c self
+	/// @note The format of \c buffer must match the format of \c self
+	/// @param buffer A buffer of audio data
+	/// @param readOffset The desired starting offset in \c buffer
+	/// @param frameLength The desired number of frames
+	/// @return The number of frames prepended
+	inline UInt32 PrependFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength) noexcept
+	{
+		return InsertFromBuffer(buffer, readOffset, frameLength, 0);
+	}
+
+	/// Appends the contents of \c buffer to \c self
+	/// @note The format of \c buffer must match the format of \c self
+	/// @param buffer A buffer of audio data
+	/// @return The number of frames appended
+	inline UInt32 AppendContentsOfBuffer(const SFBAudioBufferList& buffer) noexcept
+	{
+		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, mFrameLength);
+	}
+
+	/// Appends frames from \c buffer starting at \c readOffset to \c self
+	/// @note The format of \c buffer must match the format of \c self
+	/// @param buffer A buffer of audio data
+	/// @param readOffset The desired starting offset in \c buffer
+	/// @return The number of frames appended
+	inline UInt32 AppendFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset) noexcept
+	{
+		if(readOffset > buffer.mFrameLength)
+			return 0;
+		return InsertFromBuffer(buffer, readOffset, (buffer.mFrameLength - readOffset), mFrameLength);
+	}
+
+	/// Appends at most \c frameLength frames from \c buffer starting at \c readOffset to \c self
+	/// @note The format of \c buffer must match the format of \c self
+	/// @param buffer A buffer of audio data
+	/// @param readOffset The desired starting offset in \c buffer
+	/// @param frameLength The desired number of frames
+	/// @return The number of frames appended
+	inline UInt32 AppendFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength) noexcept
+	{
+		return InsertFromBuffer(buffer, readOffset, frameLength, mFrameLength);
+	}
+
+	/// Inserts the contents of \c buffer in \c self starting at \c writeOffset
+	/// @note The format of \c buffer must match the format of \c self
+	/// @param buffer A buffer of audio data
+	/// @param writeOffset The desired starting offset in \c self
+	/// @return The number of frames inserted
+	inline UInt32 InsertContentsOfBuffer(const SFBAudioBufferList& buffer, UInt32 writeOffset) noexcept
+	{
+		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, writeOffset);
+	}
+
+	/// Inserts at most \c readLength frames from \c buffer starting at \c readOffset to \c self starting at \c writeOffset
+	/// @note The format of \c buffer must match the format of \c self
+	/// @param buffer A buffer of audio data
+	/// @param readOffset The desired starting offset in \c buffer
+	/// @param frameLength The desired number of frames
+	/// @param writeOffset The desired starting offset in \c self
+	/// @return The number of frames inserted
+	UInt32 InsertFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength, UInt32 writeOffset) noexcept;
+
+
+	/// Deletes at most the first \c frameLength frames from \c self
+	/// @param frameLength The desired number of frames
+	/// @return The number of frames deleted
+	inline UInt32 TrimFirst(UInt32 frameLength) noexcept
+	{
+		return TrimAtOffset(0, frameLength);
+	}
+
+	/// Deletes at most the last \c frameLength frames from \c self
+	/// @param frameLength The desired number of frames
+	/// @return The number of frames deleted
+	inline UInt32 TrimLast(UInt32 frameLength) noexcept
+	{
+		UInt32 framesToTrim = std::min(frameLength, mFrameLength);
+		SetFrameLength(mFrameLength - framesToTrim);
+		return framesToTrim;
+	}
+
+	/// Deletes at most \c frameLength frames from \c self starting at \c offset
+	/// @param offset The desired starting offset
+	/// @param frameLength The desired number of frames
+	/// @return The number of frames deleted
+	UInt32 TrimAtOffset(UInt32 offset, UInt32 frameLength) noexcept;
+
 #pragma mark AudioBufferList access
+
+	/// Adopts an existing @c AudioBufferList
+	/// @note The @c SFBAudioBufferList assumes responsiblity for deallocating @c bufferList using @c std::free
+	/// @param bufferList The @c AudioBufferList to adopt
+	/// @param format The format of @c bufferList
+	/// @param frameCapacity The frame capacity of @c bufferList
+	/// @param frameLength The number of valid audio frames in @c bufferList
+	/// @return @c true on sucess, @c false otherwise
+	bool AdoptABL(AudioBufferList *bufferList, const AudioStreamBasicDescription& format, UInt32 frameCapacity, UInt32 frameLength) noexcept;
 
 	/// Relinquishes ownership of the object's internal @c AudioBufferList and returns it
 	/// @note The caller assumes responsiblity for deallocating the returned @c AudioBufferList using @c std::free
@@ -164,5 +295,7 @@ private:
 	SFBAudioStreamBasicDescription mFormat;
 	/// The capacity of @c mBufferList in frames
 	UInt32 mFrameCapacity;
+	/// The number of valid frames in @c mBufferList
+	UInt32 mFrameLength;
 
 };
