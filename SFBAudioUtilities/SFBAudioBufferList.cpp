@@ -57,7 +57,7 @@ SFBAudioBufferList::SFBAudioBufferList(SFBAudioBufferList&& rhs)
 : mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity), mFrameLength(rhs.mFrameLength)
 {
 	rhs.mBufferList = nullptr;
-	rhs.mFormat = {};
+	rhs.mFormat.Reset();
 	rhs.mFrameCapacity = 0;
 	rhs.mFrameLength = 0;
 }
@@ -73,7 +73,7 @@ SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
 		mFrameLength = rhs.mFrameLength;
 
 		rhs.mBufferList = nullptr;
-		rhs.mFormat = {};
+		rhs.mFormat.Reset();
 		rhs.mFrameCapacity = 0;
 		rhs.mFrameLength = 0;
 	}
@@ -105,7 +105,7 @@ bool SFBAudioBufferList::Deallocate() noexcept
 		return false;
 
 	std::free(mBufferList);
-	mFormat = {};
+	mFormat.Reset();
 	mFrameCapacity = 0;
 	mFrameLength = 0;
 
@@ -183,6 +183,39 @@ UInt32 SFBAudioBufferList::TrimAtOffset(UInt32 offset, UInt32 frameLength) noexc
 	return framesToTrim;
 }
 
+UInt32 SFBAudioBufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noexcept
+{
+	if(!(mFormat.IsFloat() || (mFormat.IsSignedInteger() && mFormat.IsPacked())))
+//		throw std::logic_error("Inserting silence for unsigned integer or unpacked samples not supported");
+		return 0;
+
+	if(offset > mFrameLength || frameLength == 0)
+		return 0;
+
+	auto framesToZero = std::min(mFrameCapacity - mFrameLength, frameLength);
+
+	auto framesToMove = mFrameLength - offset;
+	if(framesToMove) {
+		auto moveToOffset = offset + framesToZero;
+		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+			auto *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (moveToOffset * mFormat.mBytesPerFrame);
+			const auto *src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
+			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
+		}
+	}
+
+	if(framesToZero) {
+		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+			unsigned char *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
+			std::memset(dst, 0, framesToZero * mFormat.mBytesPerFrame);
+		}
+
+		SetFrameLength(mFrameLength + framesToZero);
+	}
+
+	return framesToZero;
+}
+
 bool SFBAudioBufferList::AdoptABL(AudioBufferList *bufferList, const AudioStreamBasicDescription& format, UInt32 frameCapacity, UInt32 frameLength) noexcept
 {
 	if(!bufferList || frameLength > frameCapacity)
@@ -203,7 +236,7 @@ AudioBufferList * SFBAudioBufferList::RelinquishABL() noexcept
 	auto bufferList = mBufferList;
 
 	mBufferList = nullptr;
-	mFormat = {};
+	mFormat.Reset();
 	mFrameCapacity = 0;
 	mFrameLength = 0;
 

@@ -114,8 +114,8 @@ public:
 
 #pragma mark Buffer utilities
 
-	/// Prepends the contents of \c buffer to \c self
-	/// @note The format of \c buffer must match the format of \c self
+	/// Prepends the contents of @c buffer
+	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
 	/// @param buffer A buffer of audio data
 	/// @return The number of frames prepended
 	inline UInt32 PrependContentsOfBuffer(const SFBAudioBufferList& buffer) noexcept
@@ -123,10 +123,10 @@ public:
 		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, 0);
 	}
 
-	/// Prepends frames from \c buffer starting at \c readOffset to \c self
-	/// @note The format of \c buffer must match the format of \c self
+	/// Prepends frames from @c buffer starting at @c readOffset
+	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
 	/// @param buffer A buffer of audio data
-	/// @param readOffset The desired starting offset in \c buffer
+	/// @param readOffset The desired starting offset in @c buffer
 	/// @return The number of frames prepended
 	inline UInt32 PrependFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset) noexcept
 	{
@@ -135,10 +135,10 @@ public:
 		return InsertFromBuffer(buffer, readOffset, (buffer.mFrameLength - readOffset), 0);
 	}
 
-	/// Prepends at most \c frameLength frames from \c buffer starting at \c readOffset to \c self
-	/// @note The format of \c buffer must match the format of \c self
+	/// Prepends at most @c frameLength frames from @c buffer starting at @c readOffset
+	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
 	/// @param buffer A buffer of audio data
-	/// @param readOffset The desired starting offset in \c buffer
+	/// @param readOffset The desired starting offset in @c buffer
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames prepended
 	inline UInt32 PrependFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength) noexcept
@@ -146,8 +146,8 @@ public:
 		return InsertFromBuffer(buffer, readOffset, frameLength, 0);
 	}
 
-	/// Appends the contents of \c buffer to \c self
-	/// @note The format of \c buffer must match the format of \c self
+	/// Appends the contents of @c buffer
+	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
 	/// @param buffer A buffer of audio data
 	/// @return The number of frames appended
 	inline UInt32 AppendContentsOfBuffer(const SFBAudioBufferList& buffer) noexcept
@@ -155,10 +155,10 @@ public:
 		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, mFrameLength);
 	}
 
-	/// Appends frames from \c buffer starting at \c readOffset to \c self
-	/// @note The format of \c buffer must match the format of \c self
+	/// Appends frames from @c buffer starting at @c readOffset
+	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
 	/// @param buffer A buffer of audio data
-	/// @param readOffset The desired starting offset in \c buffer
+	/// @param readOffset The desired starting offset in @c buffer
 	/// @return The number of frames appended
 	inline UInt32 AppendFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset) noexcept
 	{
@@ -167,10 +167,10 @@ public:
 		return InsertFromBuffer(buffer, readOffset, (buffer.mFrameLength - readOffset), mFrameLength);
 	}
 
-	/// Appends at most \c frameLength frames from \c buffer starting at \c readOffset to \c self
-	/// @note The format of \c buffer must match the format of \c self
+	/// Appends at most @c frameLength frames from @c buffer starting at @c readOffset
+	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
 	/// @param buffer A buffer of audio data
-	/// @param readOffset The desired starting offset in \c buffer
+	/// @param readOffset The desired starting offset in @c buffer
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames appended
 	inline UInt32 AppendFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength) noexcept
@@ -178,27 +178,27 @@ public:
 		return InsertFromBuffer(buffer, readOffset, frameLength, mFrameLength);
 	}
 
-	/// Inserts the contents of \c buffer in \c self starting at \c writeOffset
-	/// @note The format of \c buffer must match the format of \c self
+	/// Inserts the contents of @c buffer in this @c SFBAudioBufferList starting at @c writeOffset
+	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
 	/// @param buffer A buffer of audio data
-	/// @param writeOffset The desired starting offset in \c self
+	/// @param writeOffset The desired starting offset in this @c SFBAudioBufferList
 	/// @return The number of frames inserted
 	inline UInt32 InsertContentsOfBuffer(const SFBAudioBufferList& buffer, UInt32 writeOffset) noexcept
 	{
 		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, writeOffset);
 	}
 
-	/// Inserts at most \c readLength frames from \c buffer starting at \c readOffset to \c self starting at \c writeOffset
-	/// @note The format of \c buffer must match the format of \c self
+	/// Inserts at most @c readLength frames from @c buffer starting at @c readOffset  starting at @c writeOffset
+	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
 	/// @param buffer A buffer of audio data
-	/// @param readOffset The desired starting offset in \c buffer
+	/// @param readOffset The desired starting offset in @c buffer
 	/// @param frameLength The desired number of frames
-	/// @param writeOffset The desired starting offset in \c self
+	/// @param writeOffset The desired starting offset in this @c SFBAudioBufferList
 	/// @return The number of frames inserted
 	UInt32 InsertFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength, UInt32 writeOffset) noexcept;
 
 
-	/// Deletes at most the first \c frameLength frames from \c self
+	/// Deletes at most the first @c frameLength frames from this @c SFBAudioBufferList
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames deleted
 	inline UInt32 TrimFirst(UInt32 frameLength) noexcept
@@ -206,7 +206,7 @@ public:
 		return TrimAtOffset(0, frameLength);
 	}
 
-	/// Deletes at most the last \c frameLength frames from \c self
+	/// Deletes at most the last @c frameLength frames from this @c SFBAudioBufferList
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames deleted
 	inline UInt32 TrimLast(UInt32 frameLength) noexcept
@@ -216,11 +216,32 @@ public:
 		return framesToTrim;
 	}
 
-	/// Deletes at most \c frameLength frames from \c self starting at \c offset
+	/// Deletes at most @c frameLength frames from this @c SFBAudioBufferList starting at @c offset
 	/// @param offset The desired starting offset
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames deleted
 	UInt32 TrimAtOffset(UInt32 offset, UInt32 frameLength) noexcept;
+
+	/// Fills the remainder of this @c SFBAudioBufferList with silence
+	/// @return The number of frames of silence appended
+	inline UInt32 FillRemainderWithSilence() noexcept
+	{
+		return InsertSilence(mFrameLength, mFrameCapacity - mFrameLength);
+	}
+
+	/// Appends at most @c frameLength frames of silence
+	/// @param frameLength The desired number of frames
+	/// @return The number of frames of silence appended
+	inline UInt32 AppendSilence(UInt32 frameLength) noexcept
+	{
+		return InsertSilence(mFrameLength, frameLength);
+	}
+
+	/// Inserts at most @c frameLength frames of silence starting at @c offset
+	/// @param offset The desired starting offset
+	/// @param frameLength The desired number of frames
+	/// @return The number of frames of silence inserted
+	UInt32 InsertSilence(UInt32 offset, UInt32 frameLength) noexcept;
 
 #pragma mark AudioBufferList access
 
