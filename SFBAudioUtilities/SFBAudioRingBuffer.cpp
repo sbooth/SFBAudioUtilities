@@ -160,7 +160,7 @@ size_t SFBAudioRingBuffer::FramesAvailableToWrite() const noexcept
 
 size_t SFBAudioRingBuffer::Read(AudioBufferList * const bufferList, size_t frameCount) noexcept
 {
-	if(!bufferList || 0 == frameCount)
+	if(!bufferList || frameCount == 0)
 		return 0;
 
 	auto writePointer = mWritePointer.load(std::memory_order_acquire);
@@ -172,7 +172,7 @@ size_t SFBAudioRingBuffer::Read(AudioBufferList * const bufferList, size_t frame
 	else
 		framesAvailable = (writePointer - readPointer + mCapacityFrames) & mCapacityFramesMask;
 
-	if(0 == framesAvailable)
+	if(framesAvailable == 0)
 		return 0;
 
 	size_t framesToRead = std::min(framesAvailable, frameCount);
@@ -197,7 +197,7 @@ size_t SFBAudioRingBuffer::Read(AudioBufferList * const bufferList, size_t frame
 
 size_t SFBAudioRingBuffer::Write(const AudioBufferList * const bufferList, size_t frameCount) noexcept
 {
-	if(!bufferList || 0 == frameCount)
+	if(!bufferList || frameCount == 0)
 		return 0;
 
 	auto writePointer = mWritePointer.load(std::memory_order_acquire);
@@ -211,7 +211,7 @@ size_t SFBAudioRingBuffer::Write(const AudioBufferList * const bufferList, size_
 	else
 		framesAvailable = mCapacityFrames - 1;
 
-	if(0 == framesAvailable)
+	if(framesAvailable == 0)
 		return 0;
 
 	size_t framesToWrite = std::min(framesAvailable, frameCount);

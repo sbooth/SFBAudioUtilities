@@ -395,7 +395,7 @@ bool SFBAudioChannelLayout::MapToLayout(const SFBAudioChannelLayout& outputLayou
 	};
 
 	auto outputChannelCount = outputLayout.ChannelCount();
-	if(0 == outputChannelCount)
+	if(outputChannelCount == 0)
 		return false;
 
 	SInt32 rawChannelMap [outputChannelCount];
