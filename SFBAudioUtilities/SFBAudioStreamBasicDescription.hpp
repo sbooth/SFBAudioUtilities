@@ -70,7 +70,7 @@ public:
 	/// Returns @c true if @c rhs is equal to @c this
 	inline bool operator==(const SFBAudioStreamBasicDescription& rhs) const noexcept
 	{
-		return !memcmp(this, &rhs, sizeof(AudioStreamBasicDescription));
+		return !std::memcmp(this, &rhs, sizeof(AudioStreamBasicDescription));
 	}
 
 	/// Returns @c true if @c rhs is not equal to @c this
@@ -129,16 +129,16 @@ public:
 		return (mFormatFlags & kAudioFormatFlagIsBigEndian) == kAudioFormatFlagsNativeEndian;
 	}
 
-	/// Returns @c true if this format is floating-point
+	/// Returns @c true if this format is floating-point linear PCM
 	inline bool IsFloat() const noexcept
 	{
-		return (mFormatFlags & kAudioFormatFlagIsFloat) == kAudioFormatFlagIsFloat;
+		return IsPCM() && (mFormatFlags & kAudioFormatFlagIsFloat) == kAudioFormatFlagIsFloat;
 	}
 
-	/// Returns @c true if this format is signed integer
+	/// Returns @c true if this format is signed integer linear PCM
 	inline bool IsSignedInteger() const noexcept
 	{
-		return (mFormatFlags & kAudioFormatFlagIsSignedInteger) == kAudioFormatFlagIsSignedInteger;
+		return IsPCM() && (mFormatFlags & kAudioFormatFlagIsSignedInteger) == kAudioFormatFlagIsSignedInteger;
 	}
 
 	/// Returns @c true if this format is packed
@@ -147,10 +147,51 @@ public:
 		return (mFormatFlags & kAudioFormatFlagIsPacked) == kAudioFormatFlagIsPacked;
 	}
 
-	/// Returns @c true if this format ia high-aligned
+	/// Returns @c true if this format is high-aligned
 	inline bool IsAlignedHigh() const noexcept
 	{
 		return (mFormatFlags & kAudioFormatFlagIsAlignedHigh) == kAudioFormatFlagIsAlignedHigh;
+	}
+
+	/// Returns @c true if this format is non-mixable
+	/// @note This flag is only used when interacting with HAL stream formats
+	inline bool IsNonMixable() const noexcept
+	{
+		return (mFormatFlags & kAudioFormatFlagIsNonMixable) == kAudioFormatFlagIsNonMixable;
+	}
+
+	/// Returns @c true if this format is mixable
+	/// @note This flag is only used when interacting with HAL stream formats
+	inline bool IsMixable() const noexcept
+	{
+		return IsPCM() && !IsNonMixable();
+	}
+
+	/// Returns the sample word size in bytes
+	inline UInt32 SampleWordSize() const noexcept
+	{
+		auto interleavedChannelCount = InterleavedChannelCount();
+		if(!interleavedChannelCount)
+//			throw std::runtime_error("InterleavedChannelCount() == 0 in SampleWordSize()");
+			return 0;
+		return mBytesPerFrame / interleavedChannelCount;
+	}
+
+	/// Returns the byte size of @c frameCount audio frames
+	/// @note This is equivalent to @c frameCount*mBytesPerFrame
+	inline UInt32 FrameCountToByteSize(UInt32 frameCount) const noexcept
+	{
+		return frameCount * mBytesPerFrame;
+	}
+
+	/// Returns the frame count of @c byteSize bytes
+	/// @note This is equivalent to @c byteSize/mBytesPerFrame
+	inline UInt32 ByteSizeToFrameCount(UInt32 byteSize) const
+	{
+		if(!mBytesPerFrame)
+//			throw std::runtime_error("mBytesPerFrame == 0 in ByteSizeToFrameCount()");
+			return 0;
+		return byteSize / mBytesPerFrame;
 	}
 
 #pragma mark Format transformation
@@ -163,6 +204,12 @@ public:
 
 	/// Sets @c format to the equivalent standard format of @c this. Fails for non-PCM formats.
 	bool GetStandardEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
+
+	/// Resets the @c SFBAudioStreamBasicDescription to the default state
+	inline void Reset() noexcept
+	{
+		std::memset(this, 0, sizeof(AudioStreamBasicDescription));
+	}
 
 
 	/// Returns a string representation of this format suitable for logging
