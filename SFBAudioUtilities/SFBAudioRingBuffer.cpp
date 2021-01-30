@@ -23,7 +23,7 @@ namespace {
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(srcOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
 				continue;
-			std::memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
+			std::memcpy(buffers[bufferIndex] + dstOffset, static_cast<const uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
 		}
 	}
 
