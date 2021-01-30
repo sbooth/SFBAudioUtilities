@@ -1,7 +1,7 @@
-/*
- * Copyright (c) 2021 Stephen F. Booth <me@sbooth.org>
- * MIT license
- */
+//
+// Copyright (c) 2021 Stephen F. Booth <me@sbooth.org>
+// MIT license
+//
 
 #pragma once
 
@@ -28,10 +28,10 @@ public:
 	: mExtAudioFile(nullptr)
 	{}
 
-	/*! @internal This class is non-copyable */
+	// This class is non-copyable
 	SFBExtAudioFile(const SFBExtAudioFile& rhs) = delete;
 
-	/*! @internal This class is non-assignable */
+	// This class is non-assignable
 	SFBExtAudioFile& operator=(const SFBExtAudioFile& rhs) = delete;
 
 	~SFBExtAudioFile()

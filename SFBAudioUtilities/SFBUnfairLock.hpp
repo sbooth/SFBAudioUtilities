@@ -1,24 +1,21 @@
-/*
- * Copyright (c) 2020 - 2021 Stephen F. Booth <me@sbooth.org>
- * MIT license
- */
+//
+// Copyright (c) 2020 - 2021 Stephen F. Booth <me@sbooth.org>
+// MIT license
+//
 
 #pragma once
 
 #import <os/lock.h>
 
-/*!
- * A wrapper around @c os_unfair_lock implementing C++ Lockable
- *
- * This class may be used with @c std::lock_guard for a scope-based lock.
- *
- * @code
- * SFBUnfairLock _lock;
- * // Later
- * std::lock_guard<SFBUnfairLock> lock(_lock);
- * @endcode
- *
- */
+/// A wrapper around @c os_unfair_lock implementing C++ @c Lockable
+///
+/// This class may be used with @c std::lock_guard for a scope-based lock.
+///
+/// @code
+/// SFBUnfairLock _lock;
+/// // Later
+/// std::lock_guard<SFBUnfairLock> lock(_lock);
+/// @endcode
 class SFBUnfairLock
 {
 
@@ -26,35 +23,33 @@ public:
 
 #pragma mark Creation and Destruction
 
-	/*! Create a new @c SFBUnfairLock */
+	/// Creates a new @c SFBUnfairLock
 	inline SFBUnfairLock() noexcept
 	: mLock(OS_UNFAIR_LOCK_INIT)
 	{}
 
-	/*! @internal This class is non-copyable */
+	// This class is non-copyable
 	SFBUnfairLock(const SFBUnfairLock& rhs) = delete;
 
-	/*! @internal This class is non-assignable */
+	// This class is non-assignable
 	SFBUnfairLock& operator=(const SFBUnfairLock& rhs) = delete;
 
 #pragma mark Lockable
 
-	/*! Lock the lock. */
+	/// Locks the lock
 	inline void lock() noexcept
 	{
 		os_unfair_lock_lock(&mLock);
 	}
 
-	/*! Unlock the lock. */
+	/// Unlocks the lock
 	inline void unlock() noexcept
 	{
 		os_unfair_lock_unlock(&mLock);
 	}
 
-	/*!
-	 * Attempt to lock the lock.
-	 * @return @c true if the lock was successfully locked, @c false on error
-	 */
+	/// Attempts to lock the lock
+	/// @return @c true if the lock was successfully locked, @c false on error
 	inline bool try_lock() noexcept
 	{
 		return os_unfair_lock_trylock(&mLock);
@@ -62,6 +57,7 @@ public:
 
 private:
 
-	os_unfair_lock		mLock;					/*!< The primitive lock */
+	/// The primitive lock
+	os_unfair_lock mLock;
 
 };

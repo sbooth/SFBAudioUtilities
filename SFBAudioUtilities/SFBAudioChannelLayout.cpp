@@ -1,7 +1,7 @@
-/*
- * Copyright (c) 2013 - 2021 Stephen F. Booth <me@sbooth.org>
- * MIT license
- */
+//
+// Copyright (c) 2013 - 2021 Stephen F. Booth <me@sbooth.org>
+// MIT license
+//
 
 #import <cstdlib>
 #import <cstring>
@@ -11,18 +11,16 @@
 
 namespace {
 
-	/*! Get the size in bytes of an @c AudioChannelLayout with the specified number of channel descriptions */
+	/// Returns the size in bytes of an @c AudioChannelLayout with the specified number of channel descriptions
 	size_t ChannelLayoutSize(UInt32 numberChannelDescriptions) noexcept
 	{
 		return offsetof(AudioChannelLayout, mChannelDescriptions) + (numberChannelDescriptions * sizeof(AudioChannelDescription));
 	}
 
-	/*!
-	 * Allocates an @c AudioChannelLayout
-	 * @param numberChannelDescriptions The number of channel descriptions that will be stored in the channel layout
-	 * @return An @c AudioChannelLayout
-	 * @throws @c std::bad_alloc
-	 */
+	/// Allocates an @c AudioChannelLayout
+	/// @param numberChannelDescriptions The number of channel descriptions that will be stored in the channel layout
+	/// @return An @c AudioChannelLayout
+	/// @throws @c std::bad_alloc
 	AudioChannelLayout * CreateChannelLayout(UInt32 numberChannelDescriptions)
 	{
 		size_t layoutSize = ChannelLayoutSize(numberChannelDescriptions);
@@ -37,12 +35,10 @@ namespace {
 		return channelLayout;
 	}
 
-	/*!
-	 * Creates and returns a copy of @c rhs
-	 * @param rhs The @c AudioChannelLayout to copy
-	 * @return An @c AudioChannelLayout
-	 * @throws @c std::bad_alloc
-	 */
+	/// Creates and returns a copy of @c rhs
+	/// @param rhs The @c AudioChannelLayout to copy
+	/// @return An @c AudioChannelLayout
+	/// @throws @c std::bad_alloc
 	AudioChannelLayout * CopyChannelLayout(const AudioChannelLayout *rhs)
 	{
 		if(!rhs)
@@ -58,7 +54,7 @@ namespace {
 		return channelLayout;
 	}
 
-	/*! Get the string representation of an @c AudioChannelLayoutTag */
+	/// Returns the string representation of an @c AudioChannelLayoutTag
 	const char * const GetChannelLayoutTagName(AudioChannelLayoutTag layoutTag) noexcept
 	{
 		switch(layoutTag) {
@@ -168,7 +164,7 @@ namespace {
 		return nullptr;
 	}
 
-	/*! Get the string representation of an @c AudioChannelLabel */
+	/// Returns the string representation of an @c AudioChannelLabel
 	const char * const GetChannelLabelName(AudioChannelLabel label) noexcept
 	{
 		switch(label) {

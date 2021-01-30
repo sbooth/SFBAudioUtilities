@@ -1,7 +1,7 @@
-/*
- * Copyright (c) 2014 - 2020 Stephen F. Booth <me@sbooth.org>
- * MIT license
- */
+//
+// Copyright (c) 2014 - 2020 Stephen F. Booth <me@sbooth.org>
+// MIT license
+//
 
 #import <algorithm>
 #import <cstdlib>
@@ -12,11 +12,9 @@
 
 namespace {
 
-	/*!
-	 * Return the smallest power of two value greater than @c x
-	 * @param x A value in the range [2..2147483648]
-	 * @return The smallest power of two greater than @c x
-	 */
+	/// Returns the smallest power of two value greater than @c x
+	/// @param x A value in the range [2..2147483648]
+	/// @return The smallest power of two greater than @c x
 	inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 	{
 		assert(x > 1);

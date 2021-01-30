@@ -1,7 +1,7 @@
-/*
- * Copyright (c) 2021 Stephen F. Booth <me@sbooth.org>
- * MIT license
- */
+//
+// Copyright (c) 2021 Stephen F. Booth <me@sbooth.org>
+// MIT license
+//
 
 #include "SFBAudioTimeStamp.hpp"
 

@@ -1,7 +1,7 @@
-/*
- * Copyright (c) 2013 - 2021 Stephen F. Booth <me@sbooth.org>
- * MIT license
- */
+//
+// Copyright (c) 2013 - 2021 Stephen F. Booth <me@sbooth.org>
+// MIT license
+//
 
 #import <algorithm>
 #import <cstdlib>
@@ -12,7 +12,7 @@
 
 namespace {
 
-	/*! Returns @c v clamped to the interval @c [lo,hi] */
+	/// Returns @c v clamped to the interval @c [lo,hi]
 	template<typename T>
 	constexpr const T& clamp(const T& v, const T& lo, const T& hi)
 	{
@@ -20,25 +20,21 @@ namespace {
 		return (v < lo) ? lo : (hi < v) ? hi : v;
 	}
 
-	/*!
-	 * Zeroes a range of bytes in @c buffers
-	 * @param buffers The destination buffers
-	 * @param bufferCount The number of buffers
-	 * @param byteOffset The byte offset in @c buffers to begin writing
-	 * @param byteCount The number of bytes per non-interleaved buffer to write
-	 */
+	/// Zeroes a range of bytes in @c buffers
+	/// @param buffers The destination buffers
+	/// @param bufferCount The number of buffers
+	/// @param byteOffset The byte offset in @c buffers to begin writing
+	/// @param byteCount The number of bytes per non-interleaved buffer to write
 	inline void ZeroRange(uint8_t * const * const buffers, size_t bufferCount, size_t byteOffset, size_t byteCount)
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
 			std::memset(buffers[bufferIndex] + byteOffset, 0, byteCount);
 	}
 
-	/*!
-	 * Zeroes a range of bytes in @c bufferList
-	 * @param bufferList The destination buffers
-	 * @param byteOffset The byte offset in @c bufferList to begin writing
-	 * @param byteCount The maximum number of bytes per non-interleaved buffer to write
-	 */
+	/// Zeroes a range of bytes in @c bufferList
+	/// @param bufferList The destination buffers
+	/// @param byteOffset The byte offset in @c bufferList to begin writing
+	/// @param byteCount The maximum number of bytes per non-interleaved buffer to write
 	inline void ZeroABL(AudioBufferList * const bufferList, size_t byteOffset, size_t byteCount)
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
@@ -48,14 +44,12 @@ namespace {
 		}
 	}
 
-	/*!
-	 * Copies non-interleaved audio from @c bufferList to @c buffers
-	 * @param buffers The destination buffers
-	 * @param dstOffset The byte offset in @c buffers to begin writing
-	 * @param bufferList The source buffers
-	 * @param srcOffset The byte offset in @c bufferList to begin reading
-	 * @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-	 */
+	/// Copies non-interleaved audio from @c bufferList to @c buffers
+	/// @param buffers The destination buffers
+	/// @param dstOffset The byte offset in @c buffers to begin writing
+	/// @param bufferList The source buffers
+	/// @param srcOffset The byte offset in @c bufferList to begin reading
+	/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 	inline void StoreABL(uint8_t * const * const buffers, size_t dstOffset, const AudioBufferList * const bufferList, size_t srcOffset, size_t byteCount) noexcept
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
@@ -65,14 +59,12 @@ namespace {
 		}
 	}
 
-	/*!
-	 * Copies non-interleaved audio from @c buffers to @c bufferList
-	 * @param bufferList The destination buffers
-	 * @param dstOffset The byte offset in @c bufferList to begin writing
-	 * @param buffers The source buffers
-	 * @param srcOffset The byte offset in @c bufferList to begin reading
-	 * @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-	 */
+	/// Copies non-interleaved audio from @c buffers to @c bufferList
+	/// @param bufferList The destination buffers
+	/// @param dstOffset The byte offset in @c bufferList to begin writing
+	/// @param buffers The source buffers
+	/// @param srcOffset The byte offset in @c bufferList to begin reading
+	/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 	inline void FetchABL(AudioBufferList * const bufferList, size_t dstOffset, const uint8_t * const * const buffers, size_t srcOffset, size_t byteCount) noexcept
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
@@ -82,11 +74,9 @@ namespace {
 		}
 	}
 
-	/*!
-	 * Returns the smallest power of two greater than @c x
-	 * @param x A value in the range [2..2147483648]
-	 * @return The smallest power of two greater than @c x
-	 */
+	/// Returns the smallest power of two value greater than @c x
+	/// @param x A value in the range [2..2147483648]
+	/// @return The smallest power of two greater than @c x
 	inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 	{
 		assert(x > 1);
@@ -100,7 +90,9 @@ namespace {
 
 SFBCARingBuffer::SFBCARingBuffer() noexcept
 : mBuffers(nullptr), mCapacityFrames(0), mCapacityFramesMask(0)
-{}
+{
+	assert(mTimeBoundsQueueCounter.is_lock_free());
+}
 
 SFBCARingBuffer::~SFBCARingBuffer()
 {
@@ -311,7 +303,7 @@ void SFBCARingBuffer::SetTimeBounds(int64_t startTime, int64_t endTime) noexcept
 	mTimeBoundsQueue[nextIndex].mEndTime = endTime;
 	mTimeBoundsQueue[nextIndex].mUpdateCounter.store(nextCounter, std::memory_order_release);
 
-	mTimeBoundsQueueCounter.fetch_add(1, std::memory_order_release);
+	mTimeBoundsQueueCounter.store(nextCounter, std::memory_order_release);
 }
 
 bool SFBCARingBuffer::ClampTimesToBounds(int64_t& startRead, int64_t& endRead) const noexcept

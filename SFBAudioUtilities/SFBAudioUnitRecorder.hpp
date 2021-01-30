@@ -1,7 +1,7 @@
-/*
- * Copyright (c) 2021 Stephen F. Booth <me@sbooth.org>
- * MIT license
- */
+//
+// Copyright (c) 2021 Stephen F. Booth <me@sbooth.org>
+// MIT license
+//
 
 #pragma once
 
@@ -13,20 +13,18 @@
 
 #import "SFBExtAudioFile.hpp"
 
-/*! A class that asynchronously writes the output from an @c AudioUnit to a file */
+/// A class that asynchronously writes the output from an @c AudioUnit to a file
 class SFBAudioUnitRecorder
 {
 
 public:
 
-	/*!
-	 * Creates a new @c SFBAudioUnitRecorder that asynchronously writes the output from an @c AudioUnit to a file
-	 * @param au The @c AudioUnit to record
-	 * @param outputFileURL The URL of the output audio file
-	 * @param fileType The type of the file to create
-	 * @param format The format of the audio data to be written to the file
-	 * @param busNumber The bus number of @c au to record
-	 */
+	/// Creates a new @c SFBAudioUnitRecorder that asynchronously writes the output from an @c AudioUnit to a file
+	/// @param au The @c AudioUnit to record
+	/// @param outputFileURL The URL of the output audio file
+	/// @param fileType The type of the file to create
+	/// @param format The format of the audio data to be written to the file
+	/// @param busNumber The bus number of @c au to record
 	SFBAudioUnitRecorder(AudioUnit au, CFURLRef outputFileURL, AudioFileTypeID fileType, const AudioStreamBasicDescription& format, UInt32 busNumber = 0)
 	: mClientFormatIsSet(false), mAudioUnit(au), mBusNumber(busNumber)
 	{
@@ -35,7 +33,7 @@ public:
 		mExtAudioFile.CreateWithURL(outputFileURL, fileType, format, nullptr, kAudioFileFlags_EraseFile);
 	}
 
-	/*! Starts recording */
+	/// Starts recording
 	void Start() {
 		if(mExtAudioFile.IsValid()) {
 			if(!mClientFormatIsSet) {
@@ -52,7 +50,7 @@ public:
 		}
 	}
 
-	/*! Stops recording */
+	/// Stops recording
 	void Stop() {
 		if(mExtAudioFile.IsValid()) {
 			OSStatus result = AudioUnitRemoveRenderNotify(mAudioUnit, RenderCallback, this);
@@ -62,6 +60,7 @@ public:
 
 private:
 
+	/// Asynchronously writes rendered audio to the file
 	static OSStatus RenderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 	{
 		SFBAudioUnitRecorder *THIS = static_cast<SFBAudioUnitRecorder *>(inRefCon);
@@ -78,9 +77,13 @@ private:
 		return noErr;
 	}
 
-	SFBExtAudioFile 	mExtAudioFile;
-	bool				mClientFormatIsSet;
-	AudioUnit			mAudioUnit;
-	UInt32				mBusNumber;
+	/// The underlying @c ExtAudioFile
+	SFBExtAudioFile mExtAudioFile;
+	/// @c true if the @c ExtAudioFile client format is set
+	bool mClientFormatIsSet;
+	/// The @c AudioUnit to record
+	AudioUnit mAudioUnit;
+	/// The bus number of @c mAudioUnit to record
+	UInt32 mBusNumber;
 
 };
