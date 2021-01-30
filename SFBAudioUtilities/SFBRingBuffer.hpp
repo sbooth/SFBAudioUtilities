@@ -96,7 +96,7 @@ public:
 		/// The memory buffer location
 		uint8_t	* const mBuffer;
 		/// The capacity of @c mBuffer in bytes
-		size_t	mBufferCapacity;
+		size_t mBufferCapacity;
 
 		/// Construct an empty Buffer
 		Buffer() noexcept

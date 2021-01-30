@@ -108,7 +108,7 @@ size_t SFBRingBuffer::BytesAvailableToWrite() const noexcept
 
 size_t SFBRingBuffer::Read(void * const destinationBuffer, size_t byteCount) noexcept
 {
-	if(!destinationBuffer || 0 == byteCount)
+	if(!destinationBuffer || byteCount == 0)
 		return 0;
 
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
@@ -120,7 +120,7 @@ size_t SFBRingBuffer::Read(void * const destinationBuffer, size_t byteCount) noe
 	else
 		bytesAvailable = (writePosition - readPosition + mCapacityBytes) & mCapacityBytesMask;
 
-	if(0 == bytesAvailable)
+	if(bytesAvailable == 0)
 		return 0;
 
 	size_t bytesToRead = std::min(bytesAvailable, byteCount);
@@ -139,7 +139,7 @@ size_t SFBRingBuffer::Read(void * const destinationBuffer, size_t byteCount) noe
 
 size_t SFBRingBuffer::Peek(void * const destinationBuffer, size_t byteCount) const noexcept
 {
-	if(!destinationBuffer || 0 == byteCount)
+	if(!destinationBuffer || byteCount == 0)
 		return 0;
 
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
@@ -151,7 +151,7 @@ size_t SFBRingBuffer::Peek(void * const destinationBuffer, size_t byteCount) con
 	else
 		bytesAvailable = (writePosition - readPosition + mCapacityBytes) & mCapacityBytesMask;
 
-	if(0 == bytesAvailable)
+	if(bytesAvailable == 0)
 		return 0;
 
 	size_t bytesToRead = std::min(bytesAvailable, byteCount);
@@ -168,7 +168,7 @@ size_t SFBRingBuffer::Peek(void * const destinationBuffer, size_t byteCount) con
 
 size_t SFBRingBuffer::Write(const void * const sourceBuffer, size_t byteCount) noexcept
 {
-	if(!sourceBuffer || 0 == byteCount)
+	if(!sourceBuffer || byteCount == 0)
 		return 0;
 
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
@@ -182,7 +182,7 @@ size_t SFBRingBuffer::Write(const void * const sourceBuffer, size_t byteCount) n
 	else
 		bytesAvailable = mCapacityBytes - 1;
 
-	if(0 == bytesAvailable)
+	if(bytesAvailable == 0)
 		return 0;
 
 	size_t bytesToWrite = std::min(bytesAvailable, byteCount);
