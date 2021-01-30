@@ -154,7 +154,7 @@ void SFBCARingBuffer::Deallocate() noexcept
 		std::free(mBuffers);
 		mBuffers = nullptr;
 
-		mFormat = {};
+		mFormat.Reset();
 
 		mCapacityFrames = 0;
 		mCapacityFramesMask = 0;
