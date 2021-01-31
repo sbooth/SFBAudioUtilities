@@ -12,15 +12,15 @@
 #import "SFBCFWrapper.hpp"
 
 /// Common PCM audio formats
-typedef CF_ENUM(uint32_t, SFBCommonPCMFormat) {
+enum class SFBCommonPCMFormat {
 	/// Native-endian @c float
-	kSFBCommonPCMFormatFloat32 			= 1,
+	float32,
 	/// Native-endian @c double
-	kSFBCommonPCMFormatFloat64 			= 2,
+	float64,
 	/// Native-endian @c int16_t
-	kSFBCommonPCMFormatInt16 			= 3,
+	int16,
 	/// Native-endian @c int32_t
-	kSFBCommonPCMFormatInt32 			= 4,
+	int32,
 };
 
 /// A class extending the functionality of a Core Audio @c AudioStreamBasicDescription

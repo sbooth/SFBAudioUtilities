@@ -17,16 +17,16 @@ SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMForma
 	std::memset(this, 0, sizeof(AudioStreamBasicDescription));
 
 	switch(commonPCMFormat) {
-		case kSFBCommonPCMFormatFloat32:
+		case SFBCommonPCMFormat::float32:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;
-		case kSFBCommonPCMFormatFloat64:
+		case SFBCommonPCMFormat::float64:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 64, 64, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;
-		case kSFBCommonPCMFormatInt16:
+		case SFBCommonPCMFormat::int16:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 16, 16, false, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;
-		case kSFBCommonPCMFormatInt32:
+		case SFBCommonPCMFormat::int32:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, false, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;
 	}
