@@ -60,7 +60,7 @@ public:
 	}
 
 	/// Assignment operator
-	inline SFBAudioStreamBasicDescription& operator=(const SFBAudioStreamBasicDescription& rhs) noexcept
+	inline SFBAudioStreamBasicDescription& operator=(const AudioStreamBasicDescription& rhs) noexcept
 	{
 		if(this != &rhs)
 			std::memcpy(this, &rhs, sizeof(AudioStreamBasicDescription));
@@ -68,13 +68,13 @@ public:
 	}
 
 	/// Returns @c true if @c rhs is equal to @c this
-	inline bool operator==(const SFBAudioStreamBasicDescription& rhs) const noexcept
+	inline bool operator==(const AudioStreamBasicDescription& rhs) const noexcept
 	{
 		return !std::memcmp(this, &rhs, sizeof(AudioStreamBasicDescription));
 	}
 
 	/// Returns @c true if @c rhs is not equal to @c this
-	inline bool operator!=(const SFBAudioStreamBasicDescription& rhs) const noexcept
+	inline bool operator!=(const AudioStreamBasicDescription& rhs) const noexcept
 	{
 		return !operator==(rhs);
 	}

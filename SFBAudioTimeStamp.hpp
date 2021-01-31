@@ -82,31 +82,31 @@ public:
 #pragma mark Comparison
 
 	/// Returns @c true if @c rhs is equal to @c this
-	bool operator==(const SFBAudioTimeStamp& rhs) const noexcept;
+	bool operator==(const AudioTimeStamp& rhs) const noexcept;
 
 	/// Returns @c true if @c rhs is not equal to @c this
-	inline bool operator!=(const SFBAudioTimeStamp& rhs) const noexcept
+	inline bool operator!=(const AudioTimeStamp& rhs) const noexcept
 	{
 		return !operator==(rhs);
 	}
 
 	/// Returns @c true if @c rhs is less than @c this
-	bool operator<(const SFBAudioTimeStamp& rhs) const noexcept;
+	bool operator<(const AudioTimeStamp& rhs) const noexcept;
 
 	/// Returns @c true if @c rhs is less than or equal to @c this
-	inline bool operator<=(const SFBAudioTimeStamp& rhs) const noexcept
+	inline bool operator<=(const AudioTimeStamp& rhs) const noexcept
 	{
 		return operator<(rhs) || operator==(rhs);
 	}
 
 	/// Returns @c true if @c rhs is greater than or equal to @c this
-	inline bool operator>=(const SFBAudioTimeStamp& rhs) const noexcept
+	inline bool operator>=(const AudioTimeStamp& rhs) const noexcept
 	{
 		return !operator<(rhs);
 	}
 
 	/// Returns @c true if @c rhs is greater than @c this
-	inline bool operator>(const SFBAudioTimeStamp& rhs) const noexcept
+	inline bool operator>(const AudioTimeStamp& rhs) const noexcept
 	{
 		return !(operator<(rhs) || operator==(rhs));
 	}
