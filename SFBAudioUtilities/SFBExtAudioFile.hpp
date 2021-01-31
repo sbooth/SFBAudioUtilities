@@ -49,28 +49,28 @@ public:
 	{
 		Close();
 		auto result = ExtAudioFileOpenURL(inURL, &mExtAudioFile);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileOpenURL");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileOpenURL");
 	}
 
 	void WrapAudioFileID(AudioFileID inFileID, bool inForWriting)
 	{
 		Close();
 		auto result = ExtAudioFileWrapAudioFileID(inFileID, inForWriting, &mExtAudioFile);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileWrapAudioFileID");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileWrapAudioFileID");
 	}
 
 	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFiletype, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * const inChannelLayout, UInt32 inFlags)
 	{
 		Close();
 		auto result = ExtAudioFileCreateWithURL(inURL, inFiletype, &inStreamDesc, inChannelLayout, inFlags, &mExtAudioFile);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileCreateWithURL");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileCreateWithURL");
 	}
 
 	void Close()
 	{
 		if(mExtAudioFile) {
 			auto result = ExtAudioFileDispose(mExtAudioFile);
-			SFBCAException::ThrowIfError(result, "ExtAudioFileDispose");
+			SFBThrowIfExtAudioFileError(result, "ExtAudioFileDispose");
 			mExtAudioFile = nullptr;
 		}
 	}
@@ -78,13 +78,13 @@ public:
 	void Read(UInt32& ioNumberFrames, AudioBufferList *ioData)
 	{
 		auto result = ExtAudioFileRead(mExtAudioFile, &ioNumberFrames, ioData);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileRead");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileRead");
 	}
 
 	void Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
 	{
 		auto result = ExtAudioFileWrite(mExtAudioFile, inNumberFrames, ioData);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileWrite");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileWrite");
 #if TARGET_OS_IPHONE
 			case kExtAudioFileError_CodecUnavailableInputConsumed:
 			case kExtAudioFileError_CodecUnavailableInputNotConsumed:
@@ -95,20 +95,20 @@ public:
 	void WriteAsync(UInt32 inNumberFrames, const AudioBufferList *ioData)
 	{
 		auto result = ExtAudioFileWriteAsync(mExtAudioFile, inNumberFrames, ioData);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileOpenURL");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileOpenURL");
 	}
 
 	void Seek(SInt64 inFrameOffset)
 	{
 		auto result = ExtAudioFileSeek(mExtAudioFile, inFrameOffset);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileSeek");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileSeek");
 	}
 
 	SInt64 Tell() const
 	{
 		SInt64 pos;
 		auto result = ExtAudioFileTell(mExtAudioFile, &pos);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileTell");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileTell");
 		return pos;
 	}
 
@@ -116,20 +116,20 @@ public:
 	{
 		UInt32 size;
 		auto result = ExtAudioFileGetPropertyInfo(mExtAudioFile, inPropertyID, &size, outWritable);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileGetPropertyInfo");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileGetPropertyInfo");
 		return size;
 	}
 
 	void GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const
 	{
 		auto result = ExtAudioFileGetProperty(mExtAudioFile, inPropertyID, &ioPropertyDataSize, outPropertyData);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileGetProperty");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileGetProperty");
 	}
 
 	void SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 	{
 		auto result = ExtAudioFileSetProperty(mExtAudioFile, inPropertyID, inPropertyDataSize, inPropertyData);
-		SFBCAException::ThrowIfError(result, "ExtAudioFileSetProperty");
+		SFBThrowIfExtAudioFileError(result, "ExtAudioFileSetProperty");
 	}
 
 	SFBAudioChannelLayout FileChannelLayout() const
@@ -199,7 +199,7 @@ public:
 	void SetConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 	{
 		auto result = AudioConverterSetProperty(Converter(), inPropertyID, inPropertyDataSize, inPropertyData);
-		SFBCAException::ThrowIfError(result, "AudioConverterSetProperty");
+		SFBThrowIfAudioConverterError(result, "AudioConverterSetProperty");
 		CFPropertyListRef config = nullptr;
 		SetProperty(kExtAudioFileProperty_ConverterConfig, sizeof(config), &config);
 	}
