@@ -84,6 +84,22 @@ enum class SFBAudioUnitErrorCode
 	componentInvalidFormat 				= kAudioComponentErr_InvalidFormat,
 };
 
+// AudioCodec error codes
+enum class SFBAudioCodecErrorCode
+{
+	noError = 0,
+
+	// AudioCodec.h
+	unspecifiedError 			= kAudioCodecUnspecifiedError,
+	unknownPropertyError 		= kAudioCodecUnknownPropertyError,
+	badPropertySizeError 		= kAudioCodecBadPropertySizeError,
+	illegalOperationError 		= kAudioCodecIllegalOperationError,
+	unsupportedFormatError 		= kAudioCodecUnsupportedFormatError,
+	stateError 					= kAudioCodecStateError,
+	notEnoughBufferSpaceError 	= kAudioCodecNotEnoughBufferSpaceError,
+	badDataError 				= kAudioCodecBadDataError,
+};
+
 /// AudioConverter error codes
 enum class SFBAudioConverterErrorCode
 {
@@ -162,6 +178,9 @@ namespace std
 	{};
 
 	template <> struct is_error_code_enum<SFBAudioUnitErrorCode> : true_type
+	{};
+
+	template <> struct is_error_code_enum<SFBAudioCodecErrorCode> : true_type
 	{};
 
 	template <> struct is_error_code_enum<SFBAudioConverterErrorCode> : true_type
@@ -275,6 +294,36 @@ namespace detail
 		}
 	};
 
+	class SFBAudioCodecErrorCategory : public std::error_category
+	{
+
+	public:
+
+		virtual const char * name() const noexcept override final
+		{
+			return "AudioCodec";
+		}
+
+		virtual std::string message(int condition) const override final
+		{
+			switch (static_cast<SFBAudioCodecErrorCode>(condition)) {
+				case SFBAudioCodecErrorCode::noError:
+					return "noError";
+
+				case SFBAudioCodecErrorCode::unspecifiedError: 				return "kAudioCodecUnspecifiedError";
+				case SFBAudioCodecErrorCode::unknownPropertyError: 			return "kAudioCodecUnknownPropertyError";
+				case SFBAudioCodecErrorCode::badPropertySizeError: 			return "kAudioCodecBadPropertySizeError";
+				case SFBAudioCodecErrorCode::illegalOperationError: 		return "kAudioCodecIllegalOperationError";
+				case SFBAudioCodecErrorCode::unsupportedFormatError: 		return "kAudioCodecUnsupportedFormatError";
+				case SFBAudioCodecErrorCode::stateError: 					return "kAudioCodecStateError";
+				case SFBAudioCodecErrorCode::notEnoughBufferSpaceError: 	return "kAudioCodecNotEnoughBufferSpaceError";
+				case SFBAudioCodecErrorCode::badDataError: 					return "kAudioCodecBadDataError";
+
+				default:
+					return "unknown";
+			}
+		}
+	};
 	class SFBAudioConverterErrorCategory : public std::error_category
 	{
 
@@ -405,6 +454,12 @@ extern inline const detail::SFBAudioUnitErrorCategory& SFBAudioUnitErrorCategory
 	return c;
 }
 
+extern inline const detail::SFBAudioCodecErrorCategory& SFBAudioCodecErrorCategory()
+{
+	static detail::SFBAudioCodecErrorCategory c;
+	return c;
+}
+
 extern inline const detail::SFBAudioConverterErrorCategory& SFBAudioConverterErrorCategory()
 {
 	static detail::SFBAudioConverterErrorCategory c;
@@ -431,6 +486,11 @@ inline std::error_code make_error_code(SFBCoreAudioErrorCode e)
 inline std::error_code make_error_code(SFBAudioUnitErrorCode e)
 {
 	return { static_cast<int>(e), SFBAudioUnitErrorCategory() };
+}
+
+inline std::error_code make_error_code(SFBAudioCodecErrorCode e)
+{
+	return { static_cast<int>(e), SFBAudioCodecErrorCategory() };
 }
 
 inline std::error_code make_error_code(SFBAudioConverterErrorCode e)
@@ -466,6 +526,16 @@ inline void SFBThrowIfAudioUnitError(OSStatus result, const char * const operati
 {
 	if(__builtin_expect(result != 0, 0))
 		throw std::system_error(result, SFBAudioUnitErrorCategory(), operation);
+}
+
+/// Throws a @c std::system_error in the @c SFBAudioCodecErrorCategory if @c result!=0
+/// @param result An @c OSStatus result code
+/// @param operation An optional string describing the operation producing @c result
+/// @throw @c std::system_error in the @c SFBAudioCodecErrorCategory
+inline void SFBThrowIfAudioCodecError(OSStatus result, const char * const operation = nullptr)
+{
+	if(__builtin_expect(result != 0, 0))
+		throw std::system_error(result, SFBAudioCodecErrorCategory(), operation);
 }
 
 /// Throws a @c std::system_error in the @c SFBAudioConverterErrorCategory if @c result!=0
