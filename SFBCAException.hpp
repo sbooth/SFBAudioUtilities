@@ -14,8 +14,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 /// CoreAudio and related framework common error codes
-enum class SFBGeneralAudioErrorCode
-{
+enum class SFBGeneralAudioErrorCode {
 	noError = 0,
 
 	// CoreAudioBaseTypes.h
@@ -29,8 +28,7 @@ enum class SFBGeneralAudioErrorCode
 };
 
 /// AudioObject error codes
-enum class SFBAudioObjectErrorCode
-{
+enum class SFBAudioObjectErrorCode {
 	noError = 0,
 
 	// AudioHardwareBase.h
@@ -49,8 +47,7 @@ enum class SFBAudioObjectErrorCode
 };
 
 /// AudioUnit error codes
-enum class SFBAudioUnitErrorCode
-{
+enum class SFBAudioUnitErrorCode {
 	noError = 0,
 
 	// AUComponent.h
@@ -91,8 +88,7 @@ enum class SFBAudioUnitErrorCode
 };
 
 // AudioCodec error codes
-enum class SFBAudioCodecErrorCode
-{
+enum class SFBAudioCodecErrorCode {
 	noError = 0,
 
 	// AudioCodec.h
@@ -107,8 +103,7 @@ enum class SFBAudioCodecErrorCode
 };
 
 /// AudioConverter error codes
-enum class SFBAudioConverterErrorCode
-{
+enum class SFBAudioConverterErrorCode {
 	noError = 0,
 
 	// AudioConverter.h
@@ -129,8 +124,7 @@ enum class SFBAudioConverterErrorCode
 };
 
 /// AudioFile error codes
-enum class SFBAudioFileErrorCode
-{
+enum class SFBAudioFileErrorCode {
 	noError = 0,
 
 	// AudioFile.h
@@ -156,8 +150,7 @@ enum class SFBAudioFileErrorCode
 };
 
 /// ExtAudioFile error codes
-enum class SFBExtAudioFileErrorCode
-{
+enum class SFBExtAudioFileErrorCode {
 	noError = 0,
 
 	// ExtAudioFile.h
