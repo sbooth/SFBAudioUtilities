@@ -13,8 +13,8 @@
 #import <CoreAudio/CoreAudio.h>
 #import <AudioToolbox/AudioToolbox.h>
 
-/// CoreAudio error codes
-enum class SFBCoreAudioErrorCode
+/// CoreAudio and related framework common error codes
+enum class SFBGeneralAudioErrorCode
 {
 	noError = 0,
 
@@ -26,6 +26,12 @@ enum class SFBCoreAudioErrorCode
 	badFilePathError 		= kAudio_BadFilePathError,
 	paramError 				= kAudio_ParamError,
 	memFullError 			= kAudio_MemFullError,
+};
+
+/// AudioObject error codes
+enum class SFBAudioObjectErrorCode
+{
+	noError = 0,
 
 	// AudioHardwareBase.h
 //	hardwareNoError 					= kAudioHardwareNoError,
@@ -174,7 +180,7 @@ enum class SFBExtAudioFileErrorCode
 
 namespace std
 {
-	template <> struct is_error_code_enum<SFBCoreAudioErrorCode> : true_type
+	template <> struct is_error_code_enum<SFBAudioObjectErrorCode> : true_type
 	{};
 
 	template <> struct is_error_code_enum<SFBAudioUnitErrorCode> : true_type
@@ -195,44 +201,46 @@ namespace std
 
 namespace detail
 {
-	class SFBCoreAudioErrorCategory : public std::error_category
+
+	class SFBAudioObjectErrorCategory : public std::error_category
 	{
 
 	public:
 
 		virtual const char * name() const noexcept override final
 		{
-			return "CoreAudio";
+			return "AudioObject";
 		}
 
 		virtual std::string message(int condition) const override final
 		{
-			switch (static_cast<SFBCoreAudioErrorCode>(condition)) {
-				case SFBCoreAudioErrorCode::noError:
-					return "noError";
-
-				case SFBCoreAudioErrorCode::unimplementedError: 	return "kAudio_UnimplementedError";
-				case SFBCoreAudioErrorCode::fileNotFoundError: 		return "kAudio_FileNotFoundError";
-				case SFBCoreAudioErrorCode::filePermissionError: 	return "kAudio_FilePermissionError";
-				case SFBCoreAudioErrorCode::tooManyFilesOpenError: 	return "kAudio_TooManyFilesOpenError";
-				case SFBCoreAudioErrorCode::badFilePathError: 		return "kAudio_BadFilePathError";
-				case SFBCoreAudioErrorCode::paramError: 			return "kAudio_ParamError";
-				case SFBCoreAudioErrorCode::memFullError: 			return "kAudio_MemFullError";
-
-				case SFBCoreAudioErrorCode::hardwareNotRunningError:			return "kAudioHardwareNotRunningError";
-				case SFBCoreAudioErrorCode::hardwareUnspecifiedError:			return "kAudioHardwareUnspecifiedError";
-				case SFBCoreAudioErrorCode::hardwareUnknownPropertyError:		return "kAudioHardwareUnknownPropertyError";
-				case SFBCoreAudioErrorCode::hardwareBadPropertySizeError:		return "kAudioHardwareBadPropertySizeError";
-				case SFBCoreAudioErrorCode::hardwareIllegalOperationError:		return "kAudioHardwareIllegalOperationError";
-				case SFBCoreAudioErrorCode::hardwareBadObjectError:				return "kAudioHardwareBadObjectError";
-				case SFBCoreAudioErrorCode::hardwareBadDeviceError:				return "kAudioHardwareBadDeviceError";
-				case SFBCoreAudioErrorCode::hardwareBadStreamError:				return "kAudioHardwareBadStreamError";
-				case SFBCoreAudioErrorCode::hardwareUnsupportedOperationError: 	return "kAudioHardwareUnsupportedOperationError";
-				case SFBCoreAudioErrorCode::deviceUnsupportedFormatError:		return "kAudioDeviceUnsupportedFormatError";
-				case SFBCoreAudioErrorCode::devicePermissionsError:				return "kAudioDevicePermissionsError";
+			switch(static_cast<SFBAudioObjectErrorCode>(condition)) {
+				case SFBAudioObjectErrorCode::hardwareNotRunningError:				return "The function call requires that the hardware be running but it isn't";
+				case SFBAudioObjectErrorCode::hardwareUnspecifiedError:				return "The function call failed while doing something that doesn't provide any error messages";
+				case SFBAudioObjectErrorCode::hardwareUnknownPropertyError:			return "The AudioObject doesn't know about the property at the given address";
+				case SFBAudioObjectErrorCode::hardwareBadPropertySizeError:			return "An improperly sized buffer was provided when accessing the data of a property";
+				case SFBAudioObjectErrorCode::hardwareIllegalOperationError:		return "The requested operation couldn't be completed";
+				case SFBAudioObjectErrorCode::hardwareBadObjectError:				return "The AudioObjectID passed to the function doesn't map to a valid AudioObject";
+				case SFBAudioObjectErrorCode::hardwareBadDeviceError:				return "The AudioObjectID passed to the function doesn't map to a valid AudioDevice";
+				case SFBAudioObjectErrorCode::hardwareBadStreamError:				return "The AudioObjectID passed to the function doesn't map to a valid AudioStream";
+				case SFBAudioObjectErrorCode::hardwareUnsupportedOperationError: 	return "The AudioObject doesn't support the requested operation";
+				case SFBAudioObjectErrorCode::deviceUnsupportedFormatError:			return "The AudioStream doesn't support the requested format";
+				case SFBAudioObjectErrorCode::devicePermissionsError:				return "The requested operation can't be completed because the process doesn't have permission";
 
 				default:
-					return "unknown";
+					switch(static_cast<SFBGeneralAudioErrorCode>(condition)) {
+						case SFBGeneralAudioErrorCode::noError: 				return "The function call completed successfully";
+
+						case SFBGeneralAudioErrorCode::unimplementedError: 		return "Unimplemented core routine";
+						case SFBGeneralAudioErrorCode::fileNotFoundError: 		return "File not found";
+						case SFBGeneralAudioErrorCode::filePermissionError: 	return "File cannot be opened due to either file, directory, or sandbox permissions";
+						case SFBGeneralAudioErrorCode::tooManyFilesOpenError: 	return "File cannot be opened because too many files are already open";
+						case SFBGeneralAudioErrorCode::badFilePathError: 		return "File cannot be opened because the specified path is malformed";
+						case SFBGeneralAudioErrorCode::paramError: 				return "Error in user parameter list";
+						case SFBGeneralAudioErrorCode::memFullError: 			return "Not enough room in heap zone";
+
+						default:												return "unknown";
+					}
 			}
 		}
 	};
@@ -249,47 +257,56 @@ namespace detail
 
 		virtual std::string message(int condition) const override final
 		{
-			switch (static_cast<SFBAudioUnitErrorCode>(condition)) {
-				case SFBAudioUnitErrorCode::noError:
-					return "noError";
-
-				case SFBAudioUnitErrorCode::invalidProperty: 				return "kAudioUnitErr_InvalidProperty";
-				case SFBAudioUnitErrorCode::invalidParameter: 				return "kAudioUnitErr_InvalidParameter";
-				case SFBAudioUnitErrorCode::invalidElement: 				return "kAudioUnitErr_InvalidElement";
-				case SFBAudioUnitErrorCode::noConnection: 					return "kAudioUnitErr_NoConnection";
-				case SFBAudioUnitErrorCode::failedInitialization: 			return "kAudioUnitErr_FailedInitialization";
-				case SFBAudioUnitErrorCode::tooManyFramesToProcess: 		return "kAudioUnitErr_TooManyFramesToProcess";
-				case SFBAudioUnitErrorCode::invalidFile: 					return "kAudioUnitErr_InvalidFile";
-				case SFBAudioUnitErrorCode::unknownFileType: 				return "kAudioUnitErr_UnknownFileType";
-				case SFBAudioUnitErrorCode::fileNotSpecified: 				return "kAudioUnitErr_FileNotSpecified";
-				case SFBAudioUnitErrorCode::formatNotSupported: 			return "kAudioUnitErr_FormatNotSupported";
-				case SFBAudioUnitErrorCode::uninitialized: 					return "kAudioUnitErr_Uninitialized";
-				case SFBAudioUnitErrorCode::invalidScope: 					return "kAudioUnitErr_InvalidScope";
-				case SFBAudioUnitErrorCode::propertyNotWritable: 			return "kAudioUnitErr_PropertyNotWritable";
-				case SFBAudioUnitErrorCode::cannotDoInCurrentContext: 		return "kAudioUnitErr_CannotDoInCurrentContext";
-				case SFBAudioUnitErrorCode::invalidPropertyValue: 			return "kAudioUnitErr_InvalidPropertyValue";
-				case SFBAudioUnitErrorCode::propertyNotInUse: 				return "kAudioUnitErr_PropertyNotInUse";
-				case SFBAudioUnitErrorCode::initialized: 					return "kAudioUnitErr_Initialized";
-				case SFBAudioUnitErrorCode::invalidOfflineRender: 			return "kAudioUnitErr_InvalidOfflineRender";
-				case SFBAudioUnitErrorCode::unauthorized: 					return "kAudioUnitErr_Unauthorized";
-				case SFBAudioUnitErrorCode::midiOutputBufferFull: 			return "kAudioUnitErr_MIDIOutputBufferFull";
+			switch(static_cast<SFBAudioUnitErrorCode>(condition)) {
+				case SFBAudioUnitErrorCode::invalidProperty: 				return "The property is not supported";
+				case SFBAudioUnitErrorCode::invalidParameter: 				return "The parameter is not supported";
+				case SFBAudioUnitErrorCode::invalidElement: 				return "The specified element is not valid";
+				case SFBAudioUnitErrorCode::noConnection: 					return "There is no connection (generally an audio unit is asked to render but it has not input from which to gather data)";
+				case SFBAudioUnitErrorCode::failedInitialization: 			return "The audio unit is unable to be initialized";
+				case SFBAudioUnitErrorCode::tooManyFramesToProcess: 		return "When an audio unit is initialized it has a value which specifies the max number of frames it will be asked to render at any given time. If an audio unit is asked to render more than this, this error is returned";
+				case SFBAudioUnitErrorCode::invalidFile: 					return "If an audio unit uses external files as a data source, this error is returned if a file is invalid (Apple's DLS synth returns this error)";
+				case SFBAudioUnitErrorCode::unknownFileType: 				return "If an audio unit uses external files as a data source, this error is returned if a file is invalid (Apple's DLS synth returns this error)";
+				case SFBAudioUnitErrorCode::fileNotSpecified: 				return "If an audio unit uses external files as a data source, this error is returned if a file hasn't been set on it (Apple's DLS synth returns this error)";
+				case SFBAudioUnitErrorCode::formatNotSupported: 			return "Returned if an input or output format is not supported";
+				case SFBAudioUnitErrorCode::uninitialized: 					return "Returned if an operation requires an audio unit to be initialized and it is not";
+				case SFBAudioUnitErrorCode::invalidScope: 					return "The specified scope is invalid";
+				case SFBAudioUnitErrorCode::propertyNotWritable: 			return "The property cannot be written";
+				case SFBAudioUnitErrorCode::cannotDoInCurrentContext: 		return "Returned when an audio unit is in a state where it can't perform the requested action now - but it could later. It's usually used to guard a render operation when a reconfiguration of its internal state is being performed";
+				case SFBAudioUnitErrorCode::invalidPropertyValue: 			return "The property is valid, but the value of the property being provided is not";
+				case SFBAudioUnitErrorCode::propertyNotInUse: 				return "Returned when a property is valid, but it hasn't been set to a valid value at this time";
+				case SFBAudioUnitErrorCode::initialized: 					return "Indicates the operation cannot be performed because the audio unit is initialized";
+				case SFBAudioUnitErrorCode::invalidOfflineRender: 			return "Used to indicate that the offline render operation is invalid. For instance, when the audio unit needs to be pre-flighted, but it hasn't been";
+				case SFBAudioUnitErrorCode::unauthorized: 					return "Returned by either Open or Initialize, this error is used to indicate that the audio unit is not authorised, that it cannot be used. A host can then present a UI to notify the user the audio unit is not able to be used in its current state";
+				case SFBAudioUnitErrorCode::midiOutputBufferFull: 			return "Returned during the render call, if the audio unit produces more MIDI output, than the default allocated buffer. The audio unit can provide a size hint, in case it needs a larger buffer. See the documentation for AUAudioUnit's MIDIOutputBufferSizeHint property";
 				case SFBAudioUnitErrorCode::componentInstanceTimedOut: 		return "kAudioComponentErr_InstanceTimedOut";
-				case SFBAudioUnitErrorCode::componentInstanceInvalidated: 	return "kAudioComponentErr_InstanceInvalidated";
-				case SFBAudioUnitErrorCode::renderTimeout: 					return "kAudioUnitErr_RenderTimeout";
-				case SFBAudioUnitErrorCode::extensionNotFound: 				return "kAudioUnitErr_ExtensionNotFound";
-				case SFBAudioUnitErrorCode::invalidParameterValue: 			return "kAudioUnitErr_InvalidParameterValue";
-				case SFBAudioUnitErrorCode::invalidFilePath: 				return "kAudioUnitErr_InvalidFilePath";
-				case SFBAudioUnitErrorCode::missingKey: 					return "kAudioUnitErr_MissingKey";
+				case SFBAudioUnitErrorCode::componentInstanceInvalidated: 	return "The component instance's implementation is not available, most likely because the process that published it is no longer running";
+				case SFBAudioUnitErrorCode::renderTimeout: 					return "The audio unit did not satisfy the render request in time";
+				case SFBAudioUnitErrorCode::extensionNotFound: 				return "The specified identifier did not match any Audio Unit Extensions";
+				case SFBAudioUnitErrorCode::invalidParameterValue: 			return "The parameter value is not supported, e.g. the value specified is NaN or infinite";
+				case SFBAudioUnitErrorCode::invalidFilePath: 				return "The file path that was passed is not supported. It is either too long or contains invalid characters";
+				case SFBAudioUnitErrorCode::missingKey: 					return "A required key is missing from a dictionary object";
 
-				case SFBAudioUnitErrorCode::componentDuplicateDescription: 		return "kAudioComponentErr_DuplicateDescription";
-				case SFBAudioUnitErrorCode::componentUnsupportedType: 			return "kAudioComponentErr_UnsupportedType";
-				case SFBAudioUnitErrorCode::componentTooManyInstances: 			return "kAudioComponentErr_TooManyInstances";
-				case SFBAudioUnitErrorCode::componentNotPermitted: 				return "kAudioComponentErr_NotPermitted";
-				case SFBAudioUnitErrorCode::componentInitializationTimedOut: 	return "kAudioComponentErr_InitializationTimedOut";
-				case SFBAudioUnitErrorCode::componentInvalidFormat: 			return "kAudioComponentErr_InvalidFormat";
+				case SFBAudioUnitErrorCode::componentDuplicateDescription: 		return "A non-unique component description was provided to AudioOutputUnitPublish";
+				case SFBAudioUnitErrorCode::componentUnsupportedType: 			return "An unsupported component type was provided to AudioOutputUnitPublish";
+				case SFBAudioUnitErrorCode::componentTooManyInstances: 			return "Components published via AudioOutputUnitPublish may only have one instance";
+				case SFBAudioUnitErrorCode::componentNotPermitted: 				return "App needs \"inter-app-audio\" entitlement or host app needs \"audio\" in its UIBackgroundModes. Or app is trying to register a component not declared in its Info.plist";
+				case SFBAudioUnitErrorCode::componentInitializationTimedOut: 	return "Host did not render in a timely manner; must uninitialize and reinitialize";
+				case SFBAudioUnitErrorCode::componentInvalidFormat: 			return "Inter-app AU element formats must have sample rates matching the hardware";
 
 				default:
-					return "unknown";
+					switch(static_cast<SFBGeneralAudioErrorCode>(condition)) {
+						case SFBGeneralAudioErrorCode::noError: 				return "The function call completed successfully";
+
+						case SFBGeneralAudioErrorCode::unimplementedError: 		return "Unimplemented core routine";
+						case SFBGeneralAudioErrorCode::fileNotFoundError: 		return "File not found";
+						case SFBGeneralAudioErrorCode::filePermissionError: 	return "File cannot be opened due to either file, directory, or sandbox permissions";
+						case SFBGeneralAudioErrorCode::tooManyFilesOpenError: 	return "File cannot be opened because too many files are already open";
+						case SFBGeneralAudioErrorCode::badFilePathError: 		return "File cannot be opened because the specified path is malformed";
+						case SFBGeneralAudioErrorCode::paramError: 				return "Error in user parameter list";
+						case SFBGeneralAudioErrorCode::memFullError: 			return "Not enough room in heap zone";
+
+						default:												return "unknown";
+					}
 			}
 		}
 	};
@@ -306,10 +323,7 @@ namespace detail
 
 		virtual std::string message(int condition) const override final
 		{
-			switch (static_cast<SFBAudioCodecErrorCode>(condition)) {
-				case SFBAudioCodecErrorCode::noError:
-					return "noError";
-
+			switch(static_cast<SFBAudioCodecErrorCode>(condition)) {
 				case SFBAudioCodecErrorCode::unspecifiedError: 				return "kAudioCodecUnspecifiedError";
 				case SFBAudioCodecErrorCode::unknownPropertyError: 			return "kAudioCodecUnknownPropertyError";
 				case SFBAudioCodecErrorCode::badPropertySizeError: 			return "kAudioCodecBadPropertySizeError";
@@ -320,7 +334,19 @@ namespace detail
 				case SFBAudioCodecErrorCode::badDataError: 					return "kAudioCodecBadDataError";
 
 				default:
-					return "unknown";
+					switch(static_cast<SFBGeneralAudioErrorCode>(condition)) {
+						case SFBGeneralAudioErrorCode::noError: 				return "The function call completed successfully";
+
+						case SFBGeneralAudioErrorCode::unimplementedError: 		return "Unimplemented core routine";
+						case SFBGeneralAudioErrorCode::fileNotFoundError: 		return "File not found";
+						case SFBGeneralAudioErrorCode::filePermissionError: 	return "File cannot be opened due to either file, directory, or sandbox permissions";
+						case SFBGeneralAudioErrorCode::tooManyFilesOpenError: 	return "File cannot be opened because too many files are already open";
+						case SFBGeneralAudioErrorCode::badFilePathError: 		return "File cannot be opened because the specified path is malformed";
+						case SFBGeneralAudioErrorCode::paramError: 				return "Error in user parameter list";
+						case SFBGeneralAudioErrorCode::memFullError: 			return "Not enough room in heap zone";
+
+						default:												return "unknown";
+					}
 			}
 		}
 	};
@@ -336,10 +362,7 @@ namespace detail
 
 		virtual std::string message(int condition) const override final
 		{
-			switch (static_cast<SFBAudioConverterErrorCode>(condition)) {
-				case SFBAudioConverterErrorCode::noError:
-					return "noError";
-
+			switch(static_cast<SFBAudioConverterErrorCode>(condition)) {
 				case SFBAudioConverterErrorCode::formatNotSupported: 				return "kAudioConverterErr_FormatNotSupported or kAudioFileUnsupportedDataFormatError";
 				case SFBAudioConverterErrorCode::operationNotSupported: 			return "kAudioConverterErr_OperationNotSupported";
 				case SFBAudioConverterErrorCode::propertyNotSupported: 				return "kAudioConverterErr_PropertyNotSupported";
@@ -356,7 +379,19 @@ namespace detail
 #endif
 
 				default:
-					return "unknown";
+					switch(static_cast<SFBGeneralAudioErrorCode>(condition)) {
+						case SFBGeneralAudioErrorCode::noError: 				return "The function call completed successfully";
+
+						case SFBGeneralAudioErrorCode::unimplementedError: 		return "Unimplemented core routine";
+						case SFBGeneralAudioErrorCode::fileNotFoundError: 		return "File not found";
+						case SFBGeneralAudioErrorCode::filePermissionError: 	return "File cannot be opened due to either file, directory, or sandbox permissions";
+						case SFBGeneralAudioErrorCode::tooManyFilesOpenError: 	return "File cannot be opened because too many files are already open";
+						case SFBGeneralAudioErrorCode::badFilePathError: 		return "File cannot be opened because the specified path is malformed";
+						case SFBGeneralAudioErrorCode::paramError: 				return "Error in user parameter list";
+						case SFBGeneralAudioErrorCode::memFullError: 			return "Not enough room in heap zone";
+
+						default:												return "unknown";
+					}
 			}
 		}
 	};
@@ -373,32 +408,41 @@ namespace detail
 
 		virtual std::string message(int condition) const override final
 		{
-			switch (static_cast<SFBAudioFileErrorCode>(condition)) {
-				case SFBAudioFileErrorCode::noError:
-					return "noError";
+			switch(static_cast<SFBAudioFileErrorCode>(condition)) {
+				case SFBAudioFileErrorCode::unspecifiedError: 					return "An unspecified error has occurred";
+				case SFBAudioFileErrorCode::unsupportedFileTypeError: 			return "The file type is not supported";
+				case SFBAudioFileErrorCode::unsupportedDataFormatError: 		return "The data format is not supported by this file type";
+				case SFBAudioFileErrorCode::unsupportedPropertyError: 			return "The property is not supported";
+				case SFBAudioFileErrorCode::badPropertySizeError: 				return "The size of the property data was not correct";
+				case SFBAudioFileErrorCode::permissionsError: 					return "The operation violated the file permissions";
+				case SFBAudioFileErrorCode::notOptimizedError: 					return "There are chunks following the audio data chunk that prevent extending the audio data chunk. The file must be optimized in order to write more audio data.";
 
-				case SFBAudioFileErrorCode::unspecifiedError: 					return "kAudioFileUnspecifiedError";
-				case SFBAudioFileErrorCode::unsupportedFileTypeError: 			return "kAudioFileUnsupportedFileTypeError";
-				case SFBAudioFileErrorCode::unsupportedDataFormatError: 		return "kAudioFileUnsupportedDataFormatError";
-				case SFBAudioFileErrorCode::unsupportedPropertyError: 			return "kAudioFileUnsupportedPropertyError";
-				case SFBAudioFileErrorCode::badPropertySizeError: 				return "kAudioFileBadPropertySizeError";
-				case SFBAudioFileErrorCode::permissionsError: 					return "kAudioFilePermissionsError";
-				case SFBAudioFileErrorCode::notOptimizedError: 					return "kAudioFileNotOptimizedError";
+				case SFBAudioFileErrorCode::invalidChunkError: 					return "The chunk does not exist in the file or is not supported by the file";
+				case SFBAudioFileErrorCode::doesNotAllow64BitDataSizeError: 	return "The a file offset was too large for the file type. AIFF and WAVE have a 32 bit file size limit.";
+				case SFBAudioFileErrorCode::invalidPacketOffsetError: 			return "A packet offset was past the end of the file, or not at the end of the file when writing a VBR format, or a corrupt packet size was read when building the packet table.";
+				case SFBAudioFileErrorCode::invalidPacketDependencyError: 		return "Either the packet dependency info that's necessary for the audio format has not been provided, or the provided packet dependency info indicates dependency on a packet that's unavailable.";
+				case SFBAudioFileErrorCode::invalidFileError:					return "The file is malformed, or otherwise not a valid instance of an audio file of its type";
+				case SFBAudioFileErrorCode::operationNotSupportedError: 		return "The operation cannot be performed";
 
-				case SFBAudioFileErrorCode::invalidChunkError: 					return "kAudioFileInvalidChunkError";
-				case SFBAudioFileErrorCode::doesNotAllow64BitDataSizeError: 	return "kAudioFileDoesNotAllow64BitDataSizeError";
-				case SFBAudioFileErrorCode::invalidPacketOffsetError: 			return "kAudioFileInvalidPacketOffsetError";
-				case SFBAudioFileErrorCode::invalidPacketDependencyError: 		return "kAudioFileInvalidPacketDependencyError";
-				case SFBAudioFileErrorCode::invalidFileError:					return "kAudioFileInvalidFileError";
-				case SFBAudioFileErrorCode::operationNotSupportedError: 		return "kAudioFileOperationNotSupportedError";
-
-				case SFBAudioFileErrorCode::notOpenError:						return "kAudioFileNotOpenError";
-				case SFBAudioFileErrorCode::endOfFileError: 					return "kAudioFileEndOfFileError";
-				case SFBAudioFileErrorCode::positionError: 						return "kAudioFilePositionError";
-				case SFBAudioFileErrorCode::fileNotFoundError: 					return "kAudioFileFileNotFoundError";
+				case SFBAudioFileErrorCode::notOpenError:						return "The file is closed";
+				case SFBAudioFileErrorCode::endOfFileError: 					return "End of file";
+				case SFBAudioFileErrorCode::positionError: 						return "Invalid file position";
+				case SFBAudioFileErrorCode::fileNotFoundError: 					return "File not found";
 
 				default:
-					return "unknown";
+					switch(static_cast<SFBGeneralAudioErrorCode>(condition)) {
+						case SFBGeneralAudioErrorCode::noError: 				return "The function call completed successfully";
+
+						case SFBGeneralAudioErrorCode::unimplementedError: 		return "Unimplemented core routine";
+						case SFBGeneralAudioErrorCode::fileNotFoundError: 		return "File not found";
+						case SFBGeneralAudioErrorCode::filePermissionError: 	return "File cannot be opened due to either file, directory, or sandbox permissions";
+						case SFBGeneralAudioErrorCode::tooManyFilesOpenError: 	return "File cannot be opened because too many files are already open";
+						case SFBGeneralAudioErrorCode::badFilePathError: 		return "File cannot be opened because the specified path is malformed";
+						case SFBGeneralAudioErrorCode::paramError: 				return "Error in user parameter list";
+						case SFBGeneralAudioErrorCode::memFullError: 			return "Not enough room in heap zone";
+
+						default:												return "unknown";
+					}
 			}
 		}
 	};
@@ -416,35 +460,44 @@ namespace detail
 
 		virtual std::string message(int condition) const override final
 		{
-			switch (static_cast<SFBExtAudioFileErrorCode>(condition)) {
-				case SFBExtAudioFileErrorCode::noError:
-					return "noError";
-
+			switch(static_cast<SFBExtAudioFileErrorCode>(condition)) {
 				case SFBExtAudioFileErrorCode::invalidProperty:						return "kExtAudioFileError_InvalidProperty";
 				case SFBExtAudioFileErrorCode::invalidPropertySize: 				return "kExtAudioFileError_InvalidPropertySize";
 				case SFBExtAudioFileErrorCode::nonPCMClientFormat: 					return "kExtAudioFileError_NonPCMClientFormat";
-				case SFBExtAudioFileErrorCode::invalidChannelMap: 					return "kExtAudioFileError_InvalidChannelMap";
+				case SFBExtAudioFileErrorCode::invalidChannelMap: 					return "number of channels doesn't match format";
 				case SFBExtAudioFileErrorCode::invalidOperationOrder: 				return "kExtAudioFileError_InvalidOperationOrder";
 				case SFBExtAudioFileErrorCode::invalidDataFormat: 					return "kExtAudioFileError_InvalidDataFormat";
 				case SFBExtAudioFileErrorCode::maxPacketSizeUnknown: 				return "kExtAudioFileError_MaxPacketSizeUnknown";
-				case SFBExtAudioFileErrorCode::invalidSeek: 						return "kExtAudioFileError_InvalidSeek";
+				case SFBExtAudioFileErrorCode::invalidSeek: 						return "writing, or offset out of bounds";
 				case SFBExtAudioFileErrorCode::asyncWriteTooLarge: 					return "kExtAudioFileError_AsyncWriteTooLarge";
-				case SFBExtAudioFileErrorCode::asyncWriteBufferOverflow: 			return "kExtAudioFileError_AsyncWriteBufferOverflow";
+				case SFBExtAudioFileErrorCode::asyncWriteBufferOverflow: 			return "an async write could not be completed in time";
 #if TARGET_OS_IPHONE
-				case SFBExtAudioFileErrorCode::codecUnavailableInputConsumed:		return "kExtAudioFileError_CodecUnavailableInputConsumed";
-				case SFBExtAudioFileErrorCode::codecUnavailableInputNotConsumed: 	return "kExtAudioFileError_CodecUnavailableInputNotConsumed";
+				case SFBExtAudioFileErrorCode::codecUnavailableInputConsumed:		return "iOS only. Returned when ExtAudioFileWrite was interrupted. You must stop calling ExtAudioFileWrite. If the underlying audio converter can resume after an interruption (see kAudioConverterPropertyCanResumeFromInterruption), you must wait for an EndInterruption notification from AudioSession, and call AudioSessionSetActive(true) before resuming. In this situation, the buffer you provided to ExtAudioFileWrite was successfully consumed and you may proceed to the next buffer";
+				case SFBExtAudioFileErrorCode::codecUnavailableInputNotConsumed: 	return "iOS only. Returned when ExtAudioFileWrite was interrupted. You must stop calling ExtAudioFileWrite. If the underlying audio converter can resume after an interruption (see kAudioConverterPropertyCanResumeFromInterruption), you must wait for an EndInterruption notification from AudioSession, and call AudioSessionSetActive(true) before resuming. In this situation, the buffer you provided to ExtAudioFileWrite was not successfully consumed and you must try to write it again";
 #endif
 
 				default:
-					return "unknown";
+					switch(static_cast<SFBGeneralAudioErrorCode>(condition)) {
+						case SFBGeneralAudioErrorCode::noError: 				return "The function call completed successfully";
+
+						case SFBGeneralAudioErrorCode::unimplementedError: 		return "Unimplemented core routine";
+						case SFBGeneralAudioErrorCode::fileNotFoundError: 		return "File not found";
+						case SFBGeneralAudioErrorCode::filePermissionError: 	return "File cannot be opened due to either file, directory, or sandbox permissions";
+						case SFBGeneralAudioErrorCode::tooManyFilesOpenError: 	return "File cannot be opened because too many files are already open";
+						case SFBGeneralAudioErrorCode::badFilePathError: 		return "File cannot be opened because the specified path is malformed";
+						case SFBGeneralAudioErrorCode::paramError: 				return "Error in user parameter list";
+						case SFBGeneralAudioErrorCode::memFullError: 			return "Not enough room in heap zone";
+
+						default:												return "unknown";
+					}
 			}
 		}
 	};
 }
 
-extern inline const detail::SFBCoreAudioErrorCategory& SFBCoreAudioErrorCategory()
+extern inline const detail::SFBAudioObjectErrorCategory& SFBAudioObjectErrorCategory()
 {
-	static detail::SFBCoreAudioErrorCategory c;
+	static detail::SFBAudioObjectErrorCategory c;
 	return c;
 }
 
@@ -478,9 +531,9 @@ extern inline const detail::SFBExtAudioFileErrorCategory& SFBExtAudioFileErrorCa
 	return c;
 }
 
-inline std::error_code make_error_code(SFBCoreAudioErrorCode e)
+inline std::error_code make_error_code(SFBAudioObjectErrorCode e)
 {
-	return { static_cast<int>(e), SFBCoreAudioErrorCategory() };
+	return { static_cast<int>(e), SFBAudioObjectErrorCategory() };
 }
 
 inline std::error_code make_error_code(SFBAudioUnitErrorCode e)
@@ -508,17 +561,19 @@ inline std::error_code make_error_code(SFBExtAudioFileErrorCode e)
 	return { static_cast<int>(e), SFBExtAudioFileErrorCategory() };
 }
 
-/// Throws a @c std::system_error in the @c SFBCoreAudioErrorCategory if @c result!=0
+/// Throws a @c std::system_error in the @c SFBAudioObjectErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioObject API
 /// @param result An @c OSStatus result code
 /// @param operation An optional string describing the operation producing @c result
-/// @throw @c std::system_error in the @c SFBCoreAudioErrorCategory
-inline void SFBThrowIfCoreAudioError(OSStatus result, const char * const operation = nullptr)
+/// @throw @c std::system_error in the @c SFBAudioObjectErrorCategory
+inline void SFBThrowIfAudioObjectError(OSStatus result, const char * const operation = nullptr)
 {
 	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, SFBCoreAudioErrorCategory(), operation);
+		throw std::system_error(result, SFBAudioObjectErrorCategory(), operation);
 }
 
 /// Throws a @c std::system_error in the @c SFBAudioUnitErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioUnit API
 /// @param result An @c OSStatus result code
 /// @param operation An optional string describing the operation producing @c result
 /// @throw @c std::system_error in the @c SFBAudioUnitErrorCategory
@@ -529,6 +584,7 @@ inline void SFBThrowIfAudioUnitError(OSStatus result, const char * const operati
 }
 
 /// Throws a @c std::system_error in the @c SFBAudioCodecErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioCodec API
 /// @param result An @c OSStatus result code
 /// @param operation An optional string describing the operation producing @c result
 /// @throw @c std::system_error in the @c SFBAudioCodecErrorCategory
@@ -539,6 +595,7 @@ inline void SFBThrowIfAudioCodecError(OSStatus result, const char * const operat
 }
 
 /// Throws a @c std::system_error in the @c SFBAudioConverterErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioConverter API
 /// @param result An @c OSStatus result code
 /// @param operation An optional string describing the operation producing @c result
 /// @throw @c std::system_error in the @c SFBAudioConverterErrorCategory
@@ -549,6 +606,7 @@ inline void SFBThrowIfAudioConverterError(OSStatus result, const char * const op
 }
 
 /// Throws a @c std::system_error in the @c SFBAudioFileErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioFile API
 /// @param result An @c OSStatus result code
 /// @param operation An optional string describing the operation producing @c result
 /// @throw @c std::system_error in the @c SFBAudioFileErrorCategory
@@ -559,6 +617,7 @@ inline void SFBThrowIfAudioFileError(OSStatus result, const char * const operati
 }
 
 /// Throws a @c std::system_error in the @c SFBExtAudioFileErrorCategory if @c result!=0
+/// @note This is intended for results from the @c ExtAudioFile API
 /// @param result An @c OSStatus result code
 /// @param operation An optional string describing the operation producing @c result
 /// @throw @c std::system_error in the @c SFBExtAudioFileErrorCategory
