@@ -8,11 +8,11 @@
 #import <AudioToolbox/AudioFile.h>
 
 #import "SFBCAException.hpp"
-#import "SFBAudioChannelLayout.hpp"
 #import "SFBAudioStreamBasicDescription.hpp"
 
 CF_ASSUME_NONNULL_BEGIN
 
+/// A wrapper around @c AudioFile
 class SFBAudioFile
 {
 
