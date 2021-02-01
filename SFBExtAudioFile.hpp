@@ -147,6 +147,17 @@ public:
 		SFBThrowIfExtAudioFileError(result, "ExtAudioFileRead");
 	}
 
+	/// Performs a synchronous sequential read.
+	/// @param buffer Buffer into which the audio data is read.
+	/// @throw @c std::system_error
+	void Read(SFBAudioBufferList& buffer)
+	{
+		buffer.Reset();
+		UInt32 frameCount = buffer.FrameCapacity();
+		Read(frameCount, buffer);
+		buffer.SetFrameLength(frameCount);
+	}
+
 	/// Performs a synchronous sequential write.
 	///
 	///	If the file has a client data format, then the audio data in ioData is
