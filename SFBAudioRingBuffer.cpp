@@ -18,7 +18,7 @@ namespace {
 	/// @param bufferList The source buffers
 	/// @param srcOffset The byte offset in @c bufferList to begin reading
 	/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-	inline void StoreABL(uint8_t * const * const buffers, size_t dstOffset, const AudioBufferList * const bufferList, size_t srcOffset, size_t byteCount) noexcept
+	inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, size_t dstOffset, const AudioBufferList * const _Nonnull bufferList, size_t srcOffset, size_t byteCount) noexcept
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(srcOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
@@ -33,7 +33,7 @@ namespace {
 	/// @param buffers The source buffers
 	/// @param srcOffset The byte offset in @c bufferList to begin reading
 	/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-	inline void FetchABL(AudioBufferList * const bufferList, size_t dstOffset, const uint8_t * const * const buffers, size_t srcOffset, size_t byteCount) noexcept
+	inline void FetchABL(AudioBufferList * const _Nonnull bufferList, size_t dstOffset, const uint8_t * const _Nonnull * const _Nonnull buffers, size_t srcOffset, size_t byteCount) noexcept
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(dstOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)

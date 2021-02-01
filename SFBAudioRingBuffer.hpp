@@ -81,13 +81,13 @@ public:
 	/// @param bufferList An @c AudioBufferList to receive the audio
 	/// @param frameCount The desired number of frames to read
 	/// @return The number of frames actually read
-	size_t Read(AudioBufferList * const bufferList, size_t frameCount) noexcept;
+	size_t Read(AudioBufferList * const _Nonnull bufferList, size_t frameCount) noexcept;
 
 	/// Writes audio to the @c SFBAudioRingBuffer and advances the write pointer.
 	/// @param bufferList An @c AudioBufferList containing the audio to copy
 	/// @param frameCount The desired number of frames to write
 	/// @return The number of frames actually written
-	size_t Write(const AudioBufferList * const bufferList, size_t frameCount) noexcept;
+	size_t Write(const AudioBufferList * const _Nonnull bufferList, size_t frameCount) noexcept;
 
 private:
 
@@ -95,7 +95,7 @@ private:
 	SFBAudioStreamBasicDescription mFormat;
 
 	/// The channel pointers and buffers allocated in one chunk of memory
-	uint8_t **mBuffers;
+	uint8_t * _Nonnull * _Nullable mBuffers;
 
 	/// The frame capacity per channel
 	size_t mCapacityFrames;

@@ -79,14 +79,14 @@ public:
 	/// @param frameCount The desired number of frames to read
 	/// @param timeStamp The starting sample time
 	/// @return @c true on success, @c false on error
-	bool Read(AudioBufferList * const bufferList, size_t frameCount, int64_t timeStamp) noexcept;
+	bool Read(AudioBufferList * const _Nonnull bufferList, size_t frameCount, int64_t timeStamp) noexcept;
 
 	/// Writes audio to the @c SFBCARingBuffer
 	/// @param bufferList An @c AudioBufferList containing the audio to copy
 	/// @param frameCount The desired number of frames to write
 	/// @param timeStamp The starting sample time
 	/// @return @c true on success, @c false on error
-	bool Write(const AudioBufferList * const bufferList, size_t frameCount, int64_t timeStamp) noexcept;
+	bool Write(const AudioBufferList * const _Nonnull bufferList, size_t frameCount, int64_t timeStamp) noexcept;
 
 protected:
 
@@ -123,7 +123,7 @@ private:
 	SFBAudioStreamBasicDescription mFormat;
 
 	/// The channel pointers and buffers allocated in one chunk of memory
-	uint8_t **mBuffers;
+	uint8_t * _Nonnull * _Nullable mBuffers;
 
 	/// The frame capacity per channel
 	size_t mCapacityFrames;

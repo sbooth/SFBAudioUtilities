@@ -14,7 +14,7 @@
 /// Returns the size of an @c AudioChannelLayout struct
 /// @param channelLayout A pointer to an @c AudioChannelLayout struct
 /// @return The size of @c channelLayout in bytes
-size_t SFBAudioChannelLayoutSize(const AudioChannelLayout *channelLayout) noexcept;
+size_t SFBAudioChannelLayoutSize(const AudioChannelLayout * _Nullable channelLayout) noexcept;
 
 /// A class wrapping a Core %Audio @c AudioChannelLayout
 class SFBAudioChannelLayout
@@ -52,7 +52,7 @@ public:
 	~SFBAudioChannelLayout();
 
 	/// Creates a new @c SFBAudioChannelLayout by performing a deep copy of @c channelLayout
-	SFBAudioChannelLayout(const AudioChannelLayout *channelLayout);
+	SFBAudioChannelLayout(const AudioChannelLayout * _Nullable channelLayout);
 
 	/// Move constructor
 	SFBAudioChannelLayout(SFBAudioChannelLayout&& rhs) noexcept;
@@ -67,7 +67,7 @@ public:
 	SFBAudioChannelLayout& operator=(const SFBAudioChannelLayout& rhs);
 
 	/// Performs a deep copy of @c rhs
-	SFBAudioChannelLayout& operator=(const AudioChannelLayout *rhs);
+	SFBAudioChannelLayout& operator=(const AudioChannelLayout * _Nullable rhs);
 
 #pragma mark Comparison
 
@@ -101,10 +101,10 @@ public:
 
 	/// Relinquishes ownership of the object's internal @c AudioChannelLayout and returns it
 	/// @note The caller assumes responsiblity for deallocating the returned @c AudioChannelLayout using @c std::free
-	AudioChannelLayout * RelinquishACL() noexcept;
+	AudioChannelLayout * _Nullable RelinquishACL() noexcept;
 
 	/// Retrieves a const pointer to this object's internal @c AudioChannelLayout
-	inline const AudioChannelLayout * const ACL() const noexcept
+	inline const AudioChannelLayout * const _Nullable ACL() const noexcept
 	{
 		return mChannelLayout;
 	}
@@ -124,24 +124,24 @@ public:
 
 
 	/// Retrieve a const pointer to this object's internal @c AudioChannelLayout
-	inline const AudioChannelLayout * const  operator->() const noexcept
+	inline const AudioChannelLayout * const _Nullable operator->() const noexcept
 	{
 		return mChannelLayout;
 	}
 
 	/// Retrieve a const pointer to this object's internal @c AudioChannelLayout
-	inline operator const AudioChannelLayout * const () const noexcept
+	inline operator const AudioChannelLayout * const _Nullable () const noexcept
 	{
 		return mChannelLayout;
 	}
 
 
 	/// Returns a string representation of this channel layout suitable for logging
-	SFBCFString Description(const char * const prefix = nullptr) const noexcept;
+	SFBCFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
 
 private:
 
 	/// The underlying @c AudioChannelLayout struct
-	AudioChannelLayout *mChannelLayout;
+	AudioChannelLayout * _Nullable mChannelLayout;
 
 };

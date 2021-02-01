@@ -39,7 +39,7 @@ namespace {
 	/// @param rhs The @c AudioChannelLayout to copy
 	/// @return An @c AudioChannelLayout
 	/// @throws @c std::bad_alloc
-	AudioChannelLayout * CopyChannelLayout(const AudioChannelLayout *rhs)
+	AudioChannelLayout * CopyChannelLayout(const AudioChannelLayout * _Nullable rhs)
 	{
 		if(!rhs)
 			return nullptr;

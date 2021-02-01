@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 - 2020 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2021 Stephen F. Booth <me@sbooth.org>
 // MIT license
 //
 
@@ -69,19 +69,19 @@ public:
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
 	/// @return The number of bytes actually read
-	size_t Read(void * const destinationBuffer, size_t byteCount) noexcept;
+	size_t Read(void * const _Nonnull destinationBuffer, size_t byteCount) noexcept;
 
 	/// Read data from the @c SFBRingBuffer without advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
 	/// @return The number of bytes actually read
-	size_t Peek(void * const destinationBuffer, size_t byteCount) const noexcept;
+	size_t Peek(void * const _Nonnull destinationBuffer, size_t byteCount) const noexcept;
 
 	/// Write data to the @c SFBRingBuffer, advancing the write pointer.
 	/// @param sourceBuffer An address containing the data to copy
 	/// @param byteCount The desired number of frames to write
 	/// @return The number of bytes actually written
-	size_t Write(const void * const sourceBuffer, size_t byteCount) noexcept;
+	size_t Write(const void * const _Nonnull sourceBuffer, size_t byteCount) noexcept;
 
 
 	/// Advance the read position by the specified number of bytes
@@ -94,7 +94,7 @@ public:
 	/// A struct wrapping a memory buffer location and capacity
 	struct Buffer {
 		/// The memory buffer location
-		uint8_t	* const mBuffer;
+		uint8_t	* const _Nullable mBuffer;
 		/// The capacity of @c mBuffer in bytes
 		size_t mBufferCapacity;
 
@@ -106,7 +106,7 @@ public:
 		/// Construct a Buffer for the specified location and capacity
 		/// @param buffer The memory buffer location
 		/// @param bufferCapacity The capacity of @c buffer in bytes
-		Buffer(uint8_t * const buffer, size_t bufferCapacity) noexcept
+		Buffer(uint8_t * const _Nullable buffer, size_t bufferCapacity) noexcept
 		: mBuffer(buffer), mBufferCapacity(bufferCapacity)
 		{}
 	};
@@ -123,7 +123,7 @@ public:
 private:
 
 	/// The memory buffer holding the data
-	uint8_t *mBuffer;
+	uint8_t * _Nullable mBuffer;
 
 	/// The capacity of @c mBuffer in bytes
 	size_t mCapacityBytes;

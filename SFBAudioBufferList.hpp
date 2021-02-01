@@ -14,7 +14,7 @@
 /// @param format The format of the audio the @c AudioBufferList will hold
 /// @param frameCapacity The desired buffer capacity in audio frames
 /// @return A newly-allocated @c AudioBufferList or @c nullptr
-AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
+AudioBufferList * _Nullable SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
 
 /// A class wrapping a Core Audio @c AudioBufferList with a specific format, frame capacity, and frame length
 class SFBAudioBufferList
@@ -258,20 +258,20 @@ public:
 	/// @param frameCapacity The frame capacity of @c bufferList
 	/// @param frameLength The number of valid audio frames in @c bufferList
 	/// @return @c true on sucess, @c false otherwise
-	bool AdoptABL(AudioBufferList *bufferList, const AudioStreamBasicDescription& format, UInt32 frameCapacity, UInt32 frameLength) noexcept;
+	bool AdoptABL(AudioBufferList * _Nonnull bufferList, const AudioStreamBasicDescription& format, UInt32 frameCapacity, UInt32 frameLength) noexcept;
 
 	/// Relinquishes ownership of the object's internal @c AudioBufferList and returns it
 	/// @note The caller assumes responsiblity for deallocating the returned @c AudioBufferList using @c std::free
-	AudioBufferList * RelinquishABL() noexcept;
+	AudioBufferList * _Nullable RelinquishABL() noexcept;
 
 	/// Returns a pointer to this object's internal @c AudioBufferList
-	inline AudioBufferList * const ABL() noexcept
+	inline AudioBufferList * const _Nullable ABL() noexcept
 	{
 		return mBufferList;
 	}
 
 	/// Returns a const pointer to this object's internal @c AudioBufferList
-	inline const AudioBufferList * const ABL() const noexcept
+	inline const AudioBufferList * const _Nullable ABL() const noexcept
 	{
 		return mBufferList;
 	}
@@ -291,25 +291,25 @@ public:
 
 
 	/// Returns a pointer to this object's internal @c AudioBufferList
-	inline AudioBufferList * const operator->() noexcept
+	inline AudioBufferList * const _Nullable operator->() noexcept
 	{
 		return mBufferList;
 	}
 
 	/// Returns a const pointer to this object's internal @c AudioBufferList
-	inline const AudioBufferList * const operator->() const noexcept
+	inline const AudioBufferList * const _Nullable operator->() const noexcept
 	{
 		return mBufferList;
 	}
 
 	/// Returns a pointer to this object's internal @c AudioBufferList
-	inline operator AudioBufferList * const () noexcept
+	inline operator AudioBufferList * const _Nullable () noexcept
 	{
 		return mBufferList;
 	}
 
 	/// Returns a const pointer to this object's internal @c AudioBufferList
-	inline operator const AudioBufferList * const () const noexcept
+	inline operator const AudioBufferList * const _Nullable () const noexcept
 	{
 		return mBufferList;
 	}
@@ -317,7 +317,7 @@ public:
 private:
 
 	/// The underlying @c AudioChannelLayout struct
-	AudioBufferList *mBufferList;
+	AudioBufferList * _Nullable mBufferList;
 	/// The format of @c mBufferList
 	SFBAudioStreamBasicDescription mFormat;
 	/// The capacity of @c mBufferList in frames

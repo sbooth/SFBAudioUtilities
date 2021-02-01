@@ -25,7 +25,7 @@ namespace {
 	/// @param bufferCount The number of buffers
 	/// @param byteOffset The byte offset in @c buffers to begin writing
 	/// @param byteCount The number of bytes per non-interleaved buffer to write
-	inline void ZeroRange(uint8_t * const * const buffers, size_t bufferCount, size_t byteOffset, size_t byteCount)
+	inline void ZeroRange(uint8_t * const _Nonnull * const _Nonnull buffers, size_t bufferCount, size_t byteOffset, size_t byteCount)
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
 			std::memset(buffers[bufferIndex] + byteOffset, 0, byteCount);
@@ -35,7 +35,7 @@ namespace {
 	/// @param bufferList The destination buffers
 	/// @param byteOffset The byte offset in @c bufferList to begin writing
 	/// @param byteCount The maximum number of bytes per non-interleaved buffer to write
-	inline void ZeroABL(AudioBufferList * const bufferList, size_t byteOffset, size_t byteCount)
+	inline void ZeroABL(AudioBufferList * const _Nonnull bufferList, size_t byteOffset, size_t byteCount)
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(byteOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
@@ -50,7 +50,7 @@ namespace {
 	/// @param bufferList The source buffers
 	/// @param srcOffset The byte offset in @c bufferList to begin reading
 	/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-	inline void StoreABL(uint8_t * const * const buffers, size_t dstOffset, const AudioBufferList * const bufferList, size_t srcOffset, size_t byteCount) noexcept
+	inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, size_t dstOffset, const AudioBufferList * const _Nonnull bufferList, size_t srcOffset, size_t byteCount) noexcept
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(srcOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
@@ -65,7 +65,7 @@ namespace {
 	/// @param buffers The source buffers
 	/// @param srcOffset The byte offset in @c bufferList to begin reading
 	/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-	inline void FetchABL(AudioBufferList * const bufferList, size_t dstOffset, const uint8_t * const * const buffers, size_t srcOffset, size_t byteCount) noexcept
+	inline void FetchABL(AudioBufferList * const _Nonnull bufferList, size_t dstOffset, const uint8_t * const _Nonnull * const _Nonnull buffers, size_t srcOffset, size_t byteCount) noexcept
 	{
 		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
 			if(dstOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
