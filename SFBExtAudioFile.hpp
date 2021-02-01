@@ -11,17 +11,20 @@
 #import "SFBAudioChannelLayout.hpp"
 #import "SFBAudioStreamBasicDescription.hpp"
 
-namespace {
-	struct free_deleter{
+CF_ASSUME_NONNULL_BEGIN
+
+/// A wrapper around @c ExtAudioFile
+class SFBExtAudioFile
+{
+
+private:
+
+	struct free_deleter {
 		template <typename T>
-		void operator()(T *ptr) const {
+		void operator()(T * _Nonnull ptr) const {
 			std::free(const_cast<std::remove_const_t<T> *>(ptr));
 		}
 	};
-}
-
-class SFBExtAudioFile
-{
 
 public:
 	/// Creates a @c SFBExtAudioFile
@@ -58,6 +61,12 @@ public:
 	inline bool IsValid() const noexcept
 	{
 		return this->operator bool();
+	}
+
+	/// Returns the file's internal @c ExtAudioFileRef
+	operator ExtAudioFileRef const _Nullable () const
+	{
+		return mExtAudioFile;
 	}
 
 	/// Opens an audio file specified by a @c CFURLRef.
@@ -106,7 +115,7 @@ public:
 	/// @param inFlags The same flags as are used with @c AudioFileCreateWithURL
 	/// Can use these to control whether an existing file is overwritten (or not).
 	/// @throw @c std::system_error
-	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * const inChannelLayout, UInt32 inFlags)
+	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags)
 	{
 		Close();
 		auto result = ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &mExtAudioFile);
@@ -167,15 +176,22 @@ public:
 	/// @param inNumberFrames The number of frames to write
 	/// @param ioData The buffer(s) from which audio data is written to the file
 	/// @throw @c std::system_error
-	void Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
+	OSStatus Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
 	{
 		auto result = ExtAudioFileWrite(mExtAudioFile, inNumberFrames, ioData);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileWrite");
+		switch(result) {
+			case noErr:
+				break;
 #if TARGET_OS_IPHONE
 			case kExtAudioFileError_CodecUnavailableInputConsumed:
 			case kExtAudioFileError_CodecUnavailableInputNotConsumed:
 				break;
 #endif
+			default:
+				SFBThrowIfExtAudioFileError(result, "ExtAudioFileWrite");
+				break;
+		}
+		return result;
 	}
 
 	/// Performs an asynchronous sequential write
@@ -198,7 +214,7 @@ public:
 	/// @param inNumberFrames The number of frames to write
 	/// @param ioData The buffer(s) from which audio data is written to the file
 	/// @throw @c std::system_error
-	void WriteAsync(UInt32 inNumberFrames, const AudioBufferList *ioData)
+	void WriteAsync(UInt32 inNumberFrames, const AudioBufferList * _Nullable ioData)
 	{
 		auto result = ExtAudioFileWriteAsync(mExtAudioFile, inNumberFrames, ioData);
 		SFBThrowIfExtAudioFileError(result, "ExtAudioFileOpenURL");
@@ -239,7 +255,7 @@ public:
 	/// @param outWritable If non-null, on exit, this indicates whether the property value is settable.
 	/// @return The size of the property's value.
 	/// @throw @c std::system_error
-	UInt32 GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, Boolean *outWritable) const
+	UInt32 GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, Boolean * _Nullable outWritable) const
 	{
 		UInt32 size;
 		auto result = ExtAudioFileGetPropertyInfo(mExtAudioFile, inPropertyID, &size, outWritable);
@@ -309,7 +325,7 @@ public:
 
 	/// Sets the client data format (@c kExtAudioFileProperty_ClientDataFormat)
 	/// @throw @c std::system_error
-	void SetClientDataFormat(const SFBAudioStreamBasicDescription& clientDataFormat, const SFBAudioChannelLayout * const clientChannelLayout = nullptr, UInt32 codecManufacturer = 0)
+	void SetClientDataFormat(const SFBAudioStreamBasicDescription& clientDataFormat, const SFBAudioChannelLayout * const _Nullable clientChannelLayout = nullptr, UInt32 codecManufacturer = 0)
 	{
 		if(codecManufacturer)
 			SetProperty(kExtAudioFileProperty_CodecManufacturer, sizeof(codecManufacturer), &codecManufacturer);
@@ -337,7 +353,7 @@ public:
 
 	/// Returns the internal @c AudioConverter (@c kExtAudioFileProperty_AudioConverter)
 	/// @throw @c std::system_error
-	AudioConverterRef Converter() const
+	AudioConverterRef _Nullable Converter() const
 	{
 		UInt32 size = sizeof(AudioConverterRef);
 		AudioConverterRef converter = nullptr;
@@ -373,6 +389,8 @@ public:
 private:
 
 	/// The underlying @c ExtAudioFile object
-	ExtAudioFileRef mExtAudioFile;
+	ExtAudioFileRef _Nullable mExtAudioFile;
 
 };
+
+CF_ASSUME_NONNULL_END
