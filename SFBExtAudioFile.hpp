@@ -288,10 +288,13 @@ public:
 
 	/// Returns the file's channel layout (@c kExtAudioFileProperty_FileChannelLayout)
 	/// @throw @c std::system_error
+	/// @throw @c std::bad_alloc
 	SFBAudioChannelLayout FileChannelLayout() const
 	{
 		auto size = GetPropertyInfo(kExtAudioFileProperty_FileChannelLayout, nullptr);
 		std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
+		if(!layout)
+			throw std::bad_alloc();
 		GetProperty(kExtAudioFileProperty_FileChannelLayout, size, layout.get());
 		return layout.get();
 	}
@@ -336,10 +339,13 @@ public:
 
 	/// Returns the client channel layout (@c kExtAudioFileProperty_ClientChannelLayout)
 	/// @throw @c std::system_error
+	/// @throw @c std::bad_alloc
 	SFBAudioChannelLayout ClientChannelLayout() const
 	{
 		auto size = GetPropertyInfo(kExtAudioFileProperty_ClientChannelLayout, nullptr);
 		std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
+		if(!layout)
+			throw std::bad_alloc();
 		GetProperty(kExtAudioFileProperty_ClientChannelLayout, size, layout.get());
 		return layout.get();
 	}
