@@ -16,7 +16,7 @@
 /// @return A newly-allocated @c AudioBufferList or @c nullptr
 AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
 
-/// A class wrapping a Core Audio @c AudioBufferList
+/// A class wrapping a Core Audio @c AudioBufferList with a specific format, frame capacity, and frame length
 class SFBAudioBufferList
 {
 	
@@ -34,6 +34,7 @@ public:
 	/// Creates a new @c SFBAudioBufferList
 	/// @param format The format of the audio the @c SFBAudioBufferList will hold
 	/// @param frameCapacity The desired buffer capacity in audio frames
+	/// @throws @c std::invalid_argument if @c format.mBytesPerFrame==0
 	/// @throws @c std::bad_alloc
 	SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity);
 
@@ -89,6 +90,11 @@ public:
 	/// @param frameLength The number of valid audio frames
 	/// @return @c true on sucess, @c false otherwise
 	bool SetFrameLength(UInt32 frameLength) noexcept;
+
+	/// Infers and updates the length in audio frames using the @c mDataByteSize of the internal @c AudioBufferList
+	/// @return @c true on sucess, @c false otherwise
+	/// @throws @c std::logic_error if the @c mDataByteSize values are inconsistent
+	bool InferFrameLengthFromABL();
 
 	inline bool IsEmpty() const noexcept
 	{

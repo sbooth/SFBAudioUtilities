@@ -12,7 +12,7 @@
 
 AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept
 {
-	if(frameCapacity > (std::numeric_limits<UInt32>::max() / format.mBytesPerFrame))
+	if(format.mBytesPerFrame == 0 || frameCapacity > (std::numeric_limits<UInt32>::max() / format.mBytesPerFrame))
 		return nullptr;
 
 	auto bufferDataSize = frameCapacity * format.mBytesPerFrame;
@@ -44,6 +44,8 @@ SFBAudioBufferList::SFBAudioBufferList() noexcept
 SFBAudioBufferList::SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity)
 : SFBAudioBufferList()
 {
+	if(format.mBytesPerFrame == 0)
+		throw std::invalid_argument("format.mBytesPerFrame == 0");
 	if(!Allocate(format, frameCapacity))
 		throw std::bad_alloc();
 }
@@ -119,8 +121,28 @@ bool SFBAudioBufferList::SetFrameLength(UInt32 frameLength) noexcept
 
 	mFrameLength = frameLength;
 
-	for(auto bufferIndex = 0; bufferIndex < mBufferList->mNumberBuffers; ++bufferIndex)
-		mBufferList->mBuffers[bufferIndex].mDataByteSize = mFrameLength * mFormat.mBytesPerFrame;
+	for(auto i = 0; i < mBufferList->mNumberBuffers; ++i)
+		mBufferList->mBuffers[i].mDataByteSize = mFrameLength * mFormat.mBytesPerFrame;
+
+	return true;
+}
+
+bool SFBAudioBufferList::InferFrameLengthFromABL()
+{
+	if(!mBufferList)
+		return false;
+
+	auto buffer0ByteSize = mBufferList->mBuffers[0].mDataByteSize;
+	for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+		if(mBufferList->mBuffers[i].mDataByteSize != buffer0ByteSize)
+			throw std::logic_error("inconsistent values for mBufferList->mBuffers[].mBytesPerFrame");
+	}
+
+	auto frameLength = buffer0ByteSize / mFormat.mBytesPerFrame;
+	if(frameLength > mFrameCapacity)
+		throw std::logic_error("mBufferList->mBuffers[0].mBytesPerFrame / mFormat.mBytesPerFrame > mFrameCapacity");
+
+	mFrameLength = frameLength;
 
 	return true;
 }
