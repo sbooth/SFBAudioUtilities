@@ -13,6 +13,8 @@
 
 #import "SFBExtAudioFile.hpp"
 
+CF_ASSUME_NONNULL_BEGIN
+
 /// A class that asynchronously writes the output from an @c AudioUnit to a file
 class SFBAudioUnitRecorder
 {
@@ -87,3 +89,5 @@ private:
 	UInt32 mBusNumber;
 
 };
+
+CF_ASSUME_NONNULL_END
