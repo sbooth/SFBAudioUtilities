@@ -43,13 +43,6 @@ public:
 		std::memcpy(this, &asbd, sizeof(AudioStreamBasicDescription));
 	}
 
-	/// Creates a new @c SFBAudioStreamBasicDescription for the specified @c AudioStreamBasicDescription
-	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription * const asbd) noexcept
-	{
-		assert(asbd != nullptr);
-		std::memcpy(this, asbd, sizeof(AudioStreamBasicDescription));
-	}
-
 	/// Creates a new @c SFBAudioStreamBasicDescription for the speciifed @c SFBCommonPCMFormat
 	SFBAudioStreamBasicDescription(SFBCommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
 
@@ -213,6 +206,6 @@ public:
 
 
 	/// Returns a string representation of this format suitable for logging
-	SFBCFString Description(const char * const prefix = nullptr) const noexcept;
+	SFBCFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
 
 };
