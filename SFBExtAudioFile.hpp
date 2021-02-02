@@ -39,11 +39,17 @@ public:
 	SFBExtAudioFile& operator=(const SFBExtAudioFile& rhs) = delete;
 
 	/// Destroys the @c SFBExtAudioFile and release all associated resources.
-	~SFBExtAudioFile()
+	inline ~SFBExtAudioFile()
 	{
 		if(mExtAudioFile)
 			ExtAudioFileDispose(mExtAudioFile);
 	}
+
+	// This class is non-movable
+	SFBExtAudioFile(SFBExtAudioFile&& rhs) = delete;
+
+	// This class is non-move assignable
+	SFBExtAudioFile& operator=(SFBExtAudioFile&& rhs) = delete;
 
 	/// Returns @c true if this object's internal @c ExtAudioFileRef is not @c nullptr
 	inline explicit operator bool() const noexcept
