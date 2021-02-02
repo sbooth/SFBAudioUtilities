@@ -70,7 +70,7 @@ public:
 	}
 
 	/// Returns the file's internal @c ExtAudioFileRef
-	operator ExtAudioFileRef const _Nullable () const
+	inline operator ExtAudioFileRef const _Nullable () const noexcept
 	{
 		return mExtAudioFile;
 	}

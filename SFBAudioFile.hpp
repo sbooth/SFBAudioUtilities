@@ -69,7 +69,7 @@ public:
 	}
 
 	/// Returns the file's internal @c AudioFileID
-	operator AudioFileID const _Nullable () const
+	inline operator AudioFileID const _Nullable () const noexcept
 	{
 		return mAudioFileID;
 	}
