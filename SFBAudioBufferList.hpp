@@ -43,6 +43,7 @@ public:
 	/// Replaces the buffer
 	SFBAudioBufferList& operator=(SFBAudioBufferList&& rhs);
 
+
 	/// Creates a new @c SFBAudioBufferList
 	/// @param format The format of the audio the @c SFBAudioBufferList will hold
 	/// @param frameCapacity The desired buffer capacity in audio frames
