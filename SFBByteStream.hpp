@@ -19,7 +19,7 @@ public:
 	/// @param buf The buffer providing the data
 	/// @param len The length of @c buf in bytes
 	/// @throw @c std::invalid_argument if @c buf==nullptr and @c len>0
-	SFBByteStream(const void * const buf, size_t len)
+	SFBByteStream(const void * const _Nullable buf, size_t len)
 	: mBuffer(buf), mBufferLength(len), mReadPosition(0)
 	{
 		if(!mBuffer && len > 0)
@@ -190,7 +190,7 @@ public:
 	/// @param buf The destination buffer or @c nullptr to discard the bytes
 	/// @param count The number of bytes to read
 	/// @return The number of bytes actually read
-	size_t Read(void * const buf, size_t count) noexcept
+	size_t Read(void * const _Nullable buf, size_t count) noexcept
 	{
 		auto bytesToCopy = std::min(count, mBufferLength - mReadPosition);
 		if(buf)
@@ -250,7 +250,7 @@ public:
 private:
 
 	/// The wrapped buffer
-	const void *mBuffer;
+	const void * _Nullable mBuffer;
 	/// The number of bytes in @c mBuffer
 	size_t mBufferLength;
 	/// The current read position
