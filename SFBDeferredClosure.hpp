@@ -44,6 +44,12 @@ public:
 		mClosure();
 	}
 
+	// This class is non-movable
+	SFBDeferredClosure(const SFBDeferredClosure&& rhs) = delete;
+
+	// This class is non-move assignable
+	SFBDeferredClosure& operator=(const SFBDeferredClosure&& rhs) = delete;
+
 private:
 
 	/// The closure to invoke upon object destruction
