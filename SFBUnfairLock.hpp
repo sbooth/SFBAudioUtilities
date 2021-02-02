@@ -34,6 +34,15 @@ public:
 	// This class is non-assignable
 	SFBUnfairLock& operator=(const SFBUnfairLock& rhs) = delete;
 
+	// Destructor
+	~SFBUnfairLock() = default;
+
+	// This class is non-movable
+	SFBUnfairLock(const SFBUnfairLock&& rhs) = delete;
+
+	// This class is non-move assignable
+	SFBUnfairLock& operator=(const SFBUnfairLock&& rhs) = delete;
+
 #pragma mark Lockable
 
 	/// Locks the lock
