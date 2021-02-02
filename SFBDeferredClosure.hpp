@@ -28,7 +28,7 @@ class SFBDeferredClosure
 public:
 
 	/// Creates a new @c SFBDeferredClosure executing @c closure when the destructor is called
-	inline SFBDeferredClosure(const F& closure)
+	inline SFBDeferredClosure(const F& closure) noexcept
 	: mClosure(closure)
 	{}
 
