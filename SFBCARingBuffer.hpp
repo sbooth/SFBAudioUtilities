@@ -7,7 +7,7 @@
 
 #import <atomic>
 
-#import <CoreAudio/CoreAudioTypes.h>
+#import <CoreAudioTypes/CoreAudioTypes.h>
 
 #import "SFBAudioStreamBasicDescription.hpp"
 

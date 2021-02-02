@@ -7,7 +7,7 @@
 
 #import <cstring>
 
-#import <CoreAudio/CoreAudioTypes.h>
+#import <CoreAudioTypes/CoreAudioTypes.h>
 
 #import "SFBCFWrapper.hpp"
 

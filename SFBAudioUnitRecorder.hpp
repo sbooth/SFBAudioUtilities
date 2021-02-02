@@ -9,7 +9,7 @@
 
 #import <os/log.h>
 
-#import <AudioToolbox/ExtendedAudioFile.h>
+#import <AudioToolbox/AudioUnit.h>
 
 #import "SFBExtAudioFile.hpp"
 

@@ -7,7 +7,7 @@
 
 #import <vector>
 
-#import <AudioToolbox/AudioToolbox.h>
+#import <CoreAudioTypes/CoreAudioTypes.h>
 
 #import "SFBCFWrapper.hpp"
 

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#import <AudioToolbox/AudioToolbox.h>
+#import <CoreAudioTypes/CoreAudioTypes.h>
 
 #import "SFBAudioStreamBasicDescription.hpp"
 

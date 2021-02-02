@@ -7,7 +7,7 @@
 
 #import <cstring>
 
-#import <CoreAudio/CoreAudioTypes.h>
+#import <CoreAudioTypes/CoreAudioTypes.h>
 
 /// A class extending the functionality of a Core Audio @c AudioTimeStamp
 class SFBAudioTimeStamp : public AudioTimeStamp

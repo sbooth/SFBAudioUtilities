@@ -7,6 +7,8 @@
 #import <cstring>
 #import <new>
 
+#import <AudioToolbox/AudioFormat.h>
+
 #import "SFBAudioChannelLayout.hpp"
 
 namespace {
