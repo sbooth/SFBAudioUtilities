@@ -15,16 +15,10 @@ class SFBByteStream
 
 public:
 
-	/// Initializes a @c SFBByteStream object with the specified buffer and length and sets the read position to @c 0
-	/// @param buf The buffer providing the data
-	/// @param len The length of @c buf in bytes
-	/// @throw @c std::invalid_argument if @c buf==nullptr and @c len>0
-	SFBByteStream(const void * const _Nullable buf, size_t len)
-	: mBuffer(buf), mBufferLength(len), mReadPosition(0)
-	{
-		if(!mBuffer && len > 0)
-			throw std::invalid_argument("!mBuffer && len > 0");
-	}
+	/// Creates an empty @c SFBByteStream
+	SFBByteStream() noexcept
+	: mBuffer(nullptr), mBufferLength(0), mReadPosition(0)
+	{}
 
 	/// Initializes a @c SFBByteStream object with the same buffer, length, and read position as @c rhs
 	/// @param rhs The object to copy
@@ -45,6 +39,46 @@ public:
 		return *this;
 	}
 
+	/// Destructor
+	~SFBByteStream() = default;
+
+	/// Move constructor
+	SFBByteStream(SFBByteStream&& rhs) noexcept
+	: mBuffer(rhs.mBuffer), mBufferLength(rhs.mBufferLength), mReadPosition(rhs.mReadPosition)
+	{
+		rhs.mBuffer = nullptr;
+		rhs.mBufferLength = 0;
+		rhs.mReadPosition = 0;
+	}
+
+	/// Move assignment operator
+	SFBByteStream& operator=(SFBByteStream&& rhs) noexcept
+	{
+		if(this != &rhs) {
+			mBuffer = rhs.mBuffer;
+			mBufferLength = rhs.mBufferLength;
+			mReadPosition = rhs.mReadPosition;
+
+			rhs.mBuffer = nullptr;
+			rhs.mBufferLength = 0;
+			rhs.mReadPosition = 0;
+		}
+		return *this;
+	}
+
+
+	/// Initializes a @c SFBByteStream object with the specified buffer and length and sets the read position to @c 0
+	/// @param buf The buffer providing the data
+	/// @param len The length of @c buf in bytes
+	/// @throw @c std::invalid_argument if @c buf==nullptr and @c len>0
+	SFBByteStream(const void * const _Nullable buf, size_t len)
+	: mBuffer(buf), mBufferLength(len), mReadPosition(0)
+	{
+		if(!mBuffer && len > 0)
+			throw std::invalid_argument("!mBuffer && len > 0");
+	}
+
+
 	/// Compares to @c SFBByteStream objects for equality
 	/// Two @c SFBByteStream objects are equal if they have the same buffer, length, and read position
 	/// @param rhs The object to compare
@@ -62,6 +96,7 @@ public:
 	{
 		return mBuffer != rhs.mBuffer || mBufferLength != rhs.mBufferLength || mReadPosition != rhs.mReadPosition;
 	}
+
 
 	/// Reads an integral type and advances the read position
 	/// @tparam T The integral type to read
