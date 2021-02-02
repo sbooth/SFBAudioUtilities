@@ -32,33 +32,42 @@ public:
 #pragma mark Creation and Destruction
 
 	/// Creates an empty @c SFBAudioStreamBasicDescription
-	inline SFBAudioStreamBasicDescription() noexcept
-	{
-		std::memset(this, 0, sizeof(AudioStreamBasicDescription));
-	}
+	SFBAudioStreamBasicDescription() noexcept = default;
 
-	/// Creates a new @c SFBAudioStreamBasicDescription for the specified @c AudioStreamBasicDescription
-	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription& asbd) noexcept
-	{
-		std::memcpy(this, &asbd, sizeof(AudioStreamBasicDescription));
-	}
+	/// Copy constructor
+	SFBAudioStreamBasicDescription(const SFBAudioStreamBasicDescription& rhs) noexcept = default;
+
+	/// Assignment operator
+	SFBAudioStreamBasicDescription& operator=(const SFBAudioStreamBasicDescription& rhs) noexcept = default;
+
+	/// Destructor
+	~SFBAudioStreamBasicDescription() = default;
+
+	/// Move constructor
+	SFBAudioStreamBasicDescription(SFBAudioStreamBasicDescription&& rhs) noexcept = default;
+
+	/// Move assignment operator
+	SFBAudioStreamBasicDescription& operator=(SFBAudioStreamBasicDescription&& rhs) noexcept = default;
+
 
 	/// Creates a new @c SFBAudioStreamBasicDescription for the speciifed @c SFBCommonPCMFormat
 	SFBAudioStreamBasicDescription(SFBCommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
 
-	/// Copy constructor
-	inline SFBAudioStreamBasicDescription(const SFBAudioStreamBasicDescription& rhs) noexcept
-	{
-		*this = rhs;
-	}
+	// Native overloads
+
+	/// Creates a new @c SFBAudioStreamBasicDescription for the specified @c AudioStreamBasicDescription
+	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription& rhs) noexcept
+	: AudioStreamBasicDescription{rhs}
+	{}
 
 	/// Assignment operator
-	inline SFBAudioStreamBasicDescription& operator=(const AudioStreamBasicDescription& rhs) noexcept
+	SFBAudioStreamBasicDescription& operator=(const AudioStreamBasicDescription& rhs) noexcept
 	{
-		if(this != &rhs)
-			std::memcpy(this, &rhs, sizeof(AudioStreamBasicDescription));
+		AudioStreamBasicDescription::operator=(rhs);
 		return *this;
 	}
+
+#pragma mark Comparison
 
 	/// Returns @c true if @c rhs is equal to @c this
 	inline bool operator==(const AudioStreamBasicDescription& rhs) const noexcept

@@ -8,13 +8,12 @@
 #import "SFBAudioStreamBasicDescription.hpp"
 
 SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
+: SFBAudioStreamBasicDescription{}
 {
 //	if(sampleRate < 0)
 //		throw std::invalid_argument("sampleRate < 0");
 //	if(channelsPerFrame < 0)
 //		throw std::invalid_argument("channelsPerFrame < 0");
-
-	std::memset(this, 0, sizeof(AudioStreamBasicDescription));
 
 	switch(commonPCMFormat) {
 		case SFBCommonPCMFormat::float32:
