@@ -286,9 +286,31 @@ SFBAudioChannelLayout SFBAudioChannelLayout::ChannelLayoutWithBitmap(UInt32 chan
 	return channelLayout;
 }
 
-SFBAudioChannelLayout::SFBAudioChannelLayout() noexcept
-: mChannelLayout(nullptr)
+SFBAudioChannelLayout::SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs)
+: SFBAudioChannelLayout{}
+{
+	*this = rhs;
+}
+
+SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const SFBAudioChannelLayout& rhs)
+{
+	if(this != &rhs) {
+		std::free(mChannelLayout);
+		mChannelLayout = CopyChannelLayout(rhs.mChannelLayout);
+	}
+	return *this;
+}
+
+SFBAudioChannelLayout::SFBAudioChannelLayout(SFBAudioChannelLayout&& rhs) noexcept
+: mChannelLayout(std::move(rhs.mChannelLayout))
 {}
+
+SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(SFBAudioChannelLayout&& rhs) noexcept
+{
+	if(this != &rhs)
+		mChannelLayout = std::move(rhs.mChannelLayout);
+	return *this;
+}
 
 SFBAudioChannelLayout::SFBAudioChannelLayout(AudioChannelLayoutTag layoutTag)
 : mChannelLayout(CreateChannelLayout(0))
@@ -304,40 +326,9 @@ SFBAudioChannelLayout::SFBAudioChannelLayout(std::vector<AudioChannelLabel> chan
 		mChannelLayout->mChannelDescriptions[i].mChannelLabel = channelLabels[i];
 }
 
-SFBAudioChannelLayout::~SFBAudioChannelLayout()
-{
-	std::free(mChannelLayout);
-}
-
-SFBAudioChannelLayout::SFBAudioChannelLayout(const AudioChannelLayout *channelLayout)
-: mChannelLayout(CopyChannelLayout(channelLayout))
+SFBAudioChannelLayout::SFBAudioChannelLayout(const AudioChannelLayout *rhs)
+: mChannelLayout(CopyChannelLayout(rhs))
 {}
-
-SFBAudioChannelLayout::SFBAudioChannelLayout(SFBAudioChannelLayout&& rhs) noexcept
-: mChannelLayout(std::move(rhs.mChannelLayout))
-{}
-
-SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(SFBAudioChannelLayout&& rhs) noexcept
-{
-	if(this != &rhs)
-		mChannelLayout = std::move(rhs.mChannelLayout);
-	return *this;
-}
-
-SFBAudioChannelLayout::SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs)
-: SFBAudioChannelLayout()
-{
-	*this = rhs;
-}
-
-SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const SFBAudioChannelLayout& rhs)
-{
-	if(this != &rhs) {
-		std::free(mChannelLayout);
-		mChannelLayout = CopyChannelLayout(rhs.mChannelLayout);
-	}
-	return *this;
-}
 
 SFBAudioChannelLayout& SFBAudioChannelLayout::operator=(const AudioChannelLayout *rhs)
 {

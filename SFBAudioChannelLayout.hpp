@@ -38,7 +38,28 @@ public:
 #pragma mark Creation and Destruction
 
 	/// Creates an empty @c SFBAudioChannelLayout
-	SFBAudioChannelLayout() noexcept;
+	inline SFBAudioChannelLayout() noexcept
+	: mChannelLayout(nullptr)
+	{}
+
+	/// Copy constructor
+	SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs);
+
+	/// Assignment operator
+	SFBAudioChannelLayout& operator=(const SFBAudioChannelLayout& rhs);
+
+	/// Destroys the @c SFBAudioChannelLayout and release all associated resources.
+	inline ~SFBAudioChannelLayout()
+	{
+		std::free(mChannelLayout);
+	}
+
+	/// Move constructor
+	SFBAudioChannelLayout(SFBAudioChannelLayout&& rhs) noexcept;
+
+	/// Move assignment operator
+	SFBAudioChannelLayout& operator=(SFBAudioChannelLayout&& rhs) noexcept;
+
 
 	/// Creates a @c SFBAudioChannelLayout
 	/// @param layoutTag The layout tag for the channel layout
@@ -48,23 +69,10 @@ public:
 	/// @param channelLabels A @c std::vector of the desired channel labels
 	SFBAudioChannelLayout(std::vector<AudioChannelLabel> channelLabels);
 
-	/// Destroys the @c SFBAudioChannelLayout and release all associated resources.
-	~SFBAudioChannelLayout();
+	// Native overloads
 
-	/// Creates a new @c SFBAudioChannelLayout by performing a deep copy of @c channelLayout
-	SFBAudioChannelLayout(const AudioChannelLayout * _Nullable channelLayout);
-
-	/// Move constructor
-	SFBAudioChannelLayout(SFBAudioChannelLayout&& rhs) noexcept;
-
-	/// Move assignment operator
-	SFBAudioChannelLayout& operator=(SFBAudioChannelLayout&& rhs) noexcept;
-
-	/// Copy constructor
-	SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs);
-
-	/// Assignment operator
-	SFBAudioChannelLayout& operator=(const SFBAudioChannelLayout& rhs);
+	/// Creates a new @c SFBAudioChannelLayout by performing a deep copy of @c rhs
+	SFBAudioChannelLayout(const AudioChannelLayout * _Nullable rhs);
 
 	/// Performs a deep copy of @c rhs
 	SFBAudioChannelLayout& operator=(const AudioChannelLayout * _Nullable rhs);
