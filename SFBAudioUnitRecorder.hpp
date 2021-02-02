@@ -21,6 +21,24 @@ class SFBAudioUnitRecorder
 
 public:
 
+	/// Default constructor
+	SFBAudioUnitRecorder() noexcept = delete;
+
+	/// Copy constructor
+	SFBAudioUnitRecorder(const SFBAudioUnitRecorder& rhs) noexcept = delete;
+
+	/// Assignment operator
+	SFBAudioUnitRecorder& operator=(const SFBAudioUnitRecorder& rhs) noexcept = delete;
+
+	/// Destructor
+	~SFBAudioUnitRecorder() = default;
+
+	/// Move constructor
+	SFBAudioUnitRecorder(SFBAudioUnitRecorder&& rhs) noexcept = delete;
+
+	/// Move assignment operator
+	SFBAudioUnitRecorder& operator=(SFBAudioUnitRecorder&& rhs) noexcept = delete;
+
 	/// Creates a new @c SFBAudioUnitRecorder that asynchronously writes the output from an @c AudioUnit to a file
 	/// @param au The @c AudioUnit to record
 	/// @param outputFileURL The URL of the output audio file

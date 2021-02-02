@@ -23,14 +23,20 @@ public:
 	/// @note @c Allocate() must be called before the object may be used.
 	SFBRingBuffer() noexcept;
 
-	/// Destroys the @c SFBRingBuffer and release all associated resources.
-	~SFBRingBuffer();
-
 	// This class is non-copyable
 	SFBRingBuffer(const SFBRingBuffer& rhs) = delete;
 
 	// This class is non-assignable
 	SFBRingBuffer& operator=(const SFBRingBuffer& rhs) = delete;
+
+	/// Destroys the @c SFBRingBuffer and release all associated resources.
+	~SFBRingBuffer();
+
+	// This class is non-movable
+	SFBRingBuffer(SFBRingBuffer&& rhs) = delete;
+
+	// This class is non-move assignable
+	SFBRingBuffer& operator=(SFBRingBuffer&& rhs) = delete;
 
 #pragma mark Buffer management
 

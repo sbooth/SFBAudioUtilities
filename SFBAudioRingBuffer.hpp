@@ -27,14 +27,20 @@ public:
 	/// @note @c Allocate() must be called before the object may be used.
 	SFBAudioRingBuffer() noexcept;
 
-	/// Destroys the @c SFBAudioRingBuffer and release all associated resources.
-	~SFBAudioRingBuffer();
-
 	// This class is non-copyable
 	SFBAudioRingBuffer(const SFBAudioRingBuffer& rhs) = delete;
 
 	// This class is non-assignable
 	SFBAudioRingBuffer& operator=(const SFBAudioRingBuffer& rhs) = delete;
+
+	/// Destroys the @c SFBAudioRingBuffer and release all associated resources.
+	~SFBAudioRingBuffer();
+
+	// This class is non-movable
+	SFBAudioRingBuffer(SFBAudioRingBuffer&& rhs) = delete;
+
+	// This class is non-move assignable
+	SFBAudioRingBuffer& operator=(SFBAudioRingBuffer&& rhs) = delete;
 
 #pragma mark Buffer management
 
