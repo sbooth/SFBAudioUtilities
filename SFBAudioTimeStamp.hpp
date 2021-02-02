@@ -18,20 +18,27 @@ public:
 #pragma mark Creation and Destruction
 
 	/// Creates an empty @c SFBAudioTimeStamp
-	inline SFBAudioTimeStamp() noexcept
-	{
-		std::memset(this, 0, sizeof(AudioTimeStamp));
-	}
+	SFBAudioTimeStamp() noexcept = default;
 
-	/// Creates a new @c SFBAudioTimeStamp for the specified @c AudioTimeStamp
-	inline SFBAudioTimeStamp(const AudioTimeStamp& timeStamp) noexcept
-	{
-		std::memcpy(this, &timeStamp, sizeof(AudioTimeStamp));
-	}
+	/// Copy constructor
+	SFBAudioTimeStamp(const SFBAudioTimeStamp& rhs) noexcept = default;
+
+	/// Assignment operator
+	SFBAudioTimeStamp& operator=(const SFBAudioTimeStamp& rhs) noexcept = default;
+
+	/// Destructor
+	~SFBAudioTimeStamp() = default;
+
+	/// Move constructor
+	SFBAudioTimeStamp(SFBAudioTimeStamp&& rhs) noexcept = default;
+
+	/// Move assignment operator
+	SFBAudioTimeStamp& operator=(SFBAudioTimeStamp&& rhs) noexcept = default;
+
 
 	/// Creates a new @c SFBAudioTimeStamp with the specified sample time
 	inline SFBAudioTimeStamp(Float64 sampleTime) noexcept
-	: SFBAudioTimeStamp()
+	: AudioTimeStamp{}
 	{
 		mSampleTime = sampleTime;
 		mFlags = kAudioTimeStampSampleTimeValid;
@@ -39,7 +46,7 @@ public:
 
 	/// Creates a new @c SFBAudioTimeStamp with the specified host time
 	inline SFBAudioTimeStamp(UInt64 hostTime) noexcept
-	: SFBAudioTimeStamp()
+	: AudioTimeStamp{}
 	{
 		mHostTime = hostTime;
 		mFlags = kAudioTimeStampHostTimeValid;
@@ -47,7 +54,7 @@ public:
 
 	/// Creates a new @c SFBAudioTimeStamp with the specified sample and host times
 	inline SFBAudioTimeStamp(Float64 sampleTime, UInt64 hostTime) noexcept
-	: SFBAudioTimeStamp()
+	: AudioTimeStamp{}
 	{
 		mSampleTime = sampleTime;
 		mHostTime = hostTime;
@@ -57,7 +64,7 @@ public:
 
 	/// Creates a new @c SFBAudioTimeStamp with the specified sample and host times and rate scalar
 	inline SFBAudioTimeStamp(Float64 sampleTime, UInt64 hostTime, Float64 rateScalar) noexcept
-	: SFBAudioTimeStamp()
+	: AudioTimeStamp{}
 	{
 		mSampleTime = sampleTime;
 		mHostTime = hostTime;
@@ -65,17 +72,17 @@ public:
 		mFlags = kAudioTimeStampSampleTimeValid | kAudioTimeStampHostTimeValid | kAudioTimeStampRateScalarValid;
 	}
 
-	/// Copy constructor
-	inline SFBAudioTimeStamp(const SFBAudioTimeStamp& rhs) noexcept
-	{
-		*this = rhs;
-	}
+	// Native overloads
+
+	/// Creates a new @c SFBAudioTimeStamp for the specified @c AudioTimeStamp
+	inline SFBAudioTimeStamp(const AudioTimeStamp& rhs) noexcept
+	: AudioTimeStamp{rhs}
+	{}
 
 	/// Assignment operator
 	inline SFBAudioTimeStamp& operator=(const AudioTimeStamp& rhs) noexcept
 	{
-		if(this != &rhs)
-			std::memcpy(this, &rhs, sizeof(AudioTimeStamp));
+		AudioTimeStamp::operator=(rhs);
 		return *this;
 	}
 
