@@ -20,7 +20,7 @@ AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescriptio
 	auto bufferListSize = offsetof(AudioBufferList, mBuffers) + (sizeof(AudioBuffer) * bufferCount);
 	auto allocationSize = bufferListSize + (bufferDataSize * bufferCount);
 
-	AudioBufferList *abl = static_cast<AudioBufferList *>(std::malloc(allocationSize));
+	auto abl = static_cast<AudioBufferList *>(std::malloc(allocationSize));
 	if(!abl)
 		return nullptr;
 
@@ -164,16 +164,16 @@ UInt32 SFBAudioBufferList::InsertFromBuffer(const SFBAudioBufferList& buffer, UI
 	if(framesToMove) {
 		auto moveToOffset = writeOffset + framesToInsert;
 		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
-			auto *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (moveToOffset * mFormat.mBytesPerFrame);
-			const auto *src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (writeOffset * mFormat.mBytesPerFrame);
+			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (moveToOffset * mFormat.mBytesPerFrame);
+			const auto src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (writeOffset * mFormat.mBytesPerFrame);
 			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
 		}
 	}
 
 	if(framesToInsert) {
 		for(auto i = 0; i < buffer.mBufferList->mNumberBuffers; ++i) {
-			auto *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (writeOffset * mFormat.mBytesPerFrame);
-			const auto *src = static_cast<const uint8_t *>(buffer.mBufferList->mBuffers[i].mData) + (readOffset * mFormat.mBytesPerFrame);
+			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (writeOffset * mFormat.mBytesPerFrame);
+			const auto src = static_cast<const uint8_t *>(buffer.mBufferList->mBuffers[i].mData) + (readOffset * mFormat.mBytesPerFrame);
 			std::memcpy(dst, src, framesToInsert * mFormat.mBytesPerFrame);
 		}
 
@@ -194,8 +194,8 @@ UInt32 SFBAudioBufferList::TrimAtOffset(UInt32 offset, UInt32 frameLength) noexc
 	if(framesToMove) {
 		auto moveFromOffset = offset + framesToTrim;
 		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
-			auto *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
-			const auto *src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (moveFromOffset * mFormat.mBytesPerFrame);
+			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
+			const auto src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (moveFromOffset * mFormat.mBytesPerFrame);
 			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
 		}
 	}
@@ -220,15 +220,15 @@ UInt32 SFBAudioBufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noex
 	if(framesToMove) {
 		auto moveToOffset = offset + framesToZero;
 		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
-			auto *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (moveToOffset * mFormat.mBytesPerFrame);
-			const auto *src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
+			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (moveToOffset * mFormat.mBytesPerFrame);
+			const auto src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
 			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
 		}
 	}
 
 	if(framesToZero) {
 		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
-			unsigned char *dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
+			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
 			std::memset(dst, 0, framesToZero * mFormat.mBytesPerFrame);
 		}
 
