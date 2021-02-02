@@ -30,60 +30,12 @@ public:
 	: SFBCFWrapper(nullptr)
 	{}
 
-	/// Create a new @c SFBCFWrapper
-	/// @note The @c SFBCFWrapper takes ownership of @c object
-	/// @param object The object to wrap
-	inline explicit SFBCFWrapper(T object)
-	: SFBCFWrapper(object, true)
-	{}
-	
-	/// Creates a new @c SFBCFWrapper
-	/// @param object The object to wrap
-	/// @param release Whether this @c SFBCFWrapper should take ownership of @c object
-	SFBCFWrapper(T object, bool release)
-	: mObject(object), mRelease(release)
-	{}
-
-
-	/// Creates a new @c SFBCFWrapper
-	SFBCFWrapper(SFBCFWrapper&& rhs)
-	: mObject(rhs.mObject), mRelease(rhs.mRelease)
-	{
-		rhs.mObject = nullptr;
-	}
-
 	/// Creates a new @c SFBCFWrapper
 	SFBCFWrapper(const SFBCFWrapper& rhs)
 	: mObject(rhs.mObject), mRelease(rhs.mRelease)
 	{
 		if(mObject && mRelease)
 			CFRetain(mObject);
-	}
-
-	/// Destroys this @c SFBCFWrapper and ensure @c CFRelease() is called if necessary
-	~SFBCFWrapper()
-	{
-		if(mObject && mRelease)
-			CFRelease(mObject);
-		mObject = nullptr;
-	}
-
-#pragma mark Assignment
-
-	/// Replaces the wrapped object
-	/// @note The @c SFBCFWrapper takes ownership of @c rhs
-	/// @param rhs The object to wrap
-	SFBCFWrapper& operator=(const T& rhs)
-	{
-		if(mObject != rhs) {
-			if(mObject && mRelease)
-				CFRelease(mObject);
-
-			mObject = rhs;
-			mRelease = true;
-		}
-
-		return *this;
 	}
 
 	/// Replaces the wrapped object
@@ -103,6 +55,21 @@ public:
 		return *this;
 	}
 
+	/// Destroys this @c SFBCFWrapper and ensure @c CFRelease() is called if necessary
+	~SFBCFWrapper()
+	{
+		if(mObject && mRelease)
+			CFRelease(mObject);
+		mObject = nullptr;
+	}
+
+	/// Creates a new @c SFBCFWrapper
+	SFBCFWrapper(SFBCFWrapper&& rhs)
+	: mObject(rhs.mObject), mRelease(rhs.mRelease)
+	{
+		rhs.mObject = nullptr;
+	}
+
 	/// Replaces the wrapped object
 	SFBCFWrapper& operator=(SFBCFWrapper&& rhs)
 	{
@@ -114,6 +81,39 @@ public:
 			mRelease = rhs.mRelease;
 
 			rhs.mObject = nullptr;
+		}
+
+		return *this;
+	}
+
+
+	/// Create a new @c SFBCFWrapper
+	/// @note The @c SFBCFWrapper takes ownership of @c object
+	/// @param object The object to wrap
+	inline explicit SFBCFWrapper(T object)
+	: SFBCFWrapper(object, true)
+	{}
+
+	/// Creates a new @c SFBCFWrapper
+	/// @param object The object to wrap
+	/// @param release Whether this @c SFBCFWrapper should take ownership of @c object
+	SFBCFWrapper(T object, bool release)
+	: mObject(object), mRelease(release)
+	{}
+
+#pragma mark Assignment
+
+	/// Replaces the wrapped object
+	/// @note The @c SFBCFWrapper takes ownership of @c rhs
+	/// @param rhs The object to wrap
+	SFBCFWrapper& operator=(const T& rhs)
+	{
+		if(mObject != rhs) {
+			if(mObject && mRelease)
+				CFRelease(mObject);
+
+			mObject = rhs;
+			mRelease = true;
 		}
 
 		return *this;
