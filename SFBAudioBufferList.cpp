@@ -41,15 +41,6 @@ SFBAudioBufferList::SFBAudioBufferList() noexcept
 : mBufferList(nullptr), mFrameCapacity(0), mFrameLength(0)
 {}
 
-SFBAudioBufferList::SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity)
-: SFBAudioBufferList()
-{
-	if(format.mBytesPerFrame == 0)
-		throw std::invalid_argument("format.mBytesPerFrame == 0");
-	if(!Allocate(format, frameCapacity))
-		throw std::bad_alloc();
-}
-
 SFBAudioBufferList::~SFBAudioBufferList()
 {
 	std::free(mBufferList);
@@ -81,6 +72,15 @@ SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
 	}
 
 	return *this;
+}
+
+SFBAudioBufferList::SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity)
+: SFBAudioBufferList()
+{
+	if(format.mBytesPerFrame == 0)
+		throw std::invalid_argument("format.mBytesPerFrame == 0");
+	if(!Allocate(format, frameCapacity))
+		throw std::bad_alloc();
 }
 
 #pragma mark Buffer Management

@@ -28,15 +28,14 @@ public:
 	/// @note @c Allocate() must be called before the object may be used.
 	SFBAudioBufferList() noexcept;
 
+	// This class is non-copyable
+	SFBAudioBufferList(const SFBAudioBufferList& rhs) = delete;
+
+	// This class is non-assignable
+	SFBAudioBufferList& operator=(const SFBAudioBufferList& rhs) = delete;
+
 	/// Destroys the @c SFBAudioBufferList and release all associated resources.
 	~SFBAudioBufferList();
-
-	/// Creates a new @c SFBAudioBufferList
-	/// @param format The format of the audio the @c SFBAudioBufferList will hold
-	/// @param frameCapacity The desired buffer capacity in audio frames
-	/// @throws @c std::invalid_argument if @c format.mBytesPerFrame==0
-	/// @throws @c std::bad_alloc
-	SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity);
 
 	/// Creates a new @c SFBAudioBufferList
 	SFBAudioBufferList(SFBAudioBufferList&& rhs);
@@ -44,11 +43,12 @@ public:
 	/// Replaces the buffer
 	SFBAudioBufferList& operator=(SFBAudioBufferList&& rhs);
 
-	// This class is non-copyable
-	SFBAudioBufferList(const SFBAudioBufferList& rhs) = delete;
-
-	// This class is non-assignable
-	SFBAudioBufferList& operator=(const SFBAudioBufferList& rhs) = delete;
+	/// Creates a new @c SFBAudioBufferList
+	/// @param format The format of the audio the @c SFBAudioBufferList will hold
+	/// @param frameCapacity The desired buffer capacity in audio frames
+	/// @throws @c std::invalid_argument if @c format.mBytesPerFrame==0
+	/// @throws @c std::bad_alloc
+	SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity);
 
 #pragma mark Buffer management
 
