@@ -360,7 +360,7 @@ bool SFBAudioChannelLayout::operator==(const SFBAudioChannelLayout& rhs) const n
 
 	UInt32 layoutsEqual = false;
 	UInt32 propertySize = sizeof(layoutsEqual);
-	OSStatus result = AudioFormatGetProperty(kAudioFormatProperty_AreChannelLayoutsEquivalent, sizeof(layouts), (void *)layouts, &propertySize, &layoutsEqual);
+	OSStatus result = AudioFormatGetProperty(kAudioFormatProperty_AreChannelLayoutsEquivalent, sizeof(layouts), static_cast<void *>(layouts), &propertySize, &layoutsEqual);
 
 	if(noErr != result)
 		return false;
@@ -400,13 +400,13 @@ bool SFBAudioChannelLayout::MapToLayout(const SFBAudioChannelLayout& outputLayou
 
 	SInt32 rawChannelMap [outputChannelCount];
 	UInt32 propertySize = (UInt32)sizeof(rawChannelMap);
-	OSStatus result = AudioFormatGetProperty(kAudioFormatProperty_ChannelMap, sizeof(layouts), (void *)layouts, &propertySize, &rawChannelMap);
+	OSStatus result = AudioFormatGetProperty(kAudioFormatProperty_ChannelMap, sizeof(layouts), static_cast<void *>(layouts), &propertySize, &rawChannelMap);
 
 	if(noErr != result)
 		return false;
 	//os_log_error(OS_LOG_DEFAULT, "AudioFormatGetProperty (kAudioFormatProperty_ChannelMap) failed: %d", result);
 
-	auto start = (SInt32 *)rawChannelMap;
+	auto start = static_cast<SInt32 *>(rawChannelMap);
 	channelMap.assign(start, start + outputChannelCount);
 
 	return true;
