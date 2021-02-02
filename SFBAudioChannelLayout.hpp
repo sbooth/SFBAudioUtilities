@@ -16,7 +16,7 @@
 /// @return The size of @c channelLayout in bytes
 size_t SFBAudioChannelLayoutSize(const AudioChannelLayout * _Nullable channelLayout) noexcept;
 
-/// A class wrapping a Core %Audio @c AudioChannelLayout
+/// A class wrapping a Core Audio @c AudioChannelLayout
 class SFBAudioChannelLayout
 {
 

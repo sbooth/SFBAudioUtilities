@@ -9,7 +9,7 @@
 
 #import <CoreAudio/CoreAudioTypes.h>
 
-/// A class extending the functionality of a Core %Audio @c AudioTimeStamp
+/// A class extending the functionality of a Core Audio @c AudioTimeStamp
 class SFBAudioTimeStamp : public AudioTimeStamp
 {
 
