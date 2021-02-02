@@ -207,8 +207,8 @@ UInt32 SFBAudioBufferList::TrimAtOffset(UInt32 offset, UInt32 frameLength) noexc
 
 UInt32 SFBAudioBufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noexcept
 {
-	if(!(mFormat.IsFloat() || (mFormat.IsSignedInteger() && mFormat.IsPacked())))
-//		throw std::logic_error("Inserting silence for unsigned integer or unpacked samples not supported");
+	if(!(mFormat.IsFloat() || mFormat.IsSignedInteger()))
+//		throw std::logic_error("Inserting silence for unsigned integer samples not supported");
 		return 0;
 
 	if(offset > mFrameLength || frameLength == 0)
