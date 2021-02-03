@@ -82,7 +82,8 @@ SFBCFString SFBAudioStreamBasicDescription::Description(const char * const prefi
 		CFStringAppendCString(result, prefix, kCFStringEncodingUTF8);
 
 	unsigned char formatID [5];
-	*(UInt32 *)formatID = OSSwapHostToBigInt32(mFormatID);
+	auto formatIDBE = OSSwapHostToBigInt32(mFormatID);
+	std::memcpy(formatID, &formatIDBE, 4);
 	formatID[4] = '\0';
 
 	// General description
