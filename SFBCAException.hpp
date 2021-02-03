@@ -626,7 +626,7 @@ class SFBFourCCString
 
 public:
 
-	SFBFourCCString(UInt32 errorCode)
+	SFBFourCCString(OSStatus errorCode)
 	{
 		auto err = CFSwapInt32HostToBig(errorCode);
 		std::memcpy(&mString[0] + 1, &err, 4);
