@@ -91,7 +91,7 @@ SFBCFString SFBAudioStreamBasicDescription::Description(const char * const prefi
 	if(kAudioFormatLinearPCM == mFormatID) {
 		// Bit depth
 		UInt32 fractionalBits = (kLinearPCMFormatFlagsSampleFractionMask & mFormatFlags) >> kLinearPCMFormatFlagsSampleFractionShift;
-		if(0 < fractionalBits)
+		if(fractionalBits > 0)
 			CFStringAppendFormat(result, NULL, CFSTR("%d.%d-bit"), mBitsPerChannel - fractionalBits, fractionalBits);
 		else
 			CFStringAppendFormat(result, NULL, CFSTR("%d-bit"), mBitsPerChannel);
@@ -99,8 +99,8 @@ SFBCFString SFBAudioStreamBasicDescription::Description(const char * const prefi
 		// Endianness
 		bool isInterleaved = !(kAudioFormatFlagIsNonInterleaved & mFormatFlags);
 		UInt32 interleavedChannelCount = (isInterleaved ? mChannelsPerFrame : 1);
-		UInt32 sampleSize = (0 < mBytesPerFrame && 0 < interleavedChannelCount ? mBytesPerFrame / interleavedChannelCount : 0);
-		if(1 < sampleSize)
+		UInt32 sampleSize = (mBytesPerFrame > 0 && interleavedChannelCount > 0 ? mBytesPerFrame / interleavedChannelCount : 0);
+		if(sampleSize > 1)
 			CFStringAppend(result, (kLinearPCMFormatFlagIsBigEndian & mFormatFlags) ? CFSTR(" big-endian") : CFSTR(" little-endian"));
 
 		// Sign
@@ -112,11 +112,11 @@ SFBCFString SFBAudioStreamBasicDescription::Description(const char * const prefi
 		CFStringAppend(result, isInteger ? CFSTR(" integer") : CFSTR(" float"));
 
 		// Packedness
-		if(0 < sampleSize && ((sampleSize << 3) != mBitsPerChannel))
+		if(sampleSize > 0 && ((sampleSize << 3) != mBitsPerChannel))
 			CFStringAppendFormat(result, NULL, (kLinearPCMFormatFlagIsPacked & mFormatFlags) ? CFSTR(", packed in %d bytes") : CFSTR(", unpacked in %d bytes"), sampleSize);
 
 		// Alignment
-		if((0 < sampleSize && ((sampleSize << 3) != mBitsPerChannel)) || (0 != (mBitsPerChannel & 7)))
+		if((sampleSize > 0 && ((sampleSize << 3) != mBitsPerChannel)) || ((mBitsPerChannel & 7) != 0))
 			CFStringAppend(result, (kLinearPCMFormatFlagIsAlignedHigh & mFormatFlags) ? CFSTR(" high-aligned") : CFSTR(" low-aligned"));
 
 		if(!isInterleaved)
@@ -131,7 +131,7 @@ SFBCFString SFBAudioStreamBasicDescription::Description(const char * const prefi
 			case kAppleLosslessFormatFlag_32BitSourceData:		sourceBitDepth = 32;	break;
 		}
 
-		if(0 != sourceBitDepth)
+		if(sourceBitDepth != 0)
 			CFStringAppendFormat(result, NULL, CFSTR("from %d-bit source, "), sourceBitDepth);
 		else
 			CFStringAppend(result, CFSTR("from UNKNOWN source bit depth, "));
