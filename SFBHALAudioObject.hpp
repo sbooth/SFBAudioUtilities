@@ -10,6 +10,7 @@
 #import <CoreAudio/CoreAudio.h>
 
 #import "SFBAudioObjectPropertyAddress.hpp"
+#import "SFBCAException.hpp"
 #import "SFBCFWrapper.hpp"
 
 enum class SFBHALAudioObjectDirectionalScope {
@@ -95,12 +96,40 @@ public:
 
 #pragma mark Property Operations
 
-	bool HasProperty(const AudioObjectPropertyAddress& inAddress) const noexcept;
-	bool IsPropertySettable(const AudioObjectPropertyAddress& inAddress) const;
-	UInt32 GetPropertyDataSize(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const;
+	inline bool HasProperty(const AudioObjectPropertyAddress& inAddress) const noexcept
+	{
+		return AudioObjectHasProperty(mObjectID, &inAddress);
+	}
 
-	void GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32& ioDataSize, void * _Nonnull outData) const;
-	void SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32 inDataSize, const void * _Nonnull inData);
+	bool IsPropertySettable(const AudioObjectPropertyAddress& inAddress) const
+	{
+		Boolean settable = false;
+		auto result = AudioObjectIsPropertySettable(mObjectID, &inAddress, &settable);
+		SFBThrowIfAudioObjectError(result, "AudioObjectIsPropertySettable");
+		return settable != 0;
+	}
+
+	UInt32 GetPropertyDataSize(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
+	{
+		UInt32 size = 0;
+		auto result = AudioObjectGetPropertyDataSize(mObjectID, &inAddress, inQualifierDataSize, inQualifierData, &size);
+		SFBThrowIfAudioObjectError(result, "AudioObjectGetPropertyDataSize");
+		return size;
+	}
+
+
+	inline void GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32& ioDataSize, void * _Nonnull outData) const
+	{
+		auto result = AudioObjectGetPropertyData(mObjectID, &inAddress, inQualifierDataSize, inQualifierData, &ioDataSize, outData);
+		SFBThrowIfAudioObjectError(result, "AudioObjectGetPropertyData");
+	}
+
+	inline void SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32 inDataSize, const void * _Nonnull inData)
+	{
+		auto result = AudioObjectSetPropertyData(mObjectID, &inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData);
+		SFBThrowIfAudioObjectError(result, "AudioObjectSetPropertyData");
+	}
+
 
 	template <typename T, typename std::enable_if<std::is_arithmetic<T>::value, bool>::type = true>
 	T ArithmeticProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
@@ -139,11 +168,30 @@ public:
 		return SFBCFWrapper<T>(value);
 	}
 
-	void AddPropertyListener(const AudioObjectPropertyAddress& inAddress, AudioObjectPropertyListenerProc _Nonnull inListenerProc, void * _Nullable inClientData);
-	void RemovePropertyListener(const AudioObjectPropertyAddress& inAddress, AudioObjectPropertyListenerProc _Nonnull inListenerProc, void * _Nullable inClientData);
+	inline void AddPropertyListener(const AudioObjectPropertyAddress& inAddress, AudioObjectPropertyListenerProc _Nonnull inListenerProc, void * _Nullable inClientData)
+	{
+		auto result = AudioObjectAddPropertyListener(mObjectID, &inAddress, inListenerProc, inClientData);
+		SFBThrowIfAudioObjectError(result, "AudioObjectAddPropertyListener");
+	}
 
-	void AddPropertyListenerBlock(const AudioObjectPropertyAddress& inAddress, dispatch_queue_t _Nonnull inDispatchQueue, AudioObjectPropertyListenerBlock _Nonnull inListenerBlock);
-	void RemovePropertyListenerBlock(const AudioObjectPropertyAddress& inAddress, dispatch_queue_t _Nonnull inDispatchQueue, AudioObjectPropertyListenerBlock _Nonnull inListenerBlock);
+	inline void RemovePropertyListener(const AudioObjectPropertyAddress& inAddress, AudioObjectPropertyListenerProc _Nonnull inListenerProc, void * _Nullable inClientData)
+	{
+		auto result = AudioObjectRemovePropertyListener(mObjectID, &inAddress, inListenerProc, inClientData);
+		SFBThrowIfAudioObjectError(result, "AudioObjectRemovePropertyListener");
+	}
+
+
+	inline void AddPropertyListenerBlock(const AudioObjectPropertyAddress& inAddress, dispatch_queue_t _Nonnull inDispatchQueue, AudioObjectPropertyListenerBlock _Nonnull inListenerBlock)
+	{
+		auto result = AudioObjectAddPropertyListenerBlock(mObjectID, &inAddress, inDispatchQueue, inListenerBlock);
+		SFBThrowIfAudioObjectError(result, "AudioObjectAddPropertyListenerBlock");
+	}
+
+	inline void RemovePropertyListenerBlock(const AudioObjectPropertyAddress& inAddress, dispatch_queue_t _Nonnull inDispatchQueue, AudioObjectPropertyListenerBlock _Nonnull inListenerBlock)
+	{
+		auto result = AudioObjectRemovePropertyListenerBlock(mObjectID, &inAddress, inDispatchQueue, inListenerBlock);
+		SFBThrowIfAudioObjectError(result, "AudioObjectRemovePropertyListenerBlock");
+	}
 
 #pragma mark AudioObject Properties
 
