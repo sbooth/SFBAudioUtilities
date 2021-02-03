@@ -121,9 +121,21 @@ public:
 #pragma mark Flags
 
 	/// Returns @c true if the @c SFBAudioTimeStamp is valid
-	inline bool IsValid() const noexcept
+	inline explicit operator bool() const noexcept
 	{
 		return mFlags != kAudioTimeStampNothingValid;
+	}
+
+	/// Returns @c true if the @c SFBAudioTimeStamp is not valid
+	inline bool operator!() const noexcept
+	{
+		return !operator bool();
+	}
+
+	/// Returns @c true if the @c SFBAudioTimeStamp is valid
+	inline bool IsValid() const noexcept
+	{
+		return operator bool();
 	}
 
 	/// Returns @c true if @c mSampleTime is valid

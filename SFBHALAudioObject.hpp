@@ -68,7 +68,7 @@ public:
 	/// Returns @c true if this object's @c AudioObjectID is @c kAudioObjectUnknown
 	inline bool operator!() const noexcept
 	{
-		return mObjectID == kAudioObjectUnknown;
+		return !operator bool();
 	}
 
 	/// Returns @c true if @c rhs is equal to @c this

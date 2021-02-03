@@ -127,7 +127,7 @@ public:
 	/// Returns @c true if this object's internal @c AudioChannelLayout is @c nullptr
 	inline bool operator!() const noexcept
 	{
-		return !mChannelLayout;
+		return !operator bool();
 	}
 
 

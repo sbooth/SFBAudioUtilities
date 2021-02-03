@@ -59,13 +59,13 @@ public:
 	/// Returns @c true if this object's internal @c ExtAudioFileRef is @c nullptr
 	inline bool operator!() const noexcept
 	{
-		return !mAudioFileID;
+		return !operator bool();
 	}
 
 	/// Returns @c true if this object's internal @c ExtAudioFileRef is not @c nullptr
 	inline bool IsValid() const noexcept
 	{
-		return this->operator bool();
+		return operator bool();
 	}
 
 	/// Returns the file's internal @c AudioFileID

@@ -287,7 +287,7 @@ public:
 	/// Returns @c true if this object's internal @c AudioBufferList is @c nullptr
 	inline bool operator!() const noexcept
 	{
-		return !mBufferList;
+		return !operator bool();
 	}
 
 

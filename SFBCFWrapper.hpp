@@ -162,7 +162,7 @@ public:
 	/// Returns @c true if the wrapped object is @c nullptr
 	inline bool operator!() const
 	{
-		return !mObject;
+		return !operator bool();
 	}
 
 	/// Returns the wrapped object
