@@ -12,6 +12,11 @@
 #import "SFBAudioObjectPropertyAddress.hpp"
 #import "SFBCFWrapper.hpp"
 
+enum class SFBHALAudioObjectDirectionalScope {
+	input,
+	output,
+};
+
 class SFBHALAudioObject
 {
 
@@ -40,11 +45,11 @@ public:
 	/// Destructor
 	virtual ~SFBHALAudioObject() = default;
 
-	// This class is non-movable
-	SFBHALAudioObject(SFBHALAudioObject&& rhs) = delete;
+	// Move constructor
+	SFBHALAudioObject(SFBHALAudioObject&& rhs) noexcept = default;
 
-	// This class is non-move assignable
-	SFBHALAudioObject& operator=(SFBHALAudioObject&& rhs) = delete;
+	/// Move assignment operator
+	SFBHALAudioObject& operator=(SFBHALAudioObject&& rhs) noexcept = default;
 
 
 	/// Creates a @c SFBHALAudioObject with the specified objectID
@@ -54,13 +59,13 @@ public:
 
 #pragma mark Comparison
 
-	/// Returns @c true if this object's internal @c AudioObjectID is not @c kAudioObjectUnknown
+	/// Returns @c true if this object's @c AudioObjectID is not @c kAudioObjectUnknown
 	inline explicit operator bool() const noexcept
 	{
 		return mObjectID != kAudioObjectUnknown;
 	}
 
-	/// Returns @c true if this object's internal @c AudioObjectID is @c kAudioObjectUnknown
+	/// Returns @c true if this object's @c AudioObjectID is @c kAudioObjectUnknown
 	inline bool operator!() const noexcept
 	{
 		return mObjectID == kAudioObjectUnknown;
@@ -95,7 +100,7 @@ public:
 	UInt32 GetPropertyDataSize(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const;
 
 	void GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32& ioDataSize, void * _Nonnull outData) const;
-	void SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32 inDataSize, const void * _Nonnull  inData);
+	void SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32 inDataSize, const void * _Nonnull inData);
 
 	template <typename T>
 	typename std::enable_if<std::is_integral<T>::value, bool>::type IntegralProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
@@ -152,9 +157,14 @@ public:
 		return IntegralProperty<AudioClassID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyClass));
 	}
 
-	inline AudioObjectID Owner() const
+	inline AudioObjectID OwnerID() const
 	{
 		return IntegralProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyOwner));
+	}
+
+	inline SFBHALAudioObject Owner() const
+	{
+		return SFBHALAudioObject(OwnerID());
 	}
 
 	inline SFBCFString Name() const
@@ -187,9 +197,17 @@ public:
 		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyElementNumberName, inScope, inElement));
 	}
 
-	inline std::vector<AudioObjectID> OwnedObjects() const
+	inline std::vector<AudioObjectID> OwnedObjectIDs() const
 	{
 		return ArrayProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyOwnedObjects));
+	}
+
+	std::vector<SFBHALAudioObject> OwnedObjects() const
+	{
+		auto vec = OwnedObjectIDs();
+		std::vector<SFBHALAudioObject> result(vec.size());
+		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return SFBHALAudioObject(objectID); });
+		return result;
 	}
 
 //	kAudioObjectPropertyIdentify            = 'iden',
