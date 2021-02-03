@@ -227,6 +227,8 @@ UInt32 SFBAudioBufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noex
 	}
 
 	if(framesToZero) {
+		// For floating-point numbers this code is non-portable: the C standard doesn't require IEEE 754 compliance
+		// However, setting all bits to 0 using memset() on macOS results in a floating-point value of 0
 		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
 			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
 			std::memset(dst, 0, framesToZero * mFormat.mBytesPerFrame);
