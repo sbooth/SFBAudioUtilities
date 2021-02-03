@@ -49,7 +49,7 @@ public:
 
 	inline AudioObjectID DefaultInputDeviceID() const
 	{
-		return IntegralProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultInputDevice));
+		return ArithmeticProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultInputDevice));
 	}
 
 	inline SFBHALAudioObject DefaultInputDevice() const
@@ -59,7 +59,7 @@ public:
 
 	inline AudioObjectID DefaultOutputDeviceID() const
 	{
-		return IntegralProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultOutputDevice));
+		return ArithmeticProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultOutputDevice));
 	}
 
 	inline SFBHALAudioObject DefaultOutputDevice() const
@@ -69,12 +69,47 @@ public:
 
 	inline AudioObjectID DefaultSystemOutputDeviceID() const
 	{
-		return IntegralProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultSystemOutputDevice));
+		return ArithmeticProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultSystemOutputDevice));
 	}
 
 	inline SFBHALAudioObject DefaultSystemOutputDevice() const
 	{
 		return SFBHALAudioObject(DefaultSystemOutputDeviceID());
 	}
+
+	AudioObjectID AudioDeviceIDForUID(CFStringRef _Nonnull inUID) const
+	{
+		AudioObjectID deviceID;
+		AudioValueTranslation valueTranslation = { &inUID, sizeof(CFStringRef), &deviceID, sizeof(AudioObjectID) };
+		SFBAudioObjectPropertyAddress objectPropertyAddress(kAudioHardwarePropertyDeviceForUID);
+		UInt32 size = sizeof(AudioValueTranslation);
+		GetPropertyData(objectPropertyAddress, 0, nullptr, size, &valueTranslation);
+		return deviceID;
+	}
+
+	inline SFBHALAudioDevice AudioDeviceForUID(CFStringRef _Nonnull inUID) const
+	{
+		return SFBHALAudioDevice(AudioDeviceIDForUID(inUID));
+	}
+
+	//	kAudioHardwarePropertyMixStereoToMono                       = 'stmo',
+	//	kAudioHardwarePropertyPlugInList                            = 'plg#',
+	//	kAudioHardwarePropertyTranslateBundleIDToPlugIn             = 'bidp',
+	//	kAudioHardwarePropertyTransportManagerList                  = 'tmg#',
+	//	kAudioHardwarePropertyTranslateBundleIDToTransportManager   = 'tmbi',
+	//	kAudioHardwarePropertyBoxList                               = 'box#',
+	//	kAudioHardwarePropertyTranslateUIDToBox                     = 'uidb',
+	//	kAudioHardwarePropertyClockDeviceList                       = 'clk#',
+	//	kAudioHardwarePropertyTranslateUIDToClockDevice             = 'uidc',
+	//	kAudioHardwarePropertyProcessIsMaster                       = 'mast',
+	//	kAudioHardwarePropertyIsInitingOrExiting                    = 'inot',
+	//	kAudioHardwarePropertyUserIDChanged                         = 'euid',
+	//	kAudioHardwarePropertyProcessIsAudible                      = 'pmut',
+	//	kAudioHardwarePropertySleepingIsAllowed                     = 'slep',
+	//	kAudioHardwarePropertyUnloadingIsAllowed                    = 'unld',
+	//	kAudioHardwarePropertyHogModeIsAllowed                      = 'hogr',
+	//	kAudioHardwarePropertyUserSessionIsActiveOrHeadless         = 'user',
+	//	kAudioHardwarePropertyServiceRestarted                      = 'srst',
+	//	kAudioHardwarePropertyPowerHint                             = 'powh'
 
 };

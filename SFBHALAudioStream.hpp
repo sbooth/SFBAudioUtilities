@@ -36,10 +36,49 @@ public:
 	: SFBHALAudioObject(objectID)
 	{}
 
+	inline bool IsActive() const
+	{
+		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyIsActive)) != 0;
+	}
+
+	inline UInt32 Direction() const
+	{
+		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyDirection));
+	}
+
+	inline UInt32 TerminalType() const
+	{
+		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyTerminalType));
+	}
+
+	inline UInt32 StartingChannel() const
+	{
+		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyStartingChannel));
+	}
 
 	inline UInt32 Latency() const
 	{
-		return IntegralProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyLatency));
+		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyLatency));
+	}
+
+	inline SFBAudioStreamBasicDescription VirtualFormat() const
+	{
+		return StructProperty<AudioStreamBasicDescription>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyVirtualFormat));
+	}
+
+	inline std::vector<AudioStreamRangedDescription> AvailableVirtualFormats() const
+	{
+		return ArrayProperty<AudioStreamRangedDescription>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyAvailableVirtualFormats));
+	}
+
+	inline SFBAudioStreamBasicDescription PhysicalFormat() const
+	{
+		return StructProperty<AudioStreamBasicDescription>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyPhysicalFormat));
+	}
+
+	inline std::vector<AudioStreamRangedDescription> AvailablePhysicalFormats() const
+	{
+		return ArrayProperty<AudioStreamRangedDescription>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyAvailablePhysicalFormats));
 	}
 
 };

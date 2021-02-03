@@ -60,7 +60,7 @@ public:
 
 	inline UInt32 Latency(SFBHALAudioObjectDirectionalScope scope) const
 	{
-		return IntegralProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyLatency, scope == SFBHALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
+		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyLatency, scope == SFBHALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
 	}
 
 	inline std::vector<AudioObjectID> StreamIDs(SFBHALAudioObjectDirectionalScope scope) const
@@ -80,10 +80,14 @@ public:
 
 	inline UInt32 SafetyOffset(SFBHALAudioObjectDirectionalScope scope) const
 	{
-		return IntegralProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertySafetyOffset, scope == SFBHALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
+		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertySafetyOffset, scope == SFBHALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
 	}
 
-	//	kAudioDevicePropertyNominalSampleRate               = 'nsrt',
+	inline Float64 NominalSampleRate() const
+	{
+		return ArithmeticProperty<Float64>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyNominalSampleRate));
+	}
+
 	//	kAudioDevicePropertyAvailableNominalSampleRates     = 'nsr#',
 	//	kAudioDevicePropertyIcon                            = 'icon',
 	//	kAudioDevicePropertyIsHidden                        = 'hidn',
@@ -99,7 +103,7 @@ public:
 
 	inline UInt32 BufferFrameSize() const
 	{
-		return IntegralProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyBufferFrameSize));
+		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyBufferFrameSize));
 	}
 
 	//	kAudioDevicePropertyBufferFrameSizeRange            = 'fsz#',

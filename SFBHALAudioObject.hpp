@@ -102,8 +102,8 @@ public:
 	void GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32& ioDataSize, void * _Nonnull outData) const;
 	void SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32 inDataSize, const void * _Nonnull inData);
 
-	template <typename T>
-	typename std::enable_if<std::is_integral<T>::value, bool>::type IntegralProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
+	template <typename T, typename std::enable_if<std::is_arithmetic<T>::value, bool>::type = true>
+	T ArithmeticProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
 	{
 		T value;
 		UInt32 size = sizeof(T);
@@ -111,8 +111,8 @@ public:
 		return value;
 	}
 
-	template <typename T>
-	typename std::enable_if<std::is_trivial<T>::value, bool>::type StructProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
+	template <typename T, typename std::enable_if<std::is_trivial<T>::value, bool>::type = true>
+	T StructProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
 	{
 		T value;
 		UInt32 size = sizeof(T);
@@ -149,17 +149,17 @@ public:
 
 	inline AudioClassID BaseClass() const
 	{
-		return IntegralProperty<AudioClassID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyBaseClass));
+		return ArithmeticProperty<AudioClassID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyBaseClass));
 	}
 
 	inline AudioClassID Class() const
 	{
-		return IntegralProperty<AudioClassID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyClass));
+		return ArithmeticProperty<AudioClassID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyClass));
 	}
 
 	inline AudioObjectID OwnerID() const
 	{
-		return IntegralProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyOwner));
+		return ArithmeticProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyOwner));
 	}
 
 	inline SFBHALAudioObject Owner() const
