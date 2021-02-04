@@ -15,7 +15,7 @@ AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescriptio
 	if(format.mBytesPerFrame == 0 || frameCapacity > (std::numeric_limits<UInt32>::max() / format.mBytesPerFrame))
 		return nullptr;
 
-	auto bufferDataSize = frameCapacity * format.mBytesPerFrame;
+	auto bufferDataSize = format.FrameCountToByteSize(frameCapacity);
 	auto bufferCount = format.ChannelStreamCount();
 	auto bufferListSize = offsetof(AudioBufferList, mBuffers) + (sizeof(AudioBuffer) * bufferCount);
 	auto allocationSize = bufferListSize + (bufferDataSize * bufferCount);
