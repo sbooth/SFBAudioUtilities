@@ -8,7 +8,7 @@
 #import "SFBAudioStreamBasicDescription.hpp"
 
 SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
-: SFBAudioStreamBasicDescription{}
+: AudioStreamBasicDescription{}
 {
 //	if(sampleRate < 0)
 //		throw std::invalid_argument("sampleRate < 0");
