@@ -60,7 +60,7 @@ public:
 	/// Returns the capacity of this SFBRingBuffer in bytes
 	inline size_t CapacityBytes() const noexcept
 	{
-		return mCapacityBytes;		
+		return mCapacityBytes;
 	}
 
 	/// Returns the number of bytes available for reading
