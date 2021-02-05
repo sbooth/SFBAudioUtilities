@@ -83,6 +83,12 @@ public:
 
 #pragma mark Format information
 
+	/// Returns @c true if this format is non-interleaved
+	inline bool IsNonInterleaved() const noexcept
+	{
+		return (mFormatFlags & kAudioFormatFlagIsNonInterleaved) == kAudioFormatFlagIsNonInterleaved;
+	}
+
 	/// Returns @c true if this format is interleaved
 	inline bool IsInterleaved() const noexcept
 	{
@@ -122,7 +128,7 @@ public:
 	/// Returns @c true if this format is little-endian
 	inline bool IsLittleEndian() const noexcept
 	{
-		return !IsBigEndian();
+		return (mFormatFlags & kAudioFormatFlagIsBigEndian) == 0;
 	}
 
 	/// Returns @c true if this format is native-endian
@@ -135,6 +141,12 @@ public:
 	inline bool IsFloat() const noexcept
 	{
 		return IsPCM() && (mFormatFlags & kAudioFormatFlagIsFloat) == kAudioFormatFlagIsFloat;
+	}
+
+	/// Returns @c true if this format is integer linear PCM
+	inline bool IsInteger() const noexcept
+	{
+		return IsPCM() && (mFormatFlags & kAudioFormatFlagIsFloat) == 0;
 	}
 
 	/// Returns @c true if this format is signed integer linear PCM
@@ -166,7 +178,7 @@ public:
 	/// @note This flag is only used when interacting with HAL stream formats
 	inline bool IsMixable() const noexcept
 	{
-		return IsPCM() && !IsNonMixable();
+		return IsPCM() && (mFormatFlags & kAudioFormatFlagIsNonMixable) == 0;
 	}
 
 	/// Returns the sample word size in bytes
