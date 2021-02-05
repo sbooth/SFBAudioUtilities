@@ -127,7 +127,7 @@ size_t SFBRingBuffer::Read(void * const destinationBuffer, size_t byteCount) noe
 	if(readPosition + bytesToRead > mCapacityBytes) {
 		auto bytesAfterReadPointer = mCapacityBytes - readPosition;
 		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesAfterReadPointer);
-		std::memcpy((uint8_t *)destinationBuffer + bytesAfterReadPointer, mBuffer, bytesToRead - bytesAfterReadPointer);
+		std::memcpy(static_cast<uint8_t *>(destinationBuffer) + bytesAfterReadPointer, mBuffer, bytesToRead - bytesAfterReadPointer);
 	}
 	else
 		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesToRead);
@@ -158,7 +158,7 @@ size_t SFBRingBuffer::Peek(void * const destinationBuffer, size_t byteCount) con
 	if(readPosition + bytesToRead > mCapacityBytes) {
 		auto bytesAfterReadPointer = mCapacityBytes - readPosition;
 		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesAfterReadPointer);
-		std::memcpy((uint8_t *)destinationBuffer + bytesAfterReadPointer, mBuffer, bytesToRead - bytesAfterReadPointer);
+		std::memcpy(static_cast<uint8_t *>(destinationBuffer) + bytesAfterReadPointer, mBuffer, bytesToRead - bytesAfterReadPointer);
 	}
 	else
 		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesToRead);
@@ -189,7 +189,7 @@ size_t SFBRingBuffer::Write(const void * const sourceBuffer, size_t byteCount) n
 	if(writePosition + bytesToWrite > mCapacityBytes) {
 		auto bytesAfterWritePointer = mCapacityBytes - writePosition;
 		std::memcpy(mBuffer + writePosition, sourceBuffer, bytesAfterWritePointer);
-		std::memcpy(mBuffer, (uint8_t *)sourceBuffer + bytesAfterWritePointer, bytesToWrite - bytesAfterWritePointer);
+		std::memcpy(mBuffer, static_cast<const uint8_t *>(sourceBuffer) + bytesAfterWritePointer, bytesToWrite - bytesAfterWritePointer);
 	}
 	else
 		std::memcpy(mBuffer + writePosition, sourceBuffer, bytesToWrite);
