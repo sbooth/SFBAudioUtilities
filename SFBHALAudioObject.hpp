@@ -81,7 +81,7 @@ public:
 	/// Returns @c true if @c rhs is not equal to @c this
 	inline bool operator!=(AudioObjectID rhs) const noexcept
 	{
-		return mObjectID != rhs;
+		return !operator==(rhs);
 	}
 	
 	inline operator AudioObjectID() const noexcept
