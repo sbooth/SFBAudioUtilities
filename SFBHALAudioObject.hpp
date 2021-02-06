@@ -26,12 +26,12 @@ public:
 #pragma mark Creation and Destruction
 
 	/// Creates an unknown @c SFBHALAudioObject
-	inline SFBHALAudioObject() noexcept
+	inline constexpr SFBHALAudioObject() noexcept
 	: mObjectID(kAudioObjectUnknown)
 	{}
 
 	/// Copy constructor
-	inline SFBHALAudioObject(const SFBHALAudioObject& rhs) noexcept
+	inline constexpr SFBHALAudioObject(const SFBHALAudioObject& rhs) noexcept
 	: mObjectID(rhs.mObjectID)
 	{}
 
@@ -54,7 +54,7 @@ public:
 
 
 	/// Creates a @c SFBHALAudioObject with the specified objectID
-	inline SFBHALAudioObject(AudioObjectID objectID) noexcept
+	inline constexpr SFBHALAudioObject(AudioObjectID objectID) noexcept
 	: mObjectID(objectID)
 	{}
 

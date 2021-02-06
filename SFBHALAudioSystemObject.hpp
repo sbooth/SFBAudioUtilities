@@ -14,12 +14,12 @@ class SFBHALAudioSystemObject : public SFBHALAudioObject
 public:
 
 	/// Creates an @c SFBHALAudioSystemObject
-	inline SFBHALAudioSystemObject() noexcept
+	inline constexpr SFBHALAudioSystemObject() noexcept
 	: SFBHALAudioObject(kAudioObjectSystemObject)
 	{}
 
 	/// Copy constructor
-	SFBHALAudioSystemObject(const SFBHALAudioSystemObject& rhs) = default;
+	constexpr SFBHALAudioSystemObject(const SFBHALAudioSystemObject& rhs) = default;
 
 	/// Assignment operator
 	SFBHALAudioSystemObject& operator=(const SFBHALAudioSystemObject& rhs) = default;

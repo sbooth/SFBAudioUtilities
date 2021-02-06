@@ -14,10 +14,10 @@ class SFBHALAudioDevice : public SFBHALAudioObject
 public:
 
 	/// Creates an unknown @c SFBHALAudioObject
-	SFBHALAudioDevice() noexcept = default;
+	constexpr SFBHALAudioDevice() noexcept = default;
 
 	/// Copy constructor
-	SFBHALAudioDevice(const SFBHALAudioDevice& rhs) noexcept = default;
+	constexpr SFBHALAudioDevice(const SFBHALAudioDevice& rhs) noexcept = default;
 
 	/// Assignment operator
 	SFBHALAudioDevice& operator=(const SFBHALAudioDevice& rhs) noexcept = default;
@@ -33,7 +33,7 @@ public:
 
 
 	/// Creates a @c SFBHALAudioDevice with the specified objectID
-	inline SFBHALAudioDevice(AudioObjectID objectID) noexcept
+	inline constexpr SFBHALAudioDevice(AudioObjectID objectID) noexcept
 	: SFBHALAudioObject(objectID)
 	{}
 

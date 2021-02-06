@@ -13,10 +13,10 @@ class SFBHALAudioStream : public SFBHALAudioObject
 public:
 
 	/// Creates an unknown @c SFBHALAudioStream
-	SFBHALAudioStream() noexcept = default;
+	constexpr SFBHALAudioStream() noexcept = default;
 
 	/// Copy constructor
-	SFBHALAudioStream(const SFBHALAudioStream& rhs) noexcept = default;
+	constexpr SFBHALAudioStream(const SFBHALAudioStream& rhs) noexcept = default;
 
 	/// Assignment operator
 	SFBHALAudioStream& operator=(const SFBHALAudioStream& rhs) noexcept = default;
@@ -32,7 +32,7 @@ public:
 
 
 	/// Creates a @c SFBHALAudioStream with the specified objectID
-	inline SFBHALAudioStream(AudioObjectID objectID) noexcept
+	inline constexpr SFBHALAudioStream(AudioObjectID objectID) noexcept
 	: SFBHALAudioObject(objectID)
 	{}
 
