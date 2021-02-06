@@ -11,7 +11,7 @@
 
 #import "SFBAudioStreamBasicDescription.hpp"
 
-/// A ring buffer supporting non-interleaved audio based on Apple's @c CARingBuffer.
+/// A ring buffer supporting timestamped non-interleaved audio based on Apple's @c CARingBuffer.
 ///
 /// This class is thread safe when used from one reader thread and one writer thread (single producer, single consumer model).
 class SFBCARingBuffer
