@@ -17,6 +17,7 @@ A collection of utility classes and extensions easing common operations in Core 
 | SFBByteStream | A `SFBByteStream` provides heterogeneous typed access to an untyped buffer. |
 | SFBCARingBuffer | A ring buffer supporting timestamped non-interleaved audio based on Apple's `CARingBuffer`. |
 | SFBCFWrapper | A wrapper around a Core Foundation object|
+| SFBDeferredClosure | A class that calls a closure upon destruction. |
 | SFBExtAudioFile | A wrapper around `ExtAudioFile` |
 | SFBHALAudioDevice | |
 | SFBHALAudioObject | |
