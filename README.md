@@ -38,8 +38,8 @@ A collection of utility classes and extensions easing common operations in Core 
 
 | Extended Entity | Description |
 | --- | --- |
-| [AudioChannelLayout](AudioChannelLayout.swift) | |
-| [AudioStreamBasicDescription](AudioStreamBasicDescription.swift) | Common format support |
+| [AudioChannelLayout](AudioChannelLayout+SFBExtensions.swift) | |
+| [AudioStreamBasicDescription](AudioStreamBasicDescription+SFBExtensions.swift) | Common format support |
 
 ## License
 
