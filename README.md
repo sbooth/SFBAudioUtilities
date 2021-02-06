@@ -43,4 +43,4 @@ A collection of utility classes and extensions easing common operations in Core 
 
 ## License
 
-Released under the [MIT License](https://github.com/sbooth/SFBAudioUtilities/blob/master/LICENSE.txt).
+Released under the [MIT License](https://github.com/sbooth/SFBAudioUtilities/blob/main/LICENSE.txt).
