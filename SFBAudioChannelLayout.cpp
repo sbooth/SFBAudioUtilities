@@ -14,7 +14,7 @@
 namespace {
 
 	/// Returns the size in bytes of an @c AudioChannelLayout with the specified number of channel descriptions
-	size_t ChannelLayoutSize(UInt32 numberChannelDescriptions) noexcept
+	constexpr size_t ChannelLayoutSize(UInt32 numberChannelDescriptions) noexcept
 	{
 		return offsetof(AudioChannelLayout, mChannelDescriptions) + (numberChannelDescriptions * sizeof(AudioChannelDescription));
 	}
