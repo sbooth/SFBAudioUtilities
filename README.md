@@ -3,20 +3,15 @@
 A collection of utility classes and extensions easing common operations in Core Audio, Audio Toolbox, and AVFoundation.
 
 
-## CoreAudio and AudioToolbox Wrappers
+## CoreAudio Wrappers
 
 | C++ Class | Description |
 | --- | --- |
-| [SFB::CABufferList](SFBAudioBufferList.hpp) | A class wrapping a Core Audio `AudioBufferList` with a specific format, frame capacity, and frame length |
-| [SFB::CAChannelLayout](SFBAudioChannelLayout.hpp) | A class wrapping a Core Audio `AudioChannelLayout` |
+| [SFB::CABufferList](SFBCABufferList.hpp) | A class wrapping a Core Audio `AudioBufferList` with a specific format, frame capacity, and frame length |
+| [SFB::CAChannelLayout](SFBCAChannelLayout.hpp) | A class wrapping a Core Audio `AudioChannelLayout` |
 | [SFB::CAPropertyAddress](SFBCAPropertyAddress.hpp) | A class extending the functionality of a Core Audio `AudioObjectPropertyAddress` |
 | [SFB::CAStreamBasicDescription](SFBCAStreamBasicDescription.hpp) | A class extending the functionality of a Core Audio `AudioStreamBasicDescription` |
 | [SFB::CATimeStamp](SFBCATimeStamp.hpp) | A class extending the functionality of a Core Audio `AudioTimeStamp` |
-
-| C++ Class | Description |
-| --- | --- |
-| [SFB::CAAudioFile](SFBCAAudioFile.hpp) | A wrapper around `AudioFile` |
-| [SFB::CAExtAudioFile](SFBCAExtAudioFile.hpp) | A wrapper around `ExtAudioFile` |
 
 | C++ Class | Description |
 | --- | --- |
@@ -25,13 +20,23 @@ A collection of utility classes and extensions easing common operations in Core 
 | [SFB::HALAudioStream](SFBHALAudioStream.hpp) | |
 | [SFB::HALAudioSystemObject](SFBHALAudioSystemObject.hpp) | |
 
-## General Utility Classes
+
+## AudioToolbox Wrappers
+
+| C++ Class | Description |
+| --- | --- |
+| [SFB::CAAudioFile](SFBCAAudioFile.hpp) | A wrapper around `AudioFile` |
+| [SFB::CAExtAudioFile](SFBCAExtAudioFile.hpp) | A wrapper around `ExtAudioFile` |
+
+## Ring Buffers
 
 | C++ Class | Description |
 | --- | --- |
 | [SFB::RingBuffer](SFBRingBuffer.hpp) | A generic ring buffer |
 | [SFB::AudioRingBuffer](SFBAudioRingBuffer.hpp) | A ring buffer supporting non-interleaved audio |
 | [SFB::CARingBuffer](SFBCARingBuffer.hpp) | A ring buffer supporting timestamped non-interleaved audio |
+
+## Utility Classes
 
 | C++ Class | Description |
 | --- | --- |
