@@ -9,51 +9,53 @@
 
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
+namespace SFB {
+
 /// A class extending the functionality of a Core Audio @c AudioTimeStamp
-class SFBAudioTimeStamp : public AudioTimeStamp
+class CATimeStamp : public AudioTimeStamp
 {
 
 public:
 
 #pragma mark Creation and Destruction
 
-	/// Creates an empty @c SFBAudioTimeStamp
-	SFBAudioTimeStamp() noexcept = default;
+	/// Creates an empty @c CATimeStamp
+	CATimeStamp() noexcept = default;
 
 	/// Copy constructor
-	SFBAudioTimeStamp(const SFBAudioTimeStamp& rhs) noexcept = default;
+	CATimeStamp(const CATimeStamp& rhs) noexcept = default;
 
 	/// Assignment operator
-	SFBAudioTimeStamp& operator=(const SFBAudioTimeStamp& rhs) noexcept = default;
+	CATimeStamp& operator=(const CATimeStamp& rhs) noexcept = default;
 
 	/// Destructor
-	~SFBAudioTimeStamp() = default;
+	~CATimeStamp() = default;
 
 	/// Move constructor
-	SFBAudioTimeStamp(SFBAudioTimeStamp&& rhs) noexcept = default;
+	CATimeStamp(CATimeStamp&& rhs) noexcept = default;
 
 	/// Move assignment operator
-	SFBAudioTimeStamp& operator=(SFBAudioTimeStamp&& rhs) noexcept = default;
+	CATimeStamp& operator=(CATimeStamp&& rhs) noexcept = default;
 
 
-	/// Creates a new @c SFBAudioTimeStamp with the specified sample time
-	inline SFBAudioTimeStamp(Float64 sampleTime) noexcept
+	/// Creates a new @c CATimeStamp with the specified sample time
+	inline CATimeStamp(Float64 sampleTime) noexcept
 	: AudioTimeStamp{}
 	{
 		mSampleTime = sampleTime;
 		mFlags = kAudioTimeStampSampleTimeValid;
 	}
 
-	/// Creates a new @c SFBAudioTimeStamp with the specified host time
-	inline SFBAudioTimeStamp(UInt64 hostTime) noexcept
+	/// Creates a new @c CATimeStamp with the specified host time
+	inline CATimeStamp(UInt64 hostTime) noexcept
 	: AudioTimeStamp{}
 	{
 		mHostTime = hostTime;
 		mFlags = kAudioTimeStampHostTimeValid;
 	}
 
-	/// Creates a new @c SFBAudioTimeStamp with the specified sample and host times
-	inline SFBAudioTimeStamp(Float64 sampleTime, UInt64 hostTime) noexcept
+	/// Creates a new @c CATimeStamp with the specified sample and host times
+	inline CATimeStamp(Float64 sampleTime, UInt64 hostTime) noexcept
 	: AudioTimeStamp{}
 	{
 		mSampleTime = sampleTime;
@@ -62,8 +64,8 @@ public:
 
 	}
 
-	/// Creates a new @c SFBAudioTimeStamp with the specified sample and host times and rate scalar
-	inline SFBAudioTimeStamp(Float64 sampleTime, UInt64 hostTime, Float64 rateScalar) noexcept
+	/// Creates a new @c CATimeStamp with the specified sample and host times and rate scalar
+	inline CATimeStamp(Float64 sampleTime, UInt64 hostTime, Float64 rateScalar) noexcept
 	: AudioTimeStamp{}
 	{
 		mSampleTime = sampleTime;
@@ -74,13 +76,13 @@ public:
 
 	// Native overloads
 
-	/// Creates a new @c SFBAudioTimeStamp for the specified @c AudioTimeStamp
-	inline SFBAudioTimeStamp(const AudioTimeStamp& rhs) noexcept
+	/// Creates a new @c CATimeStamp for the specified @c AudioTimeStamp
+	inline CATimeStamp(const AudioTimeStamp& rhs) noexcept
 	: AudioTimeStamp{rhs}
 	{}
 
 	/// Assignment operator
-	inline SFBAudioTimeStamp& operator=(const AudioTimeStamp& rhs) noexcept
+	inline CATimeStamp& operator=(const AudioTimeStamp& rhs) noexcept
 	{
 		AudioTimeStamp::operator=(rhs);
 		return *this;
@@ -89,7 +91,19 @@ public:
 #pragma mark Comparison
 
 	/// Returns @c true if @c rhs is equal to @c this
-	bool operator==(const AudioTimeStamp& rhs) const noexcept;
+	bool operator==(const AudioTimeStamp& rhs) const noexcept
+	{
+		if(SampleTimeIsValid() && (rhs.mFlags & kAudioTimeStampSampleTimeValid))
+			return mSampleTime == rhs.mSampleTime;
+
+		if(HostTimeIsValid() && (rhs.mFlags & kAudioTimeStampHostTimeValid))
+			return mHostTime == rhs.mHostTime;
+
+		if(WordClockTimeIsValid() && (rhs.mFlags & kAudioTimeStampWordClockTimeValid))
+			return mWordClockTime == rhs.mWordClockTime;
+
+		return false;
+	}
 
 	/// Returns @c true if @c rhs is not equal to @c this
 	inline bool operator!=(const AudioTimeStamp& rhs) const noexcept
@@ -98,7 +112,19 @@ public:
 	}
 
 	/// Returns @c true if @c rhs is less than @c this
-	bool operator<(const AudioTimeStamp& rhs) const noexcept;
+	bool operator<(const AudioTimeStamp& rhs) const noexcept
+	{
+		if(SampleTimeIsValid() && (rhs.mFlags & kAudioTimeStampSampleTimeValid))
+			return mSampleTime < rhs.mSampleTime;
+
+		if(HostTimeIsValid() && (rhs.mFlags & kAudioTimeStampHostTimeValid))
+			return mHostTime < rhs.mHostTime;
+
+		if(WordClockTimeIsValid() && (rhs.mFlags & kAudioTimeStampWordClockTimeValid))
+			return mWordClockTime < rhs.mWordClockTime;
+
+		return false;
+	}
 
 	/// Returns @c true if @c rhs is less than or equal to @c this
 	inline bool operator<=(const AudioTimeStamp& rhs) const noexcept
@@ -120,19 +146,19 @@ public:
 
 #pragma mark Flags
 
-	/// Returns @c true if the @c SFBAudioTimeStamp is valid
+	/// Returns @c true if the @c CATimeStamp is valid
 	inline explicit operator bool() const noexcept
 	{
 		return mFlags != kAudioTimeStampNothingValid;
 	}
 
-	/// Returns @c true if the @c SFBAudioTimeStamp is not valid
+	/// Returns @c true if the @c CATimeStamp is not valid
 	inline bool operator!() const noexcept
 	{
 		return !operator bool();
 	}
 
-	/// Returns @c true if the @c SFBAudioTimeStamp is valid
+	/// Returns @c true if the @c CATimeStamp is valid
 	inline bool IsValid() const noexcept
 	{
 		return operator bool();
@@ -169,3 +195,5 @@ public:
 	}
 
 };
+
+} // namespace SFB
