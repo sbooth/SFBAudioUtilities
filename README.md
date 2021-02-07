@@ -18,6 +18,7 @@ A collection of utility classes and extensions easing common operations in Core 
 | [SFBCARingBuffer](SFBCARingBuffer.hpp) | A ring buffer supporting timestamped non-interleaved audio based on Apple's `CARingBuffer` |
 | [SFB::CFWrapper](SFBCFWrapper.hpp) | A wrapper around a Core Foundation object |
 | [SFB::DeferredClosure](SFBDeferredClosure.hpp) | A class that calls a closure upon destruction |
+| [SFB::CAAudioFile](SFBCAAudioFile.hpp) | A wrapper around `AudioFile` |
 | [SFBExtAudioFile](SFBExtAudioFile.hpp) | A wrapper around `ExtAudioFile` |
 | [SFBHALAudioDevice](SFBHALAudioDevice.hpp) | |
 | [SFBHALAudioObject](SFBHALAudioObject.hpp) | |

@@ -8,12 +8,14 @@
 #import <AudioToolbox/AudioFile.h>
 
 #import "SFBCAException.hpp"
-#import "SFBAudioStreamBasicDescription.hpp"
+#import "SFBCAStreamBasicDescription.hpp"
 
 CF_ASSUME_NONNULL_BEGIN
 
+namespace SFB {
+
 /// A wrapper around @c AudioFile
-class SFBAudioFile
+class CAAudioFile
 {
 
 private:
@@ -26,43 +28,43 @@ private:
 	};
 
 public:
-	/// Creates a @c SFBAudioFile
-	inline SFBAudioFile() noexcept
+	/// Creates a @c CAAudioFile
+	inline CAAudioFile() noexcept
 	: mAudioFileID(nullptr)
 	{}
 
 	// This class is non-copyable
-	SFBAudioFile(const SFBAudioFile& rhs) = delete;
+	CAAudioFile(const CAAudioFile& rhs) = delete;
 
 	// This class is non-assignable
-	SFBAudioFile& operator=(const SFBAudioFile& rhs) = delete;
+	CAAudioFile& operator=(const CAAudioFile& rhs) = delete;
 
-	/// Destroys the @c SFBAudioFile and release all associated resources.
-	inline ~SFBAudioFile()
+	/// Destroys the @c CAAudioFile and release all associated resources.
+	inline ~CAAudioFile()
 	{
 		if(mAudioFileID)
 			AudioFileClose(mAudioFileID);
 	}
 
 	// This class is non-movable
-	SFBAudioFile(SFBAudioFile&& rhs) = delete;
+	CAAudioFile(CAAudioFile&& rhs) = delete;
 
 	// This class is non-move assignable
-	SFBAudioFile& operator=(SFBAudioFile&& rhs) = delete;
+	CAAudioFile& operator=(CAAudioFile&& rhs) = delete;
 
-	/// Returns @c true if this object's internal @c ExtAudioFileRef is not @c nullptr
+	/// Returns @c true if this object's internal @c AudioFileID is not @c nullptr
 	inline explicit operator bool() const noexcept
 	{
 		return mAudioFileID != nullptr;
 	}
 
-	/// Returns @c true if this object's internal @c ExtAudioFileRef is @c nullptr
+	/// Returns @c true if this object's internal @c AudioFileID is @c nullptr
 	inline bool operator!() const noexcept
 	{
 		return !operator bool();
 	}
 
-	/// Returns @c true if this object's internal @c ExtAudioFileRef is not @c nullptr
+	/// Returns @c true if this object's internal @c AudioFileID is not @c nullptr
 	inline bool IsValid() const noexcept
 	{
 		return operator bool();
@@ -305,5 +307,7 @@ private:
 	AudioFileID _Nullable mAudioFileID;
 
 };
+
+} // namespace SFB
 
 CF_ASSUME_NONNULL_END
