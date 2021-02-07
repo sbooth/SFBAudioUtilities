@@ -12,8 +12,14 @@ A collection of utility classes and extensions easing common operations in Core 
 | [SFB::CAPropertyAddress](SFBCAPropertyAddress.hpp) | A class extending the functionality of a Core Audio `AudioObjectPropertyAddress` |
 | [SFB::CAStreamBasicDescription](SFBCAStreamBasicDescription.hpp) | A class extending the functionality of a Core Audio `AudioStreamBasicDescription` |
 | [SFB::CATimeStamp](SFBCATimeStamp.hpp) | A class extending the functionality of a Core Audio `AudioTimeStamp` |
+
+| C++ Class | Description |
+| --- | --- |
 | [SFB::CAAudioFile](SFBCAAudioFile.hpp) | A wrapper around `AudioFile` |
 | [SFB::CAExtAudioFile](SFBCAExtAudioFile.hpp) | A wrapper around `ExtAudioFile` |
+
+| C++ Class | Description |
+| --- | --- |
 | [SFB::HALAudioDevice](SFBHALAudioDevice.hpp) | |
 | [SFB::HALAudioObject](SFBHALAudioObject.hpp) | |
 | [SFB::HALAudioStream](SFBHALAudioStream.hpp) | |
@@ -23,14 +29,20 @@ A collection of utility classes and extensions easing common operations in Core 
 
 | C++ Class | Description |
 | --- | --- |
+| [SFB::RingBuffer](SFBRingBuffer.hpp) | A generic ring buffer |
 | [SFB::AudioRingBuffer](SFBAudioRingBuffer.hpp) | A ring buffer supporting non-interleaved audio |
-| [SFB::AudioUnitRecorder](SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
+| [SFB::CARingBuffer](SFBCARingBuffer.hpp) | A ring buffer supporting timestamped non-interleaved audio |
+
+| C++ Class | Description |
+| --- | --- |
 | [SFB::ByteStream](SFBByteStream.hpp) | A `ByteStream` provides heterogeneous typed access to an untyped buffer |
-| [SFB::CARingBuffer](SFBCARingBuffer.hpp) | A ring buffer supporting timestamped non-interleaved audio based on Apple's `CARingBuffer` |
 | [SFB::CFWrapper](SFBCFWrapper.hpp) | A wrapper around a Core Foundation object |
 | [SFB::DeferredClosure](SFBDeferredClosure.hpp) | A class that calls a closure upon destruction |
-| [SFB::RingBuffer](SFBRingBuffer.hpp) | A generic ring buffer |
 | [SFB::UnfairLock](SFBUnfairLock.hpp) | A wrapper around `os_unfair_lock` implementing C++ `Lockable` |
+
+| C++ Class | Description |
+| --- | --- |
+| [SFB::AudioUnitRecorder](SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
 
 ## AVFoundation Extensions
 
