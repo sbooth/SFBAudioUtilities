@@ -8,13 +8,15 @@
 #import <AudioToolbox/ExtendedAudioFile.h>
 
 #import "SFBCAException.hpp"
-#import "SFBAudioChannelLayout.hpp"
-#import "SFBAudioStreamBasicDescription.hpp"
+#import "SFBCAChannelLayout.hpp"
+#import "SFBCAStreamBasicDescription.hpp"
 
 CF_ASSUME_NONNULL_BEGIN
 
+namespace SFB {
+
 /// A wrapper around @c ExtAudioFile
-class SFBExtAudioFile
+class CAExtAudioFile
 {
 
 private:
@@ -27,29 +29,29 @@ private:
 	};
 
 public:
-	/// Creates a @c SFBExtAudioFile
-	inline SFBExtAudioFile() noexcept
+	/// Creates a @c CAExtAudioFile
+	inline CAExtAudioFile() noexcept
 	: mExtAudioFile(nullptr)
 	{}
 
 	// This class is non-copyable
-	SFBExtAudioFile(const SFBExtAudioFile& rhs) = delete;
+	CAExtAudioFile(const CAExtAudioFile& rhs) = delete;
 
 	// This class is non-assignable
-	SFBExtAudioFile& operator=(const SFBExtAudioFile& rhs) = delete;
+	CAExtAudioFile& operator=(const CAExtAudioFile& rhs) = delete;
 
-	/// Destroys the @c SFBExtAudioFile and release all associated resources.
-	inline ~SFBExtAudioFile()
+	/// Destroys the @c CAExtAudioFile and release all associated resources.
+	inline ~CAExtAudioFile()
 	{
 		if(mExtAudioFile)
 			ExtAudioFileDispose(mExtAudioFile);
 	}
 
 	// This class is non-movable
-	SFBExtAudioFile(SFBExtAudioFile&& rhs) = delete;
+	CAExtAudioFile(CAExtAudioFile&& rhs) = delete;
 
 	// This class is non-move assignable
-	SFBExtAudioFile& operator=(SFBExtAudioFile&& rhs) = delete;
+	CAExtAudioFile& operator=(CAExtAudioFile&& rhs) = delete;
 
 	/// Returns @c true if this object's internal @c ExtAudioFileRef is not @c nullptr
 	inline explicit operator bool() const noexcept
@@ -404,5 +406,7 @@ private:
 	ExtAudioFileRef _Nullable mExtAudioFile;
 
 };
+
+} // namespace SFB
 
 CF_ASSUME_NONNULL_END
