@@ -52,7 +52,7 @@ public:
 	/// Assignment operator
 	inline CAPropertyAddress& operator=(const AudioObjectPropertyAddress& rhs) noexcept
 	{
-		CAPropertyAddress::operator=(rhs);
+		AudioObjectPropertyAddress::operator=(rhs);
 		return *this;
 	}
 
