@@ -2,7 +2,6 @@
 
 A collection of utility classes and extensions easing common operations in Core Audio, Audio Toolbox, and AVFoundation.
 
-
 ## CoreAudio Wrappers
 
 | C++ Class | Description |
@@ -15,11 +14,10 @@ A collection of utility classes and extensions easing common operations in Core 
 
 | C++ Class | Description |
 | --- | --- |
-| [SFB::HALAudioDevice](SFBHALAudioDevice.hpp) | |
-| [SFB::HALAudioObject](SFBHALAudioObject.hpp) | |
-| [SFB::HALAudioStream](SFBHALAudioStream.hpp) | |
-| [SFB::HALAudioSystemObject](SFBHALAudioSystemObject.hpp) | |
-
+| [SFB::HALAudioDevice](SFBHALAudioDevice.hpp) | A wrapper around a HAL audio device |
+| [SFB::HALAudioObject](SFBHALAudioObject.hpp) | A wrapper around a HAL audio object |
+| [SFB::HALAudioStream](SFBHALAudioStream.hpp) | A wrapper around a HAL audio stream |
+| [SFB::HALAudioSystemObject](SFBHALAudioSystemObject.hpp) | A wrapper around `kAudioObjectSystemObject` |
 
 ## AudioToolbox Wrappers
 
