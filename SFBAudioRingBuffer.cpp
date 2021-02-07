@@ -20,10 +20,10 @@ namespace {
 /// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, size_t dstOffset, const AudioBufferList * const _Nonnull bufferList, size_t srcOffset, size_t byteCount) noexcept
 {
-	for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
-		if(srcOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
+	for(UInt32 i = 0; i < bufferList->mNumberBuffers; ++i) {
+		if(srcOffset > bufferList->mBuffers[i].mDataByteSize)
 			continue;
-		std::memcpy(buffers[bufferIndex] + dstOffset, static_cast<const uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
+		std::memcpy(buffers[i] + dstOffset, static_cast<const uint8_t *>(bufferList->mBuffers[i].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[i].mDataByteSize - srcOffset));
 	}
 }
 
@@ -35,10 +35,10 @@ inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, size_t d
 /// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
 inline void FetchABL(AudioBufferList * const _Nonnull bufferList, size_t dstOffset, const uint8_t * const _Nonnull * const _Nonnull buffers, size_t srcOffset, size_t byteCount) noexcept
 {
-	for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
-		if(dstOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
+	for(UInt32 i = 0; i < bufferList->mNumberBuffers; ++i) {
+		if(dstOffset > bufferList->mBuffers[i].mDataByteSize)
 			continue;
-		std::memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - dstOffset));
+		std::memcpy(static_cast<uint8_t *>(bufferList->mBuffers[i].mData) + dstOffset, buffers[i] + srcOffset, std::min(byteCount, bufferList->mBuffers[i].mDataByteSize - dstOffset));
 	}
 }
 
