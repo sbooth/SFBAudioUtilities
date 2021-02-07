@@ -7,41 +7,43 @@
 
 #import <os/lock.h>
 
+namespace SFB {
+
 /// A wrapper around @c os_unfair_lock implementing C++ @c Lockable
 ///
 /// This class may be used with @c std::lock_guard for a scope-based lock.
 ///
 /// @code
-/// SFBUnfairLock _lock;
+/// SFB::UnfairLock _lock;
 /// // Later
-/// std::lock_guard<SFBUnfairLock> lock(_lock);
+/// std::lock_guard<SFB::UnfairLock> lock(_lock);
 /// @endcode
-class SFBUnfairLock
+class UnfairLock
 {
 
 public:
 
 #pragma mark Creation and Destruction
 
-	/// Creates a new @c SFBUnfairLock
-	inline SFBUnfairLock() noexcept
+	/// Creates a new @c UnfairLock
+	inline UnfairLock() noexcept
 	: mLock(OS_UNFAIR_LOCK_INIT)
 	{}
 
 	// This class is non-copyable
-	SFBUnfairLock(const SFBUnfairLock& rhs) = delete;
+	UnfairLock(const UnfairLock& rhs) = delete;
 
 	// This class is non-assignable
-	SFBUnfairLock& operator=(const SFBUnfairLock& rhs) = delete;
+	UnfairLock& operator=(const UnfairLock& rhs) = delete;
 
 	// Destructor
-	~SFBUnfairLock() = default;
+	~UnfairLock() = default;
 
 	// This class is non-movable
-	SFBUnfairLock(const SFBUnfairLock&& rhs) = delete;
+	UnfairLock(const UnfairLock&& rhs) = delete;
 
 	// This class is non-move assignable
-	SFBUnfairLock& operator=(const SFBUnfairLock&& rhs) = delete;
+	UnfairLock& operator=(const UnfairLock&& rhs) = delete;
 
 #pragma mark Lockable
 
@@ -70,3 +72,5 @@ private:
 	os_unfair_lock mLock;
 
 };
+
+} // namespace SFB

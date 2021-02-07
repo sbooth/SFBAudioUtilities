@@ -7,36 +7,36 @@
 
 #import <atomic>
 
-/// A ring buffer.
+namespace SFB {
+
+/// A generic ring buffer.
 ///
 /// This class is thread safe when used from one reader thread and one writer thread (single producer, single consumer model).
-///
-/// The read and write routines were originally based on JACK's ringbuffer implementation.
-class SFBRingBuffer
+class RingBuffer
 {
 
 public:
 
 #pragma mark Creation and Destruction
 
-	/// Creates a new @c SFBRingBuffer
+	/// Creates a new @c RingBuffer
 	/// @note @c Allocate() must be called before the object may be used.
-	SFBRingBuffer() noexcept;
+	RingBuffer() noexcept;
 
 	// This class is non-copyable
-	SFBRingBuffer(const SFBRingBuffer& rhs) = delete;
+	RingBuffer(const RingBuffer& rhs) = delete;
 
 	// This class is non-assignable
-	SFBRingBuffer& operator=(const SFBRingBuffer& rhs) = delete;
+	RingBuffer& operator=(const RingBuffer& rhs) = delete;
 
-	/// Destroys the @c SFBRingBuffer and release all associated resources.
-	~SFBRingBuffer();
+	/// Destroys the @c RingBuffer and release all associated resources.
+	~RingBuffer();
 
 	// This class is non-movable
-	SFBRingBuffer(SFBRingBuffer&& rhs) = delete;
+	RingBuffer(RingBuffer&& rhs) = delete;
 
 	// This class is non-move assignable
-	SFBRingBuffer& operator=(SFBRingBuffer&& rhs) = delete;
+	RingBuffer& operator=(RingBuffer&& rhs) = delete;
 
 #pragma mark Buffer management
 
@@ -47,17 +47,17 @@ public:
 	/// @return @c true on success, @c false on error
 	bool Allocate(size_t byteCount) noexcept;
 
-	/// Frees the resources used by this @c SFBRingBuffer
+	/// Frees the resources used by this @c RingBuffer
 	/// @note This method is not thread safe.
 	void Deallocate() noexcept;
 
 
-	/// Resets this @c SFBRingBuffer to its default state.
+	/// Resets this @c RingBuffer to its default state.
 	/// @note This method is not thread safe.
 	void Reset() noexcept;
 
 
-	/// Returns the capacity of this SFBRingBuffer in bytes
+	/// Returns the capacity of this RingBuffer in bytes
 	inline size_t CapacityBytes() const noexcept
 	{
 		return mCapacityBytes;
@@ -71,19 +71,19 @@ public:
 
 #pragma mark Reading and writing data
 
-	/// Read data from the @c SFBRingBuffer, advancing the read pointer.
+	/// Read data from the @c RingBuffer, advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
 	/// @return The number of bytes actually read
 	size_t Read(void * const _Nonnull destinationBuffer, size_t byteCount) noexcept;
 
-	/// Read data from the @c SFBRingBuffer without advancing the read pointer.
+	/// Read data from the @c RingBuffer without advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
 	/// @return The number of bytes actually read
 	size_t Peek(void * const _Nonnull destinationBuffer, size_t byteCount) const noexcept;
 
-	/// Write data to the @c SFBRingBuffer, advancing the write pointer.
+	/// Write data to the @c RingBuffer, advancing the write pointer.
 	/// @param sourceBuffer An address containing the data to copy
 	/// @param byteCount The desired number of frames to write
 	/// @return The number of bytes actually written
@@ -142,3 +142,5 @@ private:
 	std::atomic_size_t mReadPosition;
 
 };
+
+} // namespace SFB

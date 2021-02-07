@@ -11,36 +11,36 @@
 
 #import "SFBAudioStreamBasicDescription.hpp"
 
+namespace SFB {
+
 /// A ring buffer supporting non-interleaved audio.
 ///
 /// This class is thread safe when used from one reader thread and one writer thread (single producer, single consumer model).
-///
-/// The read and write routines were originally based on JACK's ringbuffer implementation.
-class SFBAudioRingBuffer
+class AudioRingBuffer
 {
 
 public:
-	
+
 #pragma mark Creation and Destruction
 
-	/// Creates a new @c SFBAudioRingBuffer
+	/// Creates a new @c AudioRingBuffer
 	/// @note @c Allocate() must be called before the object may be used.
-	SFBAudioRingBuffer() noexcept;
+	AudioRingBuffer() noexcept;
 
 	// This class is non-copyable
-	SFBAudioRingBuffer(const SFBAudioRingBuffer& rhs) = delete;
+	AudioRingBuffer(const AudioRingBuffer& rhs) = delete;
 
 	// This class is non-assignable
-	SFBAudioRingBuffer& operator=(const SFBAudioRingBuffer& rhs) = delete;
+	AudioRingBuffer& operator=(const AudioRingBuffer& rhs) = delete;
 
-	/// Destroys the @c SFBAudioRingBuffer and release all associated resources.
-	~SFBAudioRingBuffer();
+	/// Destroys the @c AudioRingBuffer and release all associated resources.
+	~AudioRingBuffer();
 
 	// This class is non-movable
-	SFBAudioRingBuffer(SFBAudioRingBuffer&& rhs) = delete;
+	AudioRingBuffer(AudioRingBuffer&& rhs) = delete;
 
 	// This class is non-move assignable
-	SFBAudioRingBuffer& operator=(SFBAudioRingBuffer&& rhs) = delete;
+	AudioRingBuffer& operator=(AudioRingBuffer&& rhs) = delete;
 
 #pragma mark Buffer management
 
@@ -53,23 +53,23 @@ public:
 	/// @return @c true on success, @c false on error
 	bool Allocate(const SFBAudioStreamBasicDescription& format, size_t capacityFrames) noexcept;
 
-	/// Frees the resources used by this @c SFBAudioRingBuffer
+	/// Frees the resources used by this @c AudioRingBuffer
 	/// @note This method is not thread safe.
 	void Deallocate() noexcept;
 
 
-	/// Resets this @c SFBAudioRingBuffer to its default state.
+	/// Resets this @c AudioRingBuffer to its default state.
 	/// @note This method is not thread safe.
 	void Reset() noexcept;
 
 
-	/// Returns the capacity in frames of this @c SFBAudioRingBuffer
+	/// Returns the capacity in frames of this @c AudioRingBuffer
 	inline size_t CapacityFrames() const noexcept
 	{
 		return mCapacityFrames;
 	}
 
-	/// Returns the format of this @c SFBAudioRingBuffer
+	/// Returns the format of this @c AudioRingBuffer
 	inline const SFBAudioStreamBasicDescription& Format() const noexcept
 	{
 		return mFormat;
@@ -83,13 +83,13 @@ public:
 
 #pragma mark Reading and writing audio
 
-	/// Reads audio from the @c SFBAudioRingBuffer and advances the read pointer.
+	/// Reads audio from the @c AudioRingBuffer and advances the read pointer.
 	/// @param bufferList An @c AudioBufferList to receive the audio
 	/// @param frameCount The desired number of frames to read
 	/// @return The number of frames actually read
 	size_t Read(AudioBufferList * const _Nonnull bufferList, size_t frameCount) noexcept;
 
-	/// Writes audio to the @c SFBAudioRingBuffer and advances the write pointer.
+	/// Writes audio to the @c AudioRingBuffer and advances the write pointer.
 	/// @param bufferList An @c AudioBufferList containing the audio to copy
 	/// @param frameCount The desired number of frames to write
 	/// @return The number of frames actually written
@@ -115,3 +115,5 @@ private:
 	std::atomic_size_t mReadPointer;
 
 };
+
+} // namespace SFB

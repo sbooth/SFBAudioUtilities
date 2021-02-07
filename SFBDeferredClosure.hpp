@@ -5,6 +5,8 @@
 
 #pragma once
 
+namespace SFB {
+
 /// A class that calls a closure upon destruction.
 ///
 /// This allows similar functionality to @c defer  in Swift and Go.
@@ -19,36 +21,36 @@
 ///     auto result = ExtAudioFileDispose(eaf);
 ///     assert(result == noErr);
 /// };
-/// SFBDeferredClosure<decltype(lambda)> cleanup(lambda);
+/// SFB::DeferredClosure<decltype(lambda)> cleanup(lambda);
 /// @endcode
 template <typename F>
-class SFBDeferredClosure
+class DeferredClosure
 {
 
 public:
 
-	/// Creates a new @c SFBDeferredClosure executing @c closure when the destructor is called
-	inline SFBDeferredClosure(const F& closure) noexcept
+	/// Creates a new @c DeferredClosure executing @c closure when the destructor is called
+	inline DeferredClosure(const F& closure) noexcept
 	: mClosure(closure)
 	{}
 
 	// This class is non-copyable
-	SFBDeferredClosure(const SFBDeferredClosure& rhs) = delete;
+	DeferredClosure(const DeferredClosure& rhs) = delete;
 
 	// This class is non-assignable
-	SFBDeferredClosure& operator=(const SFBDeferredClosure& rhs) = delete;
+	DeferredClosure& operator=(const DeferredClosure& rhs) = delete;
 
 	/// Executes the closure
-	inline ~SFBDeferredClosure()
+	inline ~DeferredClosure()
 	{
 		mClosure();
 	}
 
 	// This class is non-movable
-	SFBDeferredClosure(const SFBDeferredClosure&& rhs) = delete;
+	DeferredClosure(const DeferredClosure&& rhs) = delete;
 
 	// This class is non-move assignable
-	SFBDeferredClosure& operator=(const SFBDeferredClosure&& rhs) = delete;
+	DeferredClosure& operator=(const DeferredClosure&& rhs) = delete;
 
 private:
 
@@ -56,3 +58,5 @@ private:
 	const F& mClosure;
 
 };
+
+} // namespace SFB

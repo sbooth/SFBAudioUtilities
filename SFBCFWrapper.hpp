@@ -12,26 +12,28 @@
 #import <Security/Security.h>
 #endif
 
-/// A wrapper around a Core Foundation object
+namespace SFB {
+
+/// A wrapper around a Core Foundation object.
 ///
-/// @c SFBCFWrapper simplifies the use of CFTypes in C++ by wrapping a CF object, ensuring
-/// @c CFRelease will be called when the @c SFBCFWrapper goes out of scope.
+/// @c CFWrapper simplifies the use of CFTypes in C++ by wrapping a CF object, ensuring
+/// @c CFRelease will be called when the @c CFWrapper goes out of scope.
 /// @tparam T A @c CFType
 template <typename T>
-class SFBCFWrapper
+class CFWrapper
 {
-	
+
 public:
 
 #pragma mark Creation and Destruction
 
-	/// Creates a new @c SFBCFWrapper
-	inline SFBCFWrapper()
-	: SFBCFWrapper(nullptr)
+	/// Creates a new @c CFWrapper
+	inline CFWrapper()
+	: CFWrapper(nullptr)
 	{}
 
-	/// Creates a new @c SFBCFWrapper
-	SFBCFWrapper(const SFBCFWrapper& rhs)
+	/// Creates a new @c CFWrapper
+	CFWrapper(const CFWrapper& rhs)
 	: mObject(rhs.mObject), mRelease(rhs.mRelease)
 	{
 		if(mObject && mRelease)
@@ -39,7 +41,7 @@ public:
 	}
 
 	/// Replaces the wrapped object
-	SFBCFWrapper& operator=(const SFBCFWrapper& rhs)
+	CFWrapper& operator=(const CFWrapper& rhs)
 	{
 		if(mObject != rhs.mObject) {
 			if(mObject && mRelease)
@@ -55,23 +57,23 @@ public:
 		return *this;
 	}
 
-	/// Destroys this @c SFBCFWrapper and ensure @c CFRelease() is called if necessary
-	~SFBCFWrapper()
+	/// Destroys this @c CFWrapper and ensure @c CFRelease() is called if necessary
+	~CFWrapper()
 	{
 		if(mObject && mRelease)
 			CFRelease(mObject);
 		mObject = nullptr;
 	}
 
-	/// Creates a new @c SFBCFWrapper
-	SFBCFWrapper(SFBCFWrapper&& rhs)
+	/// Creates a new @c CFWrapper
+	CFWrapper(CFWrapper&& rhs)
 	: mObject(rhs.mObject), mRelease(rhs.mRelease)
 	{
 		rhs.mObject = nullptr;
 	}
 
 	/// Replaces the wrapped object
-	SFBCFWrapper& operator=(SFBCFWrapper&& rhs)
+	CFWrapper& operator=(CFWrapper&& rhs)
 	{
 		if(mObject != rhs.mObject) {
 			if(mObject && mRelease)
@@ -87,26 +89,26 @@ public:
 	}
 
 
-	/// Create a new @c SFBCFWrapper
-	/// @note The @c SFBCFWrapper takes ownership of @c object
+	/// Create a new @c CFWrapper
+	/// @note The @c CFWrapper takes ownership of @c object
 	/// @param object The object to wrap
-	inline explicit SFBCFWrapper(T object)
-	: SFBCFWrapper(object, true)
+	inline explicit CFWrapper(T object)
+	: CFWrapper(object, true)
 	{}
 
-	/// Creates a new @c SFBCFWrapper
+	/// Creates a new @c CFWrapper
 	/// @param object The object to wrap
-	/// @param release Whether this @c SFBCFWrapper should take ownership of @c object
-	SFBCFWrapper(T object, bool release)
+	/// @param release Whether this @c CFWrapper should take ownership of @c object
+	CFWrapper(T object, bool release)
 	: mObject(object), mRelease(release)
 	{}
 
 #pragma mark Assignment
 
 	/// Replaces the wrapped object
-	/// @note The @c SFBCFWrapper takes ownership of @c rhs
+	/// @note The @c CFWrapper takes ownership of @c rhs
 	/// @param rhs The object to wrap
-	SFBCFWrapper& operator=(const T& rhs)
+	CFWrapper& operator=(const T& rhs)
 	{
 		if(mObject != rhs) {
 			if(mObject && mRelease)
@@ -132,8 +134,8 @@ public:
 
 #pragma mark Equality testing
 
-	/// Tests two @c SFBCFWrapper objects for equality using @c CFEqual()
-	inline bool operator==(const SFBCFWrapper& rhs) const
+	/// Tests two @c CFWrapper objects for equality using @c CFEqual()
+	inline bool operator==(const CFWrapper& rhs) const
 	{
 		if(mObject == rhs.mObject)
 			return true;
@@ -145,13 +147,13 @@ public:
 		return CFEqual(mObject, rhs.mObject);
 	}
 
-	/// Tests two @c SFBCFWrapper objects for inequality
-	inline bool operator!=(const SFBCFWrapper& rhs) const
+	/// Tests two @c CFWrapper objects for inequality
+	inline bool operator!=(const CFWrapper& rhs) const
 	{
 		return !operator==(rhs);
 	}
 
-#pragma mark CoreFoundation object access
+#pragma mark Core Foundation object access
 
 	/// Returns @c true if the wrapped object is not @c nullptr
 	inline explicit operator bool() const
@@ -185,18 +187,18 @@ public:
 		return mObject;
 	}
 
-#pragma mark CoreFoundation object creation
+#pragma mark Core Foundation object creation
 
 	/// Creates a new wrapped @c CFStringRef using @c CFStringCreateWithCString with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
-	SFBCFWrapper(const char *cStr, CFStringEncoding encoding)
-	: SFBCFWrapper(CFStringCreateWithCString(kCFAllocatorDefault, cStr, encoding))
+	CFWrapper(const char *cStr, CFStringEncoding encoding)
+	: CFWrapper(CFStringCreateWithCString(kCFAllocatorDefault, cStr, encoding))
 	{}
 
 	/// Creates a new wrapped @c CFStringRef using @c CFStringCreateWithFormatAndArguments with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
-	SFBCFWrapper(CFDictionaryRef formatOptions, CFStringRef format, ...) CF_FORMAT_FUNCTION(3,4)
-	: SFBCFWrapper()
+	CFWrapper(CFDictionaryRef formatOptions, CFStringRef format, ...) CF_FORMAT_FUNCTION(3,4)
+	: CFWrapper()
 	{
 		va_list ap;
 		va_start(ap, format);
@@ -206,38 +208,38 @@ public:
 
 	/// Creates a new wrapped @c CFNumberRef using @c CFNumberCreate with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFNumberRef>::value>>
-	SFBCFWrapper(CFNumberType theType, const void *valuePtr)
-	: SFBCFWrapper(CFNumberCreate(kCFAllocatorDefault, theType, valuePtr))
+	CFWrapper(CFNumberType theType, const void *valuePtr)
+	: CFWrapper(CFNumberCreate(kCFAllocatorDefault, theType, valuePtr))
 	{}
 
 	/// Creates a new wrapped @c CFArrayRef using @c CFArrayCreate with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFArrayRef>::value>>
-	SFBCFWrapper(const void **values, CFIndex numValues, const CFArrayCallBacks *callBacks)
-	: SFBCFWrapper(CFArrayCreate(kCFAllocatorDefault, values, numValues, callBacks))
+	CFWrapper(const void **values, CFIndex numValues, const CFArrayCallBacks *callBacks)
+	: CFWrapper(CFArrayCreate(kCFAllocatorDefault, values, numValues, callBacks))
 	{}
 
 	/// Creates a new wrapped @c CFMutableArrayRef using @c CFArrayCreateMutable with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFMutableArrayRef>::value>>
-	SFBCFWrapper(CFIndex capacity, const CFArrayCallBacks *callBacks)
-	: SFBCFWrapper(CFArrayCreateMutable(kCFAllocatorDefault, capacity, callBacks))
+	CFWrapper(CFIndex capacity, const CFArrayCallBacks *callBacks)
+	: CFWrapper(CFArrayCreateMutable(kCFAllocatorDefault, capacity, callBacks))
 	{}
 
 	/// Creates a new wrapped @c CFDictionaryRef using @c CFDictionaryCreate with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFDictionaryRef>::value>>
-	SFBCFWrapper(const void **keys, const void **values, CFIndex numValues, const CFDictionaryKeyCallBacks *keyCallBacks, const CFDictionaryValueCallBacks *valueCallBacks)
-	: SFBCFWrapper(CFDictionaryCreate(kCFAllocatorDefault, keys, values, numValues, keyCallBacks, valueCallBacks))
+	CFWrapper(const void **keys, const void **values, CFIndex numValues, const CFDictionaryKeyCallBacks *keyCallBacks, const CFDictionaryValueCallBacks *valueCallBacks)
+	: CFWrapper(CFDictionaryCreate(kCFAllocatorDefault, keys, values, numValues, keyCallBacks, valueCallBacks))
 	{}
 
 	/// Creates a new wrapped @c CFMutableDictionaryRef using @c CFDictionaryCreateMutable with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFMutableDictionaryRef>::value>>
-	SFBCFWrapper(CFIndex capacity, const CFDictionaryKeyCallBacks *keyCallBacks, const CFDictionaryValueCallBacks *valueCallBacks)
-	: SFBCFWrapper(CFDictionaryCreateMutable(kCFAllocatorDefault, capacity, keyCallBacks, valueCallBacks))
+	CFWrapper(CFIndex capacity, const CFDictionaryKeyCallBacks *keyCallBacks, const CFDictionaryValueCallBacks *valueCallBacks)
+	: CFWrapper(CFDictionaryCreateMutable(kCFAllocatorDefault, capacity, keyCallBacks, valueCallBacks))
 	{}
 
 	/// Creates a new wrapped @c CFDataRef using @c CFDataCreate with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFDataRef>::value>>
-	SFBCFWrapper(const UInt8 *bytes, CFIndex length)
-	: SFBCFWrapper(CFDataCreate(kCFAllocatorDefault, bytes, length))
+	CFWrapper(const UInt8 *bytes, CFIndex length)
+	: CFWrapper(CFDataCreate(kCFAllocatorDefault, bytes, length))
 	{}
 
 private:
@@ -249,74 +251,75 @@ private:
 
 };
 
-// ========================================
-// Typedefs for common CoreFoundation types
+#pragma mark Typedefs for common CF types
 
 /// A wrapped @c CFTypeRef
-using SFBCFType = SFBCFWrapper<CFTypeRef>;
+using CFType = CFWrapper<CFTypeRef>;
 /// A wrapped @c CFDataRef
-using SFBCFData = SFBCFWrapper<CFDataRef>;
+using CFData = CFWrapper<CFDataRef>;
 /// A wrapped @c CFMutableDataRef
-using SFBCFMutableData = SFBCFWrapper<CFMutableDataRef>;
+using CFMutableData = CFWrapper<CFMutableDataRef>;
 /// A wrapped @c CFStringRef
-using SFBCFString = SFBCFWrapper<CFStringRef>;
+using CFString = CFWrapper<CFStringRef>;
 /// A wrapped @c CFMutableStringRef
-using SFBCFMutableString = SFBCFWrapper<CFMutableStringRef>;
+using CFMutableString = CFWrapper<CFMutableStringRef>;
 /// A wrapped @c CFAttributedStringRef
-using SFBCFAttributedString = SFBCFWrapper<CFAttributedStringRef>;
+using CFAttributedString = CFWrapper<CFAttributedStringRef>;
 /// A wrapped @c CFMutableAttributedStringRef
-using SFBCFMutableAttributedString = SFBCFWrapper<CFMutableAttributedStringRef>;
+using CFMutableAttributedString = CFWrapper<CFMutableAttributedStringRef>;
 /// A wrapped @c CFDictionaryRef
-using SFBCFDictionary = SFBCFWrapper<CFDictionaryRef>;
+using CFDictionary = CFWrapper<CFDictionaryRef>;
 /// A wrapped @c CFMutableDictionaryRef
-using SFBCFMutableDictionary = SFBCFWrapper<CFMutableDictionaryRef>;
+using CFMutableDictionary = CFWrapper<CFMutableDictionaryRef>;
 /// A wrapped @c CFArrayRef
-using SFBCFArray = SFBCFWrapper<CFArrayRef>;
+using CFArray = CFWrapper<CFArrayRef>;
 /// A wrapped @c CFMutableArrayRef
-using SFBCFMutableArray = SFBCFWrapper<CFMutableArrayRef>;
+using CFMutableArray = CFWrapper<CFMutableArrayRef>;
 /// A wrapped @c CFSetRef
-using SFBCFSet = SFBCFWrapper<CFSetRef>;
+using CFSet = CFWrapper<CFSetRef>;
 /// A wrapped @c CFMutableSetRef
-using SFBCFMutableSet = SFBCFWrapper<CFMutableSetRef>;
+using CFMutableSet = CFWrapper<CFMutableSetRef>;
 /// A wrapped @c CFBagRef
-using SFBCFBag = SFBCFWrapper<CFBagRef>;
+using CFBag = CFWrapper<CFBagRef>;
 /// A wrapped @c CFMutableBagRef
-using SFBCFMutableBag = SFBCFWrapper<CFMutableBagRef>;
+using CFMutableBag = CFWrapper<CFMutableBagRef>;
 /// A wrapped @c CFPropertyListRef
-using SFBCFPropertyList = SFBCFWrapper<CFPropertyListRef>;
+using CFPropertyList = CFWrapper<CFPropertyListRef>;
 /// A wrapped @c CFBitVectorRef
-using SFBCFBitVector = SFBCFWrapper<CFBitVectorRef>;
+using CFBitVector = CFWrapper<CFBitVectorRef>;
 /// A wrapped @c CFMutableBitVectorRef
-using SFBCFMutableBitVector = SFBCFWrapper<CFMutableBitVectorRef>;
+using CFMutableBitVector = CFWrapper<CFMutableBitVectorRef>;
 /// A wrapped @c CFCharacterSetRef
-using SFBCFCharacterSet = SFBCFWrapper<CFCharacterSetRef>;
+using CFCharacterSet = CFWrapper<CFCharacterSetRef>;
 /// A wrapped @c CFMutableCharacterSetRef
-using SFBCFMutableCharacterSet = SFBCFWrapper<CFMutableCharacterSetRef>;
+using CFMutableCharacterSet = CFWrapper<CFMutableCharacterSetRef>;
 /// A wrapped @c CFURLRef
-using SFBCFURL = SFBCFWrapper<CFURLRef>;
+using CFURL = CFWrapper<CFURLRef>;
 /// A wrapped @c CFUUIDRef
-using SFBCFUUID = SFBCFWrapper<CFUUIDRef>;
+using CFUUID = CFWrapper<CFUUIDRef>;
 /// A wrapped @c CFNumberRef
-using SFBCFNumber = SFBCFWrapper<CFNumberRef>;
+using CFNumber = CFWrapper<CFNumberRef>;
 /// A wrapped @c CFBooleanRef
-using SFBCFBoolean = SFBCFWrapper<CFBooleanRef>;
+using CFBoolean = CFWrapper<CFBooleanRef>;
 /// A wrapped @c CFErrorRef
-using SFBCFError = SFBCFWrapper<CFErrorRef>;
+using CFError = CFWrapper<CFErrorRef>;
 /// A wrapped @c CFDateRef
-using SFBCFDate = SFBCFWrapper<CFDateRef>;
+using CFDate = CFWrapper<CFDateRef>;
 /// A wrapped @c CFReadStreamRef
-using SFBCFReadStream = SFBCFWrapper<CFReadStreamRef>;
+using CFReadStream = CFWrapper<CFReadStreamRef>;
 /// A wrapped @c CFWriteStreamRef
-using SFBCFWriteStream = SFBCFWrapper<CFWriteStreamRef>;
+using CFWriteStream = CFWrapper<CFWriteStreamRef>;
 /// A wrapped @c CFHTTPMessageRef
-using SFBCFHTTPMessage = SFBCFWrapper<CFHTTPMessageRef>;
+using CFHTTPMessage = CFWrapper<CFHTTPMessageRef>;
 #if !TARGET_OS_IPHONE
 /// A wrapped @c SecKeychainItemRef
-using SFBSecKeychainItem = SFBCFWrapper<SecKeychainItemRef>;
+using SecKeychainItem = CFWrapper<SecKeychainItemRef>;
 /// A wrapped @c SecCertificateRef
-using SFBSecCertificate = SFBCFWrapper<SecCertificateRef>;
+using SecCertificate = CFWrapper<SecCertificateRef>;
 /// A wrapped @c SecTransformRef
-using SFBSecTransform = SFBCFWrapper<SecTransformRef>;
+using SecTransform = CFWrapper<SecTransformRef>;
 /// A wrapped @c CGImageSourceRef
-using SFBCGImageSource = SFBCFWrapper<CGImageSourceRef>;
+using CGImageSource = CFWrapper<CGImageSourceRef>;
 #endif
+
+} // namespace SFB

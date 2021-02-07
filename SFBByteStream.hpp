@@ -9,27 +9,29 @@
 #import <stdexcept>
 #import <type_traits>
 
-/// A @c SFBByteStream provides heterogeneous typed access to an untyped buffer.
-class SFBByteStream
+namespace SFB {
+
+/// A @c ByteStream provides heterogeneous typed access to an untyped buffer.
+class ByteStream
 {
 
 public:
 
-	/// Creates an empty @c SFBByteStream
-	SFBByteStream() noexcept
+	/// Creates an empty @c ByteStream
+	ByteStream() noexcept
 	: mBuffer(nullptr), mBufferLength(0), mReadPosition(0)
 	{}
 
-	/// Initializes a @c SFBByteStream object with the same buffer, length, and read position as @c rhs
+	/// Initializes a @c ByteStream object with the same buffer, length, and read position as @c rhs
 	/// @param rhs The object to copy
-	SFBByteStream(const SFBByteStream& rhs) noexcept
+	ByteStream(const ByteStream& rhs) noexcept
 	: mBuffer(rhs.mBuffer), mBufferLength(rhs.mBufferLength), mReadPosition(rhs.mReadPosition)
 	{}
 
 	/// Sets the buffer, length, and read position to those of @c rhs
 	/// @param rhs The object to copy
 	/// @return A reference to @c this
-	SFBByteStream& operator=(const SFBByteStream& rhs) noexcept
+	ByteStream& operator=(const ByteStream& rhs) noexcept
 	{
 		if(this != &rhs) {
 			mBuffer = rhs.mBuffer;
@@ -40,10 +42,10 @@ public:
 	}
 
 	/// Destructor
-	~SFBByteStream() = default;
+	~ByteStream() = default;
 
 	/// Move constructor
-	SFBByteStream(SFBByteStream&& rhs) noexcept
+	ByteStream(ByteStream&& rhs) noexcept
 	: mBuffer(rhs.mBuffer), mBufferLength(rhs.mBufferLength), mReadPosition(rhs.mReadPosition)
 	{
 		rhs.mBuffer = nullptr;
@@ -52,7 +54,7 @@ public:
 	}
 
 	/// Move assignment operator
-	SFBByteStream& operator=(SFBByteStream&& rhs) noexcept
+	ByteStream& operator=(ByteStream&& rhs) noexcept
 	{
 		if(this != &rhs) {
 			mBuffer = rhs.mBuffer;
@@ -67,11 +69,11 @@ public:
 	}
 
 
-	/// Initializes a @c SFBByteStream object with the specified buffer and length and sets the read position to @c 0
+	/// Initializes a @c ByteStream object with the specified buffer and length and sets the read position to @c 0
 	/// @param buf The buffer providing the data
 	/// @param len The length of @c buf in bytes
 	/// @throw @c std::invalid_argument if @c buf==nullptr and @c len>0
-	SFBByteStream(const void * const _Nullable buf, size_t len)
+	ByteStream(const void * const _Nullable buf, size_t len)
 	: mBuffer(buf), mBufferLength(len), mReadPosition(0)
 	{
 		if(!mBuffer && len > 0)
@@ -79,20 +81,20 @@ public:
 	}
 
 
-	/// Compares to @c SFBByteStream objects for equality
-	/// Two @c SFBByteStream objects are equal if they have the same buffer, length, and read position
+	/// Compares to @c ByteStream objects for equality
+	/// Two @c ByteStream objects are equal if they have the same buffer, length, and read position
 	/// @param rhs The object to compare
 	/// @return @c true if the objects are equal, @c false otherwise
-	bool operator==(const SFBByteStream& rhs) noexcept
+	bool operator==(const ByteStream& rhs) noexcept
 	{
 		return mBuffer == rhs.mBuffer && mBufferLength == rhs.mBufferLength && mReadPosition == rhs.mReadPosition;
 	}
 
-	/// Compares to @c SFBByteStream objects for inequality
-	/// Two @c SFBByteStream objects are equal if they have the same buffer, length, and read position
+	/// Compares to @c ByteStream objects for inequality
+	/// Two @c ByteStream objects are equal if they have the same buffer, length, and read position
 	/// @param rhs The object to compare
 	/// @return @c true if the objects are not equal, @c false otherwise
-	bool operator!=(const SFBByteStream& rhs) noexcept
+	bool operator!=(const ByteStream& rhs) noexcept
 	{
 		return mBuffer != rhs.mBuffer || mBufferLength != rhs.mBufferLength || mReadPosition != rhs.mReadPosition;
 	}
@@ -292,3 +294,5 @@ private:
 	size_t mReadPosition;
 
 };
+
+} // namespace SFB
