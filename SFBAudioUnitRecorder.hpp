@@ -11,41 +11,43 @@
 
 #import <AudioToolbox/AudioUnit.h>
 
-#import "SFBExtAudioFile.hpp"
+#import "SFBCAExtAudioFile.hpp"
 
 CF_ASSUME_NONNULL_BEGIN
 
+namespace SFB {
+
 /// A class that asynchronously writes the output from an @c AudioUnit to a file
-class SFBAudioUnitRecorder
+class AudioUnitRecorder
 {
 
 public:
 
 	/// Default constructor
-	SFBAudioUnitRecorder() noexcept = delete;
+	AudioUnitRecorder() noexcept = delete;
 
 	/// Copy constructor
-	SFBAudioUnitRecorder(const SFBAudioUnitRecorder& rhs) noexcept = delete;
+	AudioUnitRecorder(const AudioUnitRecorder& rhs) noexcept = delete;
 
 	/// Assignment operator
-	SFBAudioUnitRecorder& operator=(const SFBAudioUnitRecorder& rhs) noexcept = delete;
+	AudioUnitRecorder& operator=(const AudioUnitRecorder& rhs) noexcept = delete;
 
 	/// Destructor
-	~SFBAudioUnitRecorder() = default;
+	~AudioUnitRecorder() = default;
 
 	/// Move constructor
-	SFBAudioUnitRecorder(SFBAudioUnitRecorder&& rhs) noexcept = delete;
+	AudioUnitRecorder(AudioUnitRecorder&& rhs) noexcept = delete;
 
 	/// Move assignment operator
-	SFBAudioUnitRecorder& operator=(SFBAudioUnitRecorder&& rhs) noexcept = delete;
+	AudioUnitRecorder& operator=(AudioUnitRecorder&& rhs) noexcept = delete;
 
-	/// Creates a new @c SFBAudioUnitRecorder that asynchronously writes the output from an @c AudioUnit to a file
+	/// Creates a new @c AudioUnitRecorder that asynchronously writes the output from an @c AudioUnit to a file
 	/// @param au The @c AudioUnit to record
 	/// @param outputFileURL The URL of the output audio file
 	/// @param fileType The type of the file to create
 	/// @param format The format of the audio data to be written to the file
 	/// @param busNumber The bus number of @c au to record
-	SFBAudioUnitRecorder(AudioUnit au, CFURLRef outputFileURL, AudioFileTypeID fileType, const AudioStreamBasicDescription& format, UInt32 busNumber = 0)
+	AudioUnitRecorder(AudioUnit au, CFURLRef outputFileURL, AudioFileTypeID fileType, const AudioStreamBasicDescription& format, UInt32 busNumber = 0)
 	: mClientFormatIsSet(false), mAudioUnit(au), mBusNumber(busNumber)
 	{
 		if(!au)
@@ -83,7 +85,7 @@ private:
 	/// Asynchronously writes rendered audio to the file
 	static OSStatus RenderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 	{
-		SFBAudioUnitRecorder *THIS = static_cast<SFBAudioUnitRecorder *>(inRefCon);
+		AudioUnitRecorder *THIS = static_cast<AudioUnitRecorder *>(inRefCon);
 		if(*ioActionFlags & kAudioUnitRenderAction_PostRender) {
 			if(THIS->mBusNumber == inBusNumber && !(*ioActionFlags & kAudioUnitRenderAction_PostRenderError)) {
 				try {
@@ -98,7 +100,7 @@ private:
 	}
 
 	/// The underlying @c ExtAudioFile
-	SFBExtAudioFile mExtAudioFile;
+	CAExtAudioFile mExtAudioFile;
 	/// @c true if the @c ExtAudioFile client format is set
 	bool mClientFormatIsSet;
 	/// The @c AudioUnit to record
@@ -107,5 +109,7 @@ private:
 	UInt32 mBusNumber;
 
 };
+
+} // namespace SFB
 
 CF_ASSUME_NONNULL_END
