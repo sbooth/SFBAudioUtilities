@@ -7,7 +7,7 @@
 
 #import "SFBAudioStreamBasicDescription.hpp"
 
-SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
+SFB::CAStreamBasicDescription::CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
 : AudioStreamBasicDescription{}
 {
 //	if(sampleRate < 0)
@@ -16,22 +16,22 @@ SFBAudioStreamBasicDescription::SFBAudioStreamBasicDescription(SFBCommonPCMForma
 //		throw std::invalid_argument("channelsPerFrame < 0");
 
 	switch(commonPCMFormat) {
-		case SFBCommonPCMFormat::float32:
+		case CommonPCMFormat::float32:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;
-		case SFBCommonPCMFormat::float64:
+		case CommonPCMFormat::float64:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 64, 64, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;
-		case SFBCommonPCMFormat::int16:
+		case CommonPCMFormat::int16:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 16, 16, false, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;
-		case SFBCommonPCMFormat::int32:
+		case CommonPCMFormat::int32:
 			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, false, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
 			break;
 	}
 }
 
-bool SFBAudioStreamBasicDescription::GetNonInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept
+bool SFB::CAStreamBasicDescription::GetNonInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept
 {
 	if(!IsPCM())
 		return false;
@@ -47,7 +47,7 @@ bool SFBAudioStreamBasicDescription::GetNonInterleavedEquivalent(SFBAudioStreamB
 	return true;
 }
 
-bool SFBAudioStreamBasicDescription::GetInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept
+bool SFB::CAStreamBasicDescription::GetInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept
 {
 	if(!IsPCM())
 		return false;
@@ -63,7 +63,7 @@ bool SFBAudioStreamBasicDescription::GetInterleavedEquivalent(SFBAudioStreamBasi
 	return true;
 }
 
-bool SFBAudioStreamBasicDescription::GetStandardEquivalent(SFBAudioStreamBasicDescription& format) const noexcept
+bool SFB::CAStreamBasicDescription::GetStandardEquivalent(CAStreamBasicDescription& format) const noexcept
 {
 	if(!IsPCM())
 		return false;
@@ -74,9 +74,9 @@ bool SFBAudioStreamBasicDescription::GetStandardEquivalent(SFBAudioStreamBasicDe
 }
 
 // Most of this is stolen from Apple's CAStreamBasicDescription::Print()
-SFBCFString SFBAudioStreamBasicDescription::Description(const char * const prefix) const noexcept
+SFB::CFString SFB::CAStreamBasicDescription::Description(const char * const prefix) const noexcept
 {
-	SFBCFMutableString result{ CFStringCreateMutable(kCFAllocatorDefault, 0) };
+	CFMutableString result{ CFStringCreateMutable(kCFAllocatorDefault, 0) };
 
 	if(prefix)
 		CFStringAppendCString(result, prefix, kCFStringEncodingUTF8);
@@ -142,5 +142,5 @@ SFBCFString SFBAudioStreamBasicDescription::Description(const char * const prefi
 	else
 		CFStringAppendFormat(result, NULL, CFSTR("%u bits/channel, %u bytes/packet, %u frames/packet, %u bytes/frame"), mBitsPerChannel, mBytesPerPacket, mFramesPerPacket, mBytesPerFrame);
 
-	return SFBCFString(static_cast<CFStringRef>(result.Relinquish()));
+	return CFString(static_cast<CFStringRef>(result.Relinquish()));
 }

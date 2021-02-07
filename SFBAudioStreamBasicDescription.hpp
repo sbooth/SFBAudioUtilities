@@ -11,8 +11,10 @@
 
 #import "SFBCFWrapper.hpp"
 
+namespace SFB {
+
 /// Common PCM audio formats
-enum class SFBCommonPCMFormat {
+enum class CommonPCMFormat {
 	/// Native-endian @c float
 	float32,
 	/// Native-endian @c double
@@ -24,44 +26,44 @@ enum class SFBCommonPCMFormat {
 };
 
 /// A class extending the functionality of a Core Audio @c AudioStreamBasicDescription
-class SFBAudioStreamBasicDescription : public AudioStreamBasicDescription
+class CAStreamBasicDescription : public AudioStreamBasicDescription
 {
 
 public:
 	
 #pragma mark Creation and Destruction
 
-	/// Creates an empty @c SFBAudioStreamBasicDescription
-	SFBAudioStreamBasicDescription() noexcept = default;
+	/// Creates an empty @c CAStreamBasicDescription
+	CAStreamBasicDescription() noexcept = default;
 
 	/// Copy constructor
-	SFBAudioStreamBasicDescription(const SFBAudioStreamBasicDescription& rhs) noexcept = default;
+	CAStreamBasicDescription(const CAStreamBasicDescription& rhs) noexcept = default;
 
 	/// Assignment operator
-	SFBAudioStreamBasicDescription& operator=(const SFBAudioStreamBasicDescription& rhs) noexcept = default;
+	CAStreamBasicDescription& operator=(const CAStreamBasicDescription& rhs) noexcept = default;
 
 	/// Destructor
-	~SFBAudioStreamBasicDescription() = default;
+	~CAStreamBasicDescription() = default;
 
 	/// Move constructor
-	SFBAudioStreamBasicDescription(SFBAudioStreamBasicDescription&& rhs) noexcept = default;
+	CAStreamBasicDescription(CAStreamBasicDescription&& rhs) noexcept = default;
 
 	/// Move assignment operator
-	SFBAudioStreamBasicDescription& operator=(SFBAudioStreamBasicDescription&& rhs) noexcept = default;
+	CAStreamBasicDescription& operator=(CAStreamBasicDescription&& rhs) noexcept = default;
 
 
-	/// Creates a new @c SFBAudioStreamBasicDescription for the speciifed @c SFBCommonPCMFormat
-	SFBAudioStreamBasicDescription(SFBCommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
+	/// Creates a new @c CAStreamBasicDescription for the speciifed @c CommonPCMFormat
+	CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
 
 	// Native overloads
 
-	/// Creates a new @c SFBAudioStreamBasicDescription for the specified @c AudioStreamBasicDescription
-	inline SFBAudioStreamBasicDescription(const AudioStreamBasicDescription& rhs) noexcept
+	/// Creates a new @c CAStreamBasicDescription for the specified @c AudioStreamBasicDescription
+	inline CAStreamBasicDescription(const AudioStreamBasicDescription& rhs) noexcept
 	: AudioStreamBasicDescription{rhs}
 	{}
 
 	/// Assignment operator
-	SFBAudioStreamBasicDescription& operator=(const AudioStreamBasicDescription& rhs) noexcept
+	CAStreamBasicDescription& operator=(const AudioStreamBasicDescription& rhs) noexcept
 	{
 		AudioStreamBasicDescription::operator=(rhs);
 		return *this;
@@ -211,15 +213,15 @@ public:
 #pragma mark Format transformation
 
 	/// Sets @c format to the equivalent non-interleaved format of @c this. Fails for non-PCM formats.
-	bool GetNonInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
+	bool GetNonInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept;
 
 	/// Sets @c format to the equivalent interleaved format of @c this. Fails for non-PCM formats.
-	bool GetInterleavedEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
+	bool GetInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept;
 
 	/// Sets @c format to the equivalent standard format of @c this. Fails for non-PCM formats.
-	bool GetStandardEquivalent(SFBAudioStreamBasicDescription& format) const noexcept;
+	bool GetStandardEquivalent(CAStreamBasicDescription& format) const noexcept;
 
-	/// Resets the @c SFBAudioStreamBasicDescription to the default state
+	/// Resets the @c CAStreamBasicDescription to the default state
 	inline void Reset() noexcept
 	{
 		std::memset(this, 0, sizeof(AudioStreamBasicDescription));
@@ -227,6 +229,8 @@ public:
 
 
 	/// Returns a string representation of this format suitable for logging
-	SFBCFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
+	CFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
 
 };
+
+} // namespace SFB
