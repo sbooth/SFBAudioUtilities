@@ -104,12 +104,12 @@ public:
 		/// The capacity of @c mBuffer in bytes
 		size_t mBufferCapacity;
 
-		/// Construct an empty Buffer
+		/// Construct an empty @c Buffer
 		Buffer() noexcept
 		: Buffer(nullptr, 0)
 		{}
 
-		/// Construct a Buffer for the specified location and capacity
+		/// Construct a @c Buffer for the specified location and capacity
 		/// @param buffer The memory buffer location
 		/// @param bufferCapacity The capacity of @c buffer in bytes
 		Buffer(uint8_t * const _Nullable buffer, size_t bufferCapacity) noexcept
