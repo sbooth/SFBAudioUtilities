@@ -11,79 +11,88 @@
 
 #import "SFBCFWrapper.hpp"
 
+namespace SFB {
+
 /// Returns the size of an @c AudioChannelLayout struct
 /// @param channelLayout A pointer to an @c AudioChannelLayout struct
 /// @return The size of @c channelLayout in bytes
-size_t SFBAudioChannelLayoutSize(const AudioChannelLayout * _Nullable channelLayout) noexcept;
+size_t AudioChannelLayoutSize(const AudioChannelLayout * _Nullable channelLayout) noexcept;
 
 /// A class wrapping a Core Audio @c AudioChannelLayout
-class SFBAudioChannelLayout
+class CAChannelLayout
 {
 
 public:
 
 	/// Mono layout
-	static const SFBAudioChannelLayout Mono;
+	static const CAChannelLayout Mono;
 
 	/// Stereo layout
-	static const SFBAudioChannelLayout Stereo;
+	static const CAChannelLayout Stereo;
 
 #pragma mark Factory Methods
 
-	/// Creates a @c SFBAudioChannelLayout
+	/// Creates a @c CAChannelLayout
 	/// @param channelBitmap The channel bitmap for the channel layout
-	/// @return A @c SFBAudioChannelLayout
-	static SFBAudioChannelLayout ChannelLayoutWithBitmap(UInt32 channelBitmap);
+	/// @return A @c CAChannelLayout
+	static CAChannelLayout ChannelLayoutWithBitmap(UInt32 channelBitmap);
 
 #pragma mark Creation and Destruction
 
-	/// Creates an empty @c SFBAudioChannelLayout
-	inline SFBAudioChannelLayout() noexcept
+	/// Creates an empty @c CAChannelLayout
+	inline CAChannelLayout() noexcept
 	: mChannelLayout(nullptr)
 	{}
 
 	/// Copy constructor
-	SFBAudioChannelLayout(const SFBAudioChannelLayout& rhs);
+	CAChannelLayout(const CAChannelLayout& rhs);
 
 	/// Assignment operator
-	SFBAudioChannelLayout& operator=(const SFBAudioChannelLayout& rhs);
+	CAChannelLayout& operator=(const CAChannelLayout& rhs);
 
-	/// Destroys the @c SFBAudioChannelLayout and release all associated resources.
-	inline ~SFBAudioChannelLayout()
+	/// Destroys the @c CAChannelLayout and release all associated resources.
+	inline ~CAChannelLayout()
 	{
 		std::free(mChannelLayout);
 	}
 
 	/// Move constructor
-	SFBAudioChannelLayout(SFBAudioChannelLayout&& rhs) noexcept;
+	CAChannelLayout(CAChannelLayout&& rhs) noexcept
+	: mChannelLayout(std::move(rhs.mChannelLayout))
+	{}
 
 	/// Move assignment operator
-	SFBAudioChannelLayout& operator=(SFBAudioChannelLayout&& rhs) noexcept;
+	CAChannelLayout& operator=(CAChannelLayout&& rhs) noexcept
+	{
+		if(this != &rhs)
+			mChannelLayout = std::move(rhs.mChannelLayout);
+		return *this;
+	}
 
 
-	/// Creates a @c SFBAudioChannelLayout
+	/// Creates a @c CAChannelLayout
 	/// @param layoutTag The layout tag for the channel layout
-	SFBAudioChannelLayout(AudioChannelLayoutTag layoutTag);
+	CAChannelLayout(AudioChannelLayoutTag layoutTag);
 
-	/// Creates a @c SFBAudioChannelLayout
+	/// Creates a @c CAChannelLayout
 	/// @param channelLabels A @c std::vector of the desired channel labels
-	SFBAudioChannelLayout(std::vector<AudioChannelLabel> channelLabels);
+	CAChannelLayout(std::vector<AudioChannelLabel> channelLabels);
 
 	// Native overloads
 
-	/// Creates a new @c SFBAudioChannelLayout by performing a deep copy of @c rhs
-	SFBAudioChannelLayout(const AudioChannelLayout * _Nullable rhs);
+	/// Creates a new @c CAChannelLayout by performing a deep copy of @c rhs
+	CAChannelLayout(const AudioChannelLayout * _Nullable rhs);
 
 	/// Performs a deep copy of @c rhs
-	SFBAudioChannelLayout& operator=(const AudioChannelLayout * _Nullable rhs);
+	CAChannelLayout& operator=(const AudioChannelLayout * _Nullable rhs);
 
 #pragma mark Comparison
 
 	/// Returns @c true if @c rhs is equal to @c this
-	bool operator==(const SFBAudioChannelLayout& rhs) const noexcept;
+	bool operator==(const CAChannelLayout& rhs) const noexcept;
 
 	/// Returns @c true if @c rhs is not equal to @c this
-	inline bool operator!=(const SFBAudioChannelLayout& rhs) const noexcept
+	inline bool operator!=(const CAChannelLayout& rhs) const noexcept
 	{
 		return !operator==(rhs);
 	}
@@ -97,14 +106,14 @@ public:
 	/// @param outputLayout The output channel layout
 	/// @param channelMap A @c std::vector to receive the channel map on success
 	/// @return @c true on success, @c false otherwise
-	bool MapToLayout(const SFBAudioChannelLayout& outputLayout, std::vector<SInt32>& channelMap) const;
+	bool MapToLayout(const CAChannelLayout& outputLayout, std::vector<SInt32>& channelMap) const;
 
 #pragma mark AudioChannelLayout access
 
 	/// Returns the size in bytes of this object's internal @c AudioChannelLayout
 	inline const size_t Size() const noexcept
 	{
-		return SFBAudioChannelLayoutSize(mChannelLayout);
+		return AudioChannelLayoutSize(mChannelLayout);
 	}
 
 	/// Relinquishes ownership of the object's internal @c AudioChannelLayout and returns it
@@ -145,7 +154,7 @@ public:
 
 
 	/// Returns a string representation of this channel layout suitable for logging
-	SFBCFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
+	BCFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
 
 private:
 
@@ -153,3 +162,5 @@ private:
 	AudioChannelLayout * _Nullable mChannelLayout;
 
 };
+
+} // namespace SFB
