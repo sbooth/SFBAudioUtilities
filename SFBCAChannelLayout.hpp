@@ -154,7 +154,7 @@ public:
 
 
 	/// Returns a string representation of this channel layout suitable for logging
-	BCFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
+	CFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
 
 private:
 
