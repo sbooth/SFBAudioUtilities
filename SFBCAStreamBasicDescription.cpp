@@ -3,75 +3,7 @@
 // MIT license
 //
 
-//#import <stdexcept>
-
 #import "SFBCAStreamBasicDescription.hpp"
-
-SFB::CAStreamBasicDescription::CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float64 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
-: AudioStreamBasicDescription{}
-{
-//	if(sampleRate < 0)
-//		throw std::invalid_argument("sampleRate < 0");
-//	if(channelsPerFrame < 0)
-//		throw std::invalid_argument("channelsPerFrame < 0");
-
-	switch(commonPCMFormat) {
-		case CommonPCMFormat::float32:
-			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
-			break;
-		case CommonPCMFormat::float64:
-			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 64, 64, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
-			break;
-		case CommonPCMFormat::int16:
-			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 16, 16, false, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
-			break;
-		case CommonPCMFormat::int32:
-			FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, false, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
-			break;
-	}
-}
-
-bool SFB::CAStreamBasicDescription::GetNonInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept
-{
-	if(!IsPCM())
-		return false;
-
-	format = *this;
-
-	if(IsInterleaved()) {
-		format.mFormatFlags |= kAudioFormatFlagIsNonInterleaved;
-		format.mBytesPerPacket /= mChannelsPerFrame;
-		format.mBytesPerFrame /= mChannelsPerFrame;
-	}
-
-	return true;
-}
-
-bool SFB::CAStreamBasicDescription::GetInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept
-{
-	if(!IsPCM())
-		return false;
-
-	format = *this;
-
-	if(!IsInterleaved()) {
-		format.mFormatFlags &= ~kAudioFormatFlagIsNonInterleaved;
-		format.mBytesPerPacket *= mChannelsPerFrame;
-		format.mBytesPerFrame *= mChannelsPerFrame;
-	}
-
-	return true;
-}
-
-bool SFB::CAStreamBasicDescription::GetStandardEquivalent(CAStreamBasicDescription& format) const noexcept
-{
-	if(!IsPCM())
-		return false;
-
-	FillOutASBDForLPCM(format, mSampleRate, mChannelsPerFrame, 32, 32, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, true);
-	
-	return true;
-}
 
 // Most of this is stolen from Apple's CAStreamBasicDescription::Print()
 SFB::CFString SFB::CAStreamBasicDescription::Description(const char * const prefix) const noexcept

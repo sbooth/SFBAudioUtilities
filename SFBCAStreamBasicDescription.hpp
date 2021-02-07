@@ -53,7 +53,24 @@ public:
 
 
 	/// Creates a new @c CAStreamBasicDescription for the speciifed @c CommonPCMFormat
-	CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float64 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
+	CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float64 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
+	: AudioStreamBasicDescription{}
+	{
+		switch(commonPCMFormat) {
+			case CommonPCMFormat::float32:
+				FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
+				break;
+			case CommonPCMFormat::float64:
+				FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 64, 64, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
+				break;
+			case CommonPCMFormat::int16:
+				FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 16, 16, false, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
+				break;
+			case CommonPCMFormat::int32:
+				FillOutASBDForLPCM(*this, sampleRate, channelsPerFrame, 32, 32, false, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, !isInterleaved);
+				break;
+		}
+	}
 
 	// Native overloads
 
@@ -188,7 +205,6 @@ public:
 	{
 		auto interleavedChannelCount = InterleavedChannelCount();
 		if(!interleavedChannelCount)
-//			throw std::runtime_error("InterleavedChannelCount() == 0 in SampleWordSize()");
 			return 0;
 		return mBytesPerFrame / interleavedChannelCount;
 	}
@@ -205,7 +221,6 @@ public:
 	inline UInt32 ByteSizeToFrameCount(UInt32 byteSize) const
 	{
 		if(!mBytesPerFrame)
-//			throw std::runtime_error("mBytesPerFrame == 0 in ByteSizeToFrameCount()");
 			return 0;
 		return byteSize / mBytesPerFrame;
 	}
@@ -213,13 +228,41 @@ public:
 #pragma mark Format transformation
 
 	/// Sets @c format to the equivalent non-interleaved format of @c this. Fails for non-PCM formats.
-	bool GetNonInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept;
+	bool GetNonInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept
+	{
+		if(!IsPCM() || !mChannelsPerFrame)
+			return false;
+		format = *this;
+		if(IsInterleaved()) {
+			format.mFormatFlags |= kAudioFormatFlagIsNonInterleaved;
+			format.mBytesPerPacket /= mChannelsPerFrame;
+			format.mBytesPerFrame /= mChannelsPerFrame;
+		}
+		return true;
+	}
 
 	/// Sets @c format to the equivalent interleaved format of @c this. Fails for non-PCM formats.
-	bool GetInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept;
+	bool GetInterleavedEquivalent(CAStreamBasicDescription& format) const noexcept
+	{
+		if(!IsPCM())
+			return false;
+		format = *this;
+		if(!IsInterleaved()) {
+			format.mFormatFlags &= ~kAudioFormatFlagIsNonInterleaved;
+			format.mBytesPerPacket *= mChannelsPerFrame;
+			format.mBytesPerFrame *= mChannelsPerFrame;
+		}
+		return true;
+	}
 
 	/// Sets @c format to the equivalent standard format of @c this. Fails for non-PCM formats.
-	bool GetStandardEquivalent(CAStreamBasicDescription& format) const noexcept;
+	bool GetStandardEquivalent(CAStreamBasicDescription& format) const noexcept
+	{
+		if(!IsPCM())
+			return false;
+		FillOutASBDForLPCM(format, mSampleRate, mChannelsPerFrame, 32, 32, true, kAudioFormatFlagIsBigEndian == kAudioFormatFlagsNativeEndian, true);
+		return true;
+	}
 
 	/// Resets the @c CAStreamBasicDescription to the default state
 	inline void Reset() noexcept
