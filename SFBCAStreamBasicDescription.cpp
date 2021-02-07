@@ -7,7 +7,7 @@
 
 #import "SFBCAStreamBasicDescription.hpp"
 
-SFB::CAStreamBasicDescription::CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
+SFB::CAStreamBasicDescription::CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float64 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
 : AudioStreamBasicDescription{}
 {
 //	if(sampleRate < 0)

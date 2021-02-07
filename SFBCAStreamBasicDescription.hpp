@@ -53,7 +53,7 @@ public:
 
 
 	/// Creates a new @c CAStreamBasicDescription for the speciifed @c CommonPCMFormat
-	CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
+	CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float64 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept;
 
 	// Native overloads
 
