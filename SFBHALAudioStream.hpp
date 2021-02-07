@@ -6,79 +6,84 @@
 #pragma once
 
 #import "SFBHALAudioObject.hpp"
+#import "SFBCAStreamBasicDescription.hpp"
 
-class SFBHALAudioStream : public SFBHALAudioObject
+namespace SFB {
+
+class HALAudioStream : public HALAudioObject
 {
 
 public:
 
-	/// Creates an unknown @c SFBHALAudioStream
-	constexpr SFBHALAudioStream() noexcept = default;
+	/// Creates an unknown @c HALAudioStream
+	constexpr HALAudioStream() noexcept = default;
 
 	/// Copy constructor
-	constexpr SFBHALAudioStream(const SFBHALAudioStream& rhs) noexcept = default;
+	constexpr HALAudioStream(const HALAudioStream& rhs) noexcept = default;
 
 	/// Assignment operator
-	SFBHALAudioStream& operator=(const SFBHALAudioStream& rhs) noexcept = default;
+	HALAudioStream& operator=(const HALAudioStream& rhs) noexcept = default;
 
 	/// Destructor
-	virtual ~SFBHALAudioStream() = default;
+	virtual ~HALAudioStream() = default;
 
 	/// Move constructor
-	SFBHALAudioStream(SFBHALAudioStream&& rhs) = default;
+	HALAudioStream(HALAudioStream&& rhs) = default;
 
 	/// Move assignment operator
-	SFBHALAudioStream& operator=(SFBHALAudioStream&& rhs) = default;
+	HALAudioStream& operator=(HALAudioStream&& rhs) = default;
 
 
-	/// Creates a @c SFBHALAudioStream with the specified objectID
-	inline constexpr SFBHALAudioStream(AudioObjectID objectID) noexcept
-	: SFBHALAudioObject(objectID)
+	/// Creates a @c HALAudioStream with the specified objectID
+	inline constexpr HALAudioStream(AudioObjectID objectID) noexcept
+	: HALAudioObject(objectID)
 	{}
 
 	inline bool IsActive() const
 	{
-		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyIsActive)) != 0;
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioStreamPropertyIsActive)) != 0;
 	}
 
 	inline UInt32 Direction() const
 	{
-		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyDirection));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioStreamPropertyDirection));
 	}
 
 	inline UInt32 TerminalType() const
 	{
-		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyTerminalType));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioStreamPropertyTerminalType));
 	}
 
 	inline UInt32 StartingChannel() const
 	{
-		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyStartingChannel));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioStreamPropertyStartingChannel));
 	}
 
 	inline UInt32 Latency() const
 	{
-		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyLatency));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioStreamPropertyLatency));
 	}
 
-	inline SFBAudioStreamBasicDescription VirtualFormat() const
+	inline CAStreamBasicDescription VirtualFormat() const
 	{
-		return StructProperty<AudioStreamBasicDescription>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyVirtualFormat));
+		return StructProperty<AudioStreamBasicDescription>(CAPropertyAddress(kAudioStreamPropertyVirtualFormat));
 	}
 
 	inline std::vector<AudioStreamRangedDescription> AvailableVirtualFormats() const
 	{
-		return ArrayProperty<AudioStreamRangedDescription>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyAvailableVirtualFormats));
+		return ArrayProperty<AudioStreamRangedDescription>(CAPropertyAddress(kAudioStreamPropertyAvailableVirtualFormats));
 	}
 
-	inline SFBAudioStreamBasicDescription PhysicalFormat() const
+	inline CAStreamBasicDescription PhysicalFormat() const
 	{
-		return StructProperty<AudioStreamBasicDescription>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyPhysicalFormat));
+		return StructProperty<AudioStreamBasicDescription>(CAPropertyAddress(kAudioStreamPropertyPhysicalFormat));
 	}
 
 	inline std::vector<AudioStreamRangedDescription> AvailablePhysicalFormats() const
 	{
-		return ArrayProperty<AudioStreamRangedDescription>(SFBAudioObjectPropertyAddress(kAudioStreamPropertyAvailablePhysicalFormats));
+		return ArrayProperty<AudioStreamRangedDescription>(CAPropertyAddress(kAudioStreamPropertyAvailablePhysicalFormats));
 	}
 
 };
+
+} // namespace SFB

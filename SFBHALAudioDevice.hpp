@@ -8,46 +8,48 @@
 #import "SFBHALAudioObject.hpp"
 #import "SFBHALAudioStream.hpp"
 
-class SFBHALAudioDevice : public SFBHALAudioObject
+namespace SFB {
+
+class HALAudioDevice : public HALAudioObject
 {
 
 public:
 
 	/// Creates an unknown @c SFBHALAudioObject
-	constexpr SFBHALAudioDevice() noexcept = default;
+	constexpr HALAudioDevice() noexcept = default;
 
 	/// Copy constructor
-	constexpr SFBHALAudioDevice(const SFBHALAudioDevice& rhs) noexcept = default;
+	constexpr HALAudioDevice(const HALAudioDevice& rhs) noexcept = default;
 
 	/// Assignment operator
-	SFBHALAudioDevice& operator=(const SFBHALAudioDevice& rhs) noexcept = default;
+	HALAudioDevice& operator=(const HALAudioDevice& rhs) noexcept = default;
 
 	/// Destructor
-	virtual ~SFBHALAudioDevice() = default;
+	virtual ~HALAudioDevice() = default;
 
 	/// Move constructor
-	SFBHALAudioDevice(SFBHALAudioDevice&& rhs) = default;
+	HALAudioDevice(HALAudioDevice&& rhs) = default;
 
 	/// Move assignment operator
-	SFBHALAudioDevice& operator=(SFBHALAudioDevice&& rhs) = default;
+	HALAudioDevice& operator=(HALAudioDevice&& rhs) = default;
 
 
-	/// Creates a @c SFBHALAudioDevice with the specified objectID
-	inline constexpr SFBHALAudioDevice(AudioObjectID objectID) noexcept
-	: SFBHALAudioObject(objectID)
+	/// Creates a @c HALAudioDevice with the specified objectID
+	inline constexpr HALAudioDevice(AudioObjectID objectID) noexcept
+	: HALAudioObject(objectID)
 	{}
 
 
 	//	kAudioDevicePropertyConfigurationApplication        = 'capp',
 
-	inline SFBCFString UID() const
+	inline CFString UID() const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyDeviceUID));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioDevicePropertyDeviceUID));
 	}
 
-	inline SFBCFString ModelUID() const
+	inline CFString ModelUID() const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyModelUID));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioDevicePropertyModelUID));
 	}
 
 	//	kAudioDevicePropertyTransportType                   = 'tran',
@@ -58,34 +60,34 @@ public:
 	//	kAudioDevicePropertyDeviceCanBeDefaultDevice        = 'dflt',
 	//	kAudioDevicePropertyDeviceCanBeDefaultSystemDevice  = 'sflt',
 
-	inline UInt32 Latency(SFBHALAudioObjectDirectionalScope scope) const
+	inline UInt32 Latency(HALAudioObjectDirectionalScope scope) const
 	{
-		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyLatency, scope == SFBHALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioDevicePropertyLatency, scope == HALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
 	}
 
-	inline std::vector<AudioObjectID> StreamIDs(SFBHALAudioObjectDirectionalScope scope) const
+	inline std::vector<AudioObjectID> StreamIDs(HALAudioObjectDirectionalScope scope) const
 	{
-		return ArrayProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyStreams, scope == SFBHALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
+		return ArrayProperty<AudioObjectID>(CAPropertyAddress(kAudioDevicePropertyStreams, scope == HALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
 	}
 
-	std::vector<SFBHALAudioStream> Streams(SFBHALAudioObjectDirectionalScope scope) const
+	std::vector<HALAudioStream> Streams(HALAudioObjectDirectionalScope scope) const
 	{
 		auto vec = StreamIDs(scope);
-		std::vector<SFBHALAudioStream> result(vec.size());
-		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return SFBHALAudioStream(objectID); });
+		std::vector<HALAudioStream> result(vec.size());
+		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return HALAudioStream(objectID); });
 		return result;
 	}
 
 	//	kAudioObjectPropertyControlList                     = 'ctrl',
 
-	inline UInt32 SafetyOffset(SFBHALAudioObjectDirectionalScope scope) const
+	inline UInt32 SafetyOffset(HALAudioObjectDirectionalScope scope) const
 	{
-		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertySafetyOffset, scope == SFBHALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioDevicePropertySafetyOffset, scope == HALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
 	}
 
 	inline Float64 NominalSampleRate() const
 	{
-		return ArithmeticProperty<Float64>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyNominalSampleRate));
+		return ArithmeticProperty<Float64>(CAPropertyAddress(kAudioDevicePropertyNominalSampleRate));
 	}
 
 	//	kAudioDevicePropertyAvailableNominalSampleRates     = 'nsr#',
@@ -103,7 +105,7 @@ public:
 
 	inline UInt32 BufferFrameSize() const
 	{
-		return ArithmeticProperty<UInt32>(SFBAudioObjectPropertyAddress(kAudioDevicePropertyBufferFrameSize));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioDevicePropertyBufferFrameSize));
 	}
 
 	//	kAudioDevicePropertyBufferFrameSizeRange            = 'fsz#',
@@ -116,3 +118,5 @@ public:
 	//	kAudioDevicePropertyIOThreadOSWorkgroup				= 'oswg'
 
 };
+
+} // namespace SFB

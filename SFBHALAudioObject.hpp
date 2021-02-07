@@ -9,34 +9,36 @@
 
 #import <CoreAudio/CoreAudio.h>
 
-#import "SFBAudioObjectPropertyAddress.hpp"
 #import "SFBCAException.hpp"
+#import "SFBCAPropertyAddress.hpp"
 #import "SFBCFWrapper.hpp"
 
-enum class SFBHALAudioObjectDirectionalScope {
+namespace SFB {
+
+enum class HALAudioObjectDirectionalScope {
 	input,
 	output,
 };
 
-class SFBHALAudioObject
+class HALAudioObject
 {
 
 public:
 
 #pragma mark Creation and Destruction
 
-	/// Creates an unknown @c SFBHALAudioObject
-	inline constexpr SFBHALAudioObject() noexcept
+	/// Creates an unknown @c HALAudioObject
+	inline constexpr HALAudioObject() noexcept
 	: mObjectID(kAudioObjectUnknown)
 	{}
 
 	/// Copy constructor
-	inline constexpr SFBHALAudioObject(const SFBHALAudioObject& rhs) noexcept
+	inline constexpr HALAudioObject(const HALAudioObject& rhs) noexcept
 	: mObjectID(rhs.mObjectID)
 	{}
 
 	/// Assignment operator
-	inline SFBHALAudioObject& operator=(const SFBHALAudioObject& rhs) noexcept
+	inline HALAudioObject& operator=(const HALAudioObject& rhs) noexcept
 	{
 		if(this != &rhs)
 			mObjectID = rhs.mObjectID;
@@ -44,17 +46,17 @@ public:
 	}
 
 	/// Destructor
-	virtual ~SFBHALAudioObject() = default;
+	virtual ~HALAudioObject() = default;
 
 	// Move constructor
-	SFBHALAudioObject(SFBHALAudioObject&& rhs) noexcept = default;
+	HALAudioObject(HALAudioObject&& rhs) noexcept = default;
 
 	/// Move assignment operator
-	SFBHALAudioObject& operator=(SFBHALAudioObject&& rhs) noexcept = default;
+	HALAudioObject& operator=(HALAudioObject&& rhs) noexcept = default;
 
 
-	/// Creates a @c SFBHALAudioObject with the specified objectID
-	inline constexpr SFBHALAudioObject(AudioObjectID objectID) noexcept
+	/// Creates a @c HALAudioObject with the specified objectID
+	inline constexpr HALAudioObject(AudioObjectID objectID) noexcept
 	: mObjectID(objectID)
 	{}
 
@@ -83,7 +85,7 @@ public:
 	{
 		return !operator==(rhs);
 	}
-	
+
 	inline operator AudioObjectID() const noexcept
 	{
 		return mObjectID;
@@ -160,12 +162,12 @@ public:
 	}
 
 	template <typename T, typename std::enable_if</*std::is_class<T>::value &&*/ std::is_pointer<T>::value, bool>::type = true>
-	SFBCFWrapper<T> CFTypeProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
+	CFWrapper<T> CFTypeProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
 	{
 		T value;
 		UInt32 size = sizeof(T);
 		GetPropertyData(inAddress, inQualifierDataSize, inQualifierData, size, &value);
-		return SFBCFWrapper<T>(value);
+		return CFWrapper<T>(value);
 	}
 
 	inline void AddPropertyListener(const AudioObjectPropertyAddress& inAddress, AudioObjectPropertyListenerProc _Nonnull inListenerProc, void * _Nullable inClientData)
@@ -197,77 +199,77 @@ public:
 
 	inline AudioClassID BaseClass() const
 	{
-		return ArithmeticProperty<AudioClassID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyBaseClass));
+		return ArithmeticProperty<AudioClassID>(CAPropertyAddress(kAudioObjectPropertyBaseClass));
 	}
 
 	inline AudioClassID Class() const
 	{
-		return ArithmeticProperty<AudioClassID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyClass));
+		return ArithmeticProperty<AudioClassID>(CAPropertyAddress(kAudioObjectPropertyClass));
 	}
 
 	inline AudioObjectID OwnerID() const
 	{
-		return ArithmeticProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyOwner));
+		return ArithmeticProperty<AudioObjectID>(CAPropertyAddress(kAudioObjectPropertyOwner));
 	}
 
-	inline SFBHALAudioObject Owner() const
+	inline HALAudioObject Owner() const
 	{
-		return SFBHALAudioObject(OwnerID());
+		return HALAudioObject(OwnerID());
 	}
 
-	inline SFBCFString Name() const
+	inline CFString Name() const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyName));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioObjectPropertyName));
 	}
 
-	inline SFBCFString ModelName() const
+	inline CFString ModelName() const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyModelName));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioObjectPropertyModelName));
 	}
 
-	inline SFBCFString Manufacturer() const
+	inline CFString Manufacturer() const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyManufacturer));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioObjectPropertyManufacturer));
 	}
 
-	inline SFBCFString ElementName(AudioObjectPropertyScope inScope, AudioObjectPropertyElement inElement) const
+	inline CFString ElementName(AudioObjectPropertyScope inScope, AudioObjectPropertyElement inElement) const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyElementName, inScope, inElement));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioObjectPropertyElementName, inScope, inElement));
 	}
 
-	inline SFBCFString ElementCategoryName(AudioObjectPropertyScope inScope, AudioObjectPropertyElement inElement) const
+	inline CFString ElementCategoryName(AudioObjectPropertyScope inScope, AudioObjectPropertyElement inElement) const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyElementCategoryName, inScope, inElement));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioObjectPropertyElementCategoryName, inScope, inElement));
 	}
 
-	inline SFBCFString ElementNumberName(AudioObjectPropertyScope inScope, AudioObjectPropertyElement inElement) const
+	inline CFString ElementNumberName(AudioObjectPropertyScope inScope, AudioObjectPropertyElement inElement) const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyElementNumberName, inScope, inElement));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioObjectPropertyElementNumberName, inScope, inElement));
 	}
 
 	inline std::vector<AudioObjectID> OwnedObjectIDs() const
 	{
-		return ArrayProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyOwnedObjects));
+		return ArrayProperty<AudioObjectID>(CAPropertyAddress(kAudioObjectPropertyOwnedObjects));
 	}
 
-	std::vector<SFBHALAudioObject> OwnedObjects() const
+	std::vector<HALAudioObject> OwnedObjects() const
 	{
 		auto vec = OwnedObjectIDs();
-		std::vector<SFBHALAudioObject> result(vec.size());
-		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return SFBHALAudioObject(objectID); });
+		std::vector<HALAudioObject> result(vec.size());
+		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return HALAudioObject(objectID); });
 		return result;
 	}
 
-//	kAudioObjectPropertyIdentify            = 'iden',
+	//	kAudioObjectPropertyIdentify            = 'iden',
 
-	inline SFBCFString SerialNumber() const
+	inline CFString SerialNumber() const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertySerialNumber));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioObjectPropertySerialNumber));
 	}
 
-	inline SFBCFString FirmwareVersion() const
+	inline CFString FirmwareVersion() const
 	{
-		return CFTypeProperty<CFStringRef>(SFBAudioObjectPropertyAddress(kAudioObjectPropertyFirmwareVersion));
+		return CFTypeProperty<CFStringRef>(CAPropertyAddress(kAudioObjectPropertyFirmwareVersion));
 	}
 
 protected:
@@ -276,3 +278,5 @@ protected:
 	AudioObjectID mObjectID;
 
 };
+
+} // namespace SFB

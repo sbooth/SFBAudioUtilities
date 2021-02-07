@@ -8,88 +8,90 @@
 #import "SFBHALAudioObject.hpp"
 #import "SFBHALAudioDevice.hpp"
 
-class SFBHALAudioSystemObject : public SFBHALAudioObject
+namespace SFB {
+
+class HALAudioSystemObject : public HALAudioObject
 {
 
 public:
 
-	/// Creates an @c SFBHALAudioSystemObject
-	inline constexpr SFBHALAudioSystemObject() noexcept
-	: SFBHALAudioObject(kAudioObjectSystemObject)
+	/// Creates an @c HALAudioSystemObject
+	inline constexpr HALAudioSystemObject() noexcept
+	: HALAudioObject(kAudioObjectSystemObject)
 	{}
 
 	/// Copy constructor
-	constexpr SFBHALAudioSystemObject(const SFBHALAudioSystemObject& rhs) = default;
+	constexpr HALAudioSystemObject(const HALAudioSystemObject& rhs) = default;
 
 	/// Assignment operator
-	SFBHALAudioSystemObject& operator=(const SFBHALAudioSystemObject& rhs) = default;
+	HALAudioSystemObject& operator=(const HALAudioSystemObject& rhs) = default;
 
 	/// Destructor
-	virtual ~SFBHALAudioSystemObject() = default;
+	virtual ~HALAudioSystemObject() = default;
 
 	// Move constructor
-	SFBHALAudioSystemObject(SFBHALAudioSystemObject&& rhs) = default;
+	HALAudioSystemObject(HALAudioSystemObject&& rhs) = default;
 
 	// Move assignment operator
-	SFBHALAudioSystemObject& operator=(SFBHALAudioSystemObject&& rhs) = default;
+	HALAudioSystemObject& operator=(HALAudioSystemObject&& rhs) = default;
 
-	
+
 	inline std::vector<AudioObjectID> DeviceIDs() const
 	{
-		return ArrayProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDevices));
+		return ArrayProperty<AudioObjectID>(CAPropertyAddress(kAudioHardwarePropertyDevices));
 	}
 
-	std::vector<SFBHALAudioDevice> Devices() const
+	std::vector<HALAudioDevice> Devices() const
 	{
 		auto vec = DeviceIDs();
-		std::vector<SFBHALAudioDevice> result(vec.size());
-		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return SFBHALAudioDevice(objectID); });
+		std::vector<HALAudioDevice> result(vec.size());
+		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return HALAudioDevice(objectID); });
 		return result;
 	}
 
 	inline AudioObjectID DefaultInputDeviceID() const
 	{
-		return ArithmeticProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultInputDevice));
+		return ArithmeticProperty<AudioObjectID>(CAPropertyAddress(kAudioHardwarePropertyDefaultInputDevice));
 	}
 
-	inline SFBHALAudioObject DefaultInputDevice() const
+	inline HALAudioObject DefaultInputDevice() const
 	{
-		return SFBHALAudioObject(DefaultInputDeviceID());
+		return HALAudioObject(DefaultInputDeviceID());
 	}
 
 	inline AudioObjectID DefaultOutputDeviceID() const
 	{
-		return ArithmeticProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultOutputDevice));
+		return ArithmeticProperty<AudioObjectID>(CAPropertyAddress(kAudioHardwarePropertyDefaultOutputDevice));
 	}
 
-	inline SFBHALAudioObject DefaultOutputDevice() const
+	inline HALAudioObject DefaultOutputDevice() const
 	{
-		return SFBHALAudioObject(DefaultOutputDeviceID());
+		return HALAudioObject(DefaultOutputDeviceID());
 	}
 
 	inline AudioObjectID DefaultSystemOutputDeviceID() const
 	{
-		return ArithmeticProperty<AudioObjectID>(SFBAudioObjectPropertyAddress(kAudioHardwarePropertyDefaultSystemOutputDevice));
+		return ArithmeticProperty<AudioObjectID>(CAPropertyAddress(kAudioHardwarePropertyDefaultSystemOutputDevice));
 	}
 
-	inline SFBHALAudioObject DefaultSystemOutputDevice() const
+	inline HALAudioObject DefaultSystemOutputDevice() const
 	{
-		return SFBHALAudioObject(DefaultSystemOutputDeviceID());
+		return HALAudioObject(DefaultSystemOutputDeviceID());
 	}
 
 	AudioObjectID AudioDeviceIDForUID(CFStringRef _Nonnull inUID) const
 	{
 		AudioObjectID deviceID;
 		AudioValueTranslation valueTranslation = { &inUID, sizeof(CFStringRef), &deviceID, sizeof(AudioObjectID) };
-		SFBAudioObjectPropertyAddress objectPropertyAddress(kAudioHardwarePropertyDeviceForUID);
+		CAPropertyAddress objectPropertyAddress(kAudioHardwarePropertyDeviceForUID);
 		UInt32 size = sizeof(AudioValueTranslation);
 		GetPropertyData(objectPropertyAddress, 0, nullptr, size, &valueTranslation);
 		return deviceID;
 	}
 
-	inline SFBHALAudioDevice AudioDeviceForUID(CFStringRef _Nonnull inUID) const
+	inline HALAudioDevice AudioDeviceForUID(CFStringRef _Nonnull inUID) const
 	{
-		return SFBHALAudioDevice(AudioDeviceIDForUID(inUID));
+		return HALAudioDevice(AudioDeviceIDForUID(inUID));
 	}
 
 	//	kAudioHardwarePropertyMixStereoToMono                       = 'stmo',
@@ -113,3 +115,5 @@ public:
 	//	kAudioHardwarePropertyPowerHint                             = 'powh'
 
 };
+
+} // namespace SFB
