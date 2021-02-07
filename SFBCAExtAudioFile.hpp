@@ -8,6 +8,7 @@
 #import <AudioToolbox/ExtendedAudioFile.h>
 
 #import "SFBCAException.hpp"
+#import "SFBCABufferList.hpp"
 #import "SFBCAChannelLayout.hpp"
 #import "SFBCAStreamBasicDescription.hpp"
 
@@ -167,7 +168,7 @@ public:
 	/// Performs a synchronous sequential read.
 	/// @param buffer Buffer into which the audio data is read.
 	/// @throw @c std::system_error
-	void Read(SFBAudioBufferList& buffer)
+	void Read(SFB::CABufferList& buffer)
 	{
 		buffer.Reset();
 		UInt32 frameCount = buffer.FrameCapacity();
@@ -297,7 +298,7 @@ public:
 	/// Returns the file's channel layout (@c kExtAudioFileProperty_FileChannelLayout)
 	/// @throw @c std::system_error
 	/// @throw @c std::bad_alloc
-	SFBAudioChannelLayout FileChannelLayout() const
+	CAChannelLayout FileChannelLayout() const
 	{
 		auto size = GetPropertyInfo(kExtAudioFileProperty_FileChannelLayout, nullptr);
 		std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
@@ -309,16 +310,16 @@ public:
 
 	/// Sets the file's channel layout (@c kExtAudioFileProperty_FileChannelLayout)
 	/// @throw @c std::system_error
-	void SetFileChannelLayout(const SFBAudioChannelLayout& fileChannelLayout)
+	void SetFileChannelLayout(const CAChannelLayout& fileChannelLayout)
 	{
 		SetProperty(kExtAudioFileProperty_FileChannelLayout, static_cast<UInt32>(fileChannelLayout.Size()), fileChannelLayout);
 	}
 
 	/// Returns the file's data format (@c kExtAudioFileProperty_FileDataFormat)
 	/// @throw @c std::system_error
-	SFBAudioStreamBasicDescription FileDataFormat() const
+	CAStreamBasicDescription FileDataFormat() const
 	{
-		SFBAudioStreamBasicDescription fileDataFormat;
+		CAStreamBasicDescription fileDataFormat;
 		UInt32 size = sizeof(fileDataFormat);
 		GetProperty(kExtAudioFileProperty_FileDataFormat, size, &fileDataFormat);
 		return fileDataFormat;
@@ -326,9 +327,9 @@ public:
 
 	/// Returns the client data format (@c kExtAudioFileProperty_ClientDataFormat)
 	/// @throw @c std::system_error
-	SFBAudioStreamBasicDescription ClientDataFormat() const
+	CAStreamBasicDescription ClientDataFormat() const
 	{
-		SFBAudioStreamBasicDescription clientDataFormat;
+		CAStreamBasicDescription clientDataFormat;
 		UInt32 size = sizeof(clientDataFormat);
 		GetProperty(kExtAudioFileProperty_ClientDataFormat, size, &clientDataFormat);
 		return clientDataFormat;
@@ -336,7 +337,7 @@ public:
 
 	/// Sets the client data format (@c kExtAudioFileProperty_ClientDataFormat)
 	/// @throw @c std::system_error
-	void SetClientDataFormat(const SFBAudioStreamBasicDescription& clientDataFormat, const SFBAudioChannelLayout * const _Nullable clientChannelLayout = nullptr, UInt32 codecManufacturer = 0)
+	void SetClientDataFormat(const CAStreamBasicDescription& clientDataFormat, const CAChannelLayout * const _Nullable clientChannelLayout = nullptr, UInt32 codecManufacturer = 0)
 	{
 		if(codecManufacturer)
 			SetProperty(kExtAudioFileProperty_CodecManufacturer, sizeof(codecManufacturer), &codecManufacturer);
@@ -348,7 +349,7 @@ public:
 	/// Returns the client channel layout (@c kExtAudioFileProperty_ClientChannelLayout)
 	/// @throw @c std::system_error
 	/// @throw @c std::bad_alloc
-	SFBAudioChannelLayout ClientChannelLayout() const
+	CAChannelLayout ClientChannelLayout() const
 	{
 		auto size = GetPropertyInfo(kExtAudioFileProperty_ClientChannelLayout, nullptr);
 		std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
@@ -360,7 +361,7 @@ public:
 
 	/// Sets the client channel layout (@c kExtAudioFileProperty_ClientChannelLayout)
 	/// @throw @c std::system_error
-	void SetClientChannelLayout(const SFBAudioChannelLayout& clientChannelLayout)
+	void SetClientChannelLayout(const CAChannelLayout& clientChannelLayout)
 	{
 		SetProperty(kExtAudioFileProperty_ClientChannelLayout, static_cast<UInt32>(clientChannelLayout.Size()), clientChannelLayout);
 	}
