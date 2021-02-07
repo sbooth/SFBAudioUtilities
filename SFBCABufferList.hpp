@@ -7,49 +7,51 @@
 
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
-#import "SFBAudioStreamBasicDescription.hpp"
+#import "SFBCAStreamBasicDescription.hpp"
+
+namespace SFB {
 
 /// Allocates and returns a new @c AudioBufferList in a single allocation
 /// @note The allocation is performed using @c std::malloc and should be deallocated using @c std::free
 /// @param format The format of the audio the @c AudioBufferList will hold
 /// @param frameCapacity The desired buffer capacity in audio frames
 /// @return A newly-allocated @c AudioBufferList or @c nullptr
-AudioBufferList * _Nullable SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
+AudioBufferList * _Nullable AllocateAudioBufferList(const CAStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
 
 /// A class wrapping a Core Audio @c AudioBufferList with a specific format, frame capacity, and frame length
-class SFBAudioBufferList
+class CABufferList
 {
 	
 public:
 	
 #pragma mark Creation and Destruction
 
-	/// Creates an empty @c SFBAudioBufferList
+	/// Creates an empty @c CABufferList
 	/// @note @c Allocate() must be called before the object may be used.
-	SFBAudioBufferList() noexcept;
+	CABufferList() noexcept;
 
 	// This class is non-copyable
-	SFBAudioBufferList(const SFBAudioBufferList& rhs) = delete;
+	CABufferList(const CABufferList& rhs) = delete;
 
 	// This class is non-assignable
-	SFBAudioBufferList& operator=(const SFBAudioBufferList& rhs) = delete;
+	CABufferList& operator=(const CABufferList& rhs) = delete;
 
-	/// Destroys the @c SFBAudioBufferList and release all associated resources.
-	~SFBAudioBufferList();
+	/// Destroys the @c CABufferList and release all associated resources.
+	~CABufferList();
 
-	/// Creates a new @c SFBAudioBufferList
-	SFBAudioBufferList(SFBAudioBufferList&& rhs);
+	/// Creates a new @c CABufferList
+	CABufferList(CABufferList&& rhs);
 
 	/// Replaces the buffer
-	SFBAudioBufferList& operator=(SFBAudioBufferList&& rhs);
+	CABufferList& operator=(CABufferList&& rhs);
 
 
-	/// Creates a new @c SFBAudioBufferList
-	/// @param format The format of the audio the @c SFBAudioBufferList will hold
+	/// Creates a new @c CABufferList
+	/// @param format The format of the audio the @c CABufferList will hold
 	/// @param frameCapacity The desired buffer capacity in audio frames
 	/// @throws @c std::invalid_argument if @c format.mBytesPerFrame==0
 	/// @throws @c std::bad_alloc
-	SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity);
+	CABufferList(const CAStreamBasicDescription& format, UInt32 frameCapacity);
 
 #pragma mark Buffer management
 
@@ -57,13 +59,13 @@ public:
 	/// @param format The format of the audio
 	/// @param frameCapacity The desired capacity in audio frames
 	/// @return @c true on sucess, @c false otherwise
-	bool Allocate(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
+	bool Allocate(const CAStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
 
-	/// Deallocates the memory associated with this @c SFBAudioBufferList
+	/// Deallocates the memory associated with this @c CABufferList
 	bool Deallocate() noexcept;
 
 
-	/// Resets the @c SFBAudioBufferList to the default state in preparation for reading
+	/// Resets the @c CABufferList to the default state in preparation for reading
 	///
 	/// This is equivalent to @c SetFrameLength(FrameCapacity())
 	inline bool Reset() noexcept
@@ -71,7 +73,7 @@ public:
 		return SetFrameLength(mFrameCapacity);
 	}
 
-	/// Clears the @c SFBAudioBufferList
+	/// Clears the @c CABufferList
 	///
 	/// This is equivalent to @c SetFrameLength(0)
 	/// @return @c true on sucess, @c false otherwise
@@ -81,13 +83,13 @@ public:
 	}
 
 
-	/// Returns the length in audio frames of the data in this @c SFBAudioBufferList
+	/// Returns the length in audio frames of the data in this @c CABufferList
 	inline UInt32 FrameLength() const noexcept
 	{
 		return mFrameLength;
 	}
 
-	/// Set the length in audio frames of the data in this @c SFBAudioBufferList
+	/// Set the length in audio frames of the data in this @c CABufferList
 	/// @param frameLength The number of valid audio frames
 	/// @return @c true on sucess, @c false otherwise
 	bool SetFrameLength(UInt32 frameLength) noexcept;
@@ -107,14 +109,14 @@ public:
 		return mFrameLength == mFrameCapacity;
 	}
 
-	/// Returns the audio frame capacity of this @c SFBAudioBufferList
+	/// Returns the audio frame capacity of this @c CABufferList
 	inline UInt32 FrameCapacity() const noexcept
 	{
 		return mFrameCapacity;
 	}
 
-	/// Returns the format of this @c SFBAudioBufferList
-	inline const SFBAudioStreamBasicDescription& Format() const noexcept
+	/// Returns the format of this @c CABufferList
+	inline const CAStreamBasicDescription& Format() const noexcept
 	{
 		return mFormat;
 	}
@@ -122,20 +124,20 @@ public:
 #pragma mark Buffer utilities
 
 	/// Prepends the contents of @c buffer
-	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
+	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
 	/// @return The number of frames prepended
-	inline UInt32 PrependContentsOfBuffer(const SFBAudioBufferList& buffer) noexcept
+	inline UInt32 PrependContentsOfBuffer(const CABufferList& buffer) noexcept
 	{
 		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, 0);
 	}
 
 	/// Prepends frames from @c buffer starting at @c readOffset
-	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
+	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
 	/// @param readOffset The desired starting offset in @c buffer
 	/// @return The number of frames prepended
-	inline UInt32 PrependFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset) noexcept
+	inline UInt32 PrependFromBuffer(const CABufferList& buffer, UInt32 readOffset) noexcept
 	{
 		if(readOffset > buffer.mFrameLength)
 			return 0;
@@ -143,31 +145,31 @@ public:
 	}
 
 	/// Prepends at most @c frameLength frames from @c buffer starting at @c readOffset
-	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
+	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
 	/// @param readOffset The desired starting offset in @c buffer
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames prepended
-	inline UInt32 PrependFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength) noexcept
+	inline UInt32 PrependFromBuffer(const CABufferList& buffer, UInt32 readOffset, UInt32 frameLength) noexcept
 	{
 		return InsertFromBuffer(buffer, readOffset, frameLength, 0);
 	}
 
 	/// Appends the contents of @c buffer
-	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
+	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
 	/// @return The number of frames appended
-	inline UInt32 AppendContentsOfBuffer(const SFBAudioBufferList& buffer) noexcept
+	inline UInt32 AppendContentsOfBuffer(const CABufferList& buffer) noexcept
 	{
 		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, mFrameLength);
 	}
 
 	/// Appends frames from @c buffer starting at @c readOffset
-	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
+	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
 	/// @param readOffset The desired starting offset in @c buffer
 	/// @return The number of frames appended
-	inline UInt32 AppendFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset) noexcept
+	inline UInt32 AppendFromBuffer(const CABufferList& buffer, UInt32 readOffset) noexcept
 	{
 		if(readOffset > buffer.mFrameLength)
 			return 0;
@@ -175,37 +177,37 @@ public:
 	}
 
 	/// Appends at most @c frameLength frames from @c buffer starting at @c readOffset
-	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
+	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
 	/// @param readOffset The desired starting offset in @c buffer
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames appended
-	inline UInt32 AppendFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength) noexcept
+	inline UInt32 AppendFromBuffer(const CABufferList& buffer, UInt32 readOffset, UInt32 frameLength) noexcept
 	{
 		return InsertFromBuffer(buffer, readOffset, frameLength, mFrameLength);
 	}
 
-	/// Inserts the contents of @c buffer in this @c SFBAudioBufferList starting at @c writeOffset
-	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
+	/// Inserts the contents of @c buffer in this @c CABufferList starting at @c writeOffset
+	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
-	/// @param writeOffset The desired starting offset in this @c SFBAudioBufferList
+	/// @param writeOffset The desired starting offset in this @c CABufferList
 	/// @return The number of frames inserted
-	inline UInt32 InsertContentsOfBuffer(const SFBAudioBufferList& buffer, UInt32 writeOffset) noexcept
+	inline UInt32 InsertContentsOfBuffer(const CABufferList& buffer, UInt32 writeOffset) noexcept
 	{
 		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, writeOffset);
 	}
 
 	/// Inserts at most @c readLength frames from @c buffer starting at @c readOffset  starting at @c writeOffset
-	/// @note The format of @c buffer must match the format of this @c SFBAudioBufferList
+	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
 	/// @param readOffset The desired starting offset in @c buffer
 	/// @param frameLength The desired number of frames
-	/// @param writeOffset The desired starting offset in this @c SFBAudioBufferList
+	/// @param writeOffset The desired starting offset in this @c CABufferList
 	/// @return The number of frames inserted
-	UInt32 InsertFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength, UInt32 writeOffset) noexcept;
+	UInt32 InsertFromBuffer(const CABufferList& buffer, UInt32 readOffset, UInt32 frameLength, UInt32 writeOffset) noexcept;
 
 
-	/// Deletes at most the first @c frameLength frames from this @c SFBAudioBufferList
+	/// Deletes at most the first @c frameLength frames from this @c CABufferList
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames deleted
 	inline UInt32 TrimFirst(UInt32 frameLength) noexcept
@@ -213,7 +215,7 @@ public:
 		return TrimAtOffset(0, frameLength);
 	}
 
-	/// Deletes at most the last @c frameLength frames from this @c SFBAudioBufferList
+	/// Deletes at most the last @c frameLength frames from this @c CABufferList
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames deleted
 	inline UInt32 TrimLast(UInt32 frameLength) noexcept
@@ -223,13 +225,13 @@ public:
 		return framesToTrim;
 	}
 
-	/// Deletes at most @c frameLength frames from this @c SFBAudioBufferList starting at @c offset
+	/// Deletes at most @c frameLength frames from this @c CABufferList starting at @c offset
 	/// @param offset The desired starting offset
 	/// @param frameLength The desired number of frames
 	/// @return The number of frames deleted
 	UInt32 TrimAtOffset(UInt32 offset, UInt32 frameLength) noexcept;
 
-	/// Fills the remainder of this @c SFBAudioBufferList with silence
+	/// Fills the remainder of this @c CABufferList with silence
 	/// @return The number of frames of silence appended
 	inline UInt32 FillRemainderWithSilence() noexcept
 	{
@@ -253,7 +255,7 @@ public:
 #pragma mark AudioBufferList access
 
 	/// Adopts an existing @c AudioBufferList
-	/// @note The @c SFBAudioBufferList assumes responsiblity for deallocating @c bufferList using @c std::free
+	/// @note The @c CABufferList assumes responsiblity for deallocating @c bufferList using @c std::free
 	/// @param bufferList The @c AudioBufferList to adopt
 	/// @param format The format of @c bufferList
 	/// @param frameCapacity The frame capacity of @c bufferList
@@ -320,10 +322,12 @@ private:
 	/// The underlying @c AudioChannelLayout struct
 	AudioBufferList * _Nullable mBufferList;
 	/// The format of @c mBufferList
-	SFBAudioStreamBasicDescription mFormat;
+	CAStreamBasicDescription mFormat;
 	/// The capacity of @c mBufferList in frames
 	UInt32 mFrameCapacity;
 	/// The number of valid frames in @c mBufferList
 	UInt32 mFrameLength;
 
 };
+
+} // namespace SFB

@@ -8,9 +8,9 @@
 #import <limits>
 #import <new>
 
-#import "SFBAudioBufferList.hpp"
+#import "SFBCABufferList.hpp"
 
-AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept
+AudioBufferList * SFB::AllocateAudioBufferList(const CAStreamBasicDescription& format, UInt32 frameCapacity) noexcept
 {
 	if(format.mBytesPerFrame == 0 || frameCapacity > (std::numeric_limits<UInt32>::max() / format.mBytesPerFrame))
 		return nullptr;
@@ -28,7 +28,7 @@ AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescriptio
 
 	abl->mNumberBuffers = bufferCount;
 
-	for(auto i = 0; i < bufferCount; ++i) {
+	for(UInt32 i = 0; i < bufferCount; ++i) {
 		abl->mBuffers[i].mNumberChannels = format.InterleavedChannelCount();
 		abl->mBuffers[i].mData = reinterpret_cast<uint8_t *>(abl) + bufferListSize + (bufferDataSize * i);
 		abl->mBuffers[i].mDataByteSize = bufferDataSize;
@@ -37,16 +37,16 @@ AudioBufferList * SFBAllocateAudioBufferList(const SFBAudioStreamBasicDescriptio
 	return abl;
 }
 
-SFBAudioBufferList::SFBAudioBufferList() noexcept
+SFB::CABufferList::CABufferList() noexcept
 : mBufferList(nullptr), mFrameCapacity(0), mFrameLength(0)
 {}
 
-SFBAudioBufferList::~SFBAudioBufferList()
+SFB::CABufferList::~CABufferList()
 {
 	std::free(mBufferList);
 }
 
-SFBAudioBufferList::SFBAudioBufferList(SFBAudioBufferList&& rhs)
+SFB::CABufferList::CABufferList(CABufferList&& rhs)
 : mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity), mFrameLength(rhs.mFrameLength)
 {
 	rhs.mBufferList = nullptr;
@@ -55,7 +55,7 @@ SFBAudioBufferList::SFBAudioBufferList(SFBAudioBufferList&& rhs)
 	rhs.mFrameLength = 0;
 }
 
-SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
+SFB::CABufferList& SFB::CABufferList::operator=(CABufferList&& rhs)
 {
 	if(this != &rhs) {
 		Deallocate();
@@ -74,8 +74,8 @@ SFBAudioBufferList& SFBAudioBufferList::operator=(SFBAudioBufferList&& rhs)
 	return *this;
 }
 
-SFBAudioBufferList::SFBAudioBufferList(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity)
-: SFBAudioBufferList()
+SFB::CABufferList::CABufferList(const CAStreamBasicDescription& format, UInt32 frameCapacity)
+: CABufferList()
 {
 	if(format.mBytesPerFrame == 0)
 		throw std::invalid_argument("format.mBytesPerFrame == 0");
@@ -85,12 +85,12 @@ SFBAudioBufferList::SFBAudioBufferList(const SFBAudioStreamBasicDescription& for
 
 #pragma mark Buffer Management
 
-bool SFBAudioBufferList::Allocate(const SFBAudioStreamBasicDescription& format, UInt32 frameCapacity) noexcept
+bool SFB::CABufferList::Allocate(const CAStreamBasicDescription& format, UInt32 frameCapacity) noexcept
 {
 	if(mBufferList)
 		Deallocate();
 
-	mBufferList = SFBAllocateAudioBufferList(format, frameCapacity);
+	mBufferList = AllocateAudioBufferList(format, frameCapacity);
 	if(!mBufferList)
 		return false;
 
@@ -101,7 +101,7 @@ bool SFBAudioBufferList::Allocate(const SFBAudioStreamBasicDescription& format, 
 	return true;
 }
 
-bool SFBAudioBufferList::Deallocate() noexcept
+bool SFB::CABufferList::Deallocate() noexcept
 {
 	if(!mBufferList)
 		return false;
@@ -114,7 +114,7 @@ bool SFBAudioBufferList::Deallocate() noexcept
 	return true;
 }
 
-bool SFBAudioBufferList::SetFrameLength(UInt32 frameLength) noexcept
+bool SFB::CABufferList::SetFrameLength(UInt32 frameLength) noexcept
 {
 	if(!mBufferList || frameLength > mFrameCapacity)
 		return false;
@@ -127,7 +127,7 @@ bool SFBAudioBufferList::SetFrameLength(UInt32 frameLength) noexcept
 	return true;
 }
 
-bool SFBAudioBufferList::InferFrameLengthFromABL()
+bool SFB::CABufferList::InferFrameLengthFromABL()
 {
 	if(!mBufferList)
 		return false;
@@ -149,7 +149,7 @@ bool SFBAudioBufferList::InferFrameLengthFromABL()
 
 #pragma mark Buffer Utilities
 
-UInt32 SFBAudioBufferList::InsertFromBuffer(const SFBAudioBufferList& buffer, UInt32 readOffset, UInt32 frameLength, UInt32 writeOffset) noexcept
+UInt32 SFB::CABufferList::InsertFromBuffer(const CABufferList& buffer, UInt32 readOffset, UInt32 frameLength, UInt32 writeOffset) noexcept
 {
 	if(mFormat != buffer.mFormat)
 //		throw std::invalid_argument("mFormat != buffer.mFormat");
@@ -183,7 +183,7 @@ UInt32 SFBAudioBufferList::InsertFromBuffer(const SFBAudioBufferList& buffer, UI
 	return framesToInsert;
 }
 
-UInt32 SFBAudioBufferList::TrimAtOffset(UInt32 offset, UInt32 frameLength) noexcept
+UInt32 SFB::CABufferList::TrimAtOffset(UInt32 offset, UInt32 frameLength) noexcept
 {
 	if(offset > mFrameLength || frameLength == 0)
 		return 0;
@@ -205,7 +205,7 @@ UInt32 SFBAudioBufferList::TrimAtOffset(UInt32 offset, UInt32 frameLength) noexc
 	return framesToTrim;
 }
 
-UInt32 SFBAudioBufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noexcept
+UInt32 SFB::CABufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noexcept
 {
 	if(!(mFormat.IsFloat() || mFormat.IsSignedInteger()))
 //		throw std::logic_error("Inserting silence for unsigned integer samples not supported");
@@ -240,7 +240,7 @@ UInt32 SFBAudioBufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noex
 	return framesToZero;
 }
 
-bool SFBAudioBufferList::AdoptABL(AudioBufferList *bufferList, const AudioStreamBasicDescription& format, UInt32 frameCapacity, UInt32 frameLength) noexcept
+bool SFB::CABufferList::AdoptABL(AudioBufferList *bufferList, const AudioStreamBasicDescription& format, UInt32 frameCapacity, UInt32 frameLength) noexcept
 {
 	if(!bufferList || frameLength > frameCapacity)
 		return false;
@@ -255,7 +255,7 @@ bool SFBAudioBufferList::AdoptABL(AudioBufferList *bufferList, const AudioStream
 	return true;
 }
 
-AudioBufferList * SFBAudioBufferList::RelinquishABL() noexcept
+AudioBufferList * SFB::CABufferList::RelinquishABL() noexcept
 {
 	auto bufferList = mBufferList;
 
