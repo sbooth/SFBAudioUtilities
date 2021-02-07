@@ -39,14 +39,14 @@ public:
 	/// @param scope The property element
 	/// @param element The property scope
 	inline CAPropertyAddress(AudioObjectPropertySelector selector, AudioObjectPropertyScope scope = kAudioObjectPropertyScopeGlobal, AudioObjectPropertyElement element = kAudioObjectPropertyElementMaster) noexcept
-	: CAPropertyAddress{selector, scope, element}
+	: AudioObjectPropertyAddress{selector, scope, element}
 	{}
 
 	// Native overloads
 
 	/// Creates a new @c CAPropertyAddress for the specified @c AudioObjectPropertyAddress
 	inline CAPropertyAddress(const AudioObjectPropertyAddress& rhs) noexcept
-	: CAPropertyAddress{rhs}
+	: AudioObjectPropertyAddress{rhs}
 	{}
 
 	/// Assignment operator
