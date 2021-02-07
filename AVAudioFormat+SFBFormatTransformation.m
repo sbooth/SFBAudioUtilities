@@ -10,7 +10,7 @@
 - (nullable AVAudioFormat *)nonInterleavedEquivalent
 {
 	AudioStreamBasicDescription asbd = *(self.streamDescription);
-	if(asbd.mFormatID != kAudioFormatLinearPCM)
+	if(asbd.mFormatID != kAudioFormatLinearPCM || !asbd.mChannelsPerFrame)
 		return nil;
 
 	if(asbd.mFormatFlags & kAudioFormatFlagIsNonInterleaved)
