@@ -5,7 +5,7 @@
 
 //#import <stdexcept>
 
-#import "SFBAudioStreamBasicDescription.hpp"
+#import "SFBCAStreamBasicDescription.hpp"
 
 SFB::CAStreamBasicDescription::CAStreamBasicDescription(CommonPCMFormat commonPCMFormat, Float32 sampleRate, UInt32 channelsPerFrame, bool isInterleaved) noexcept
 : AudioStreamBasicDescription{}

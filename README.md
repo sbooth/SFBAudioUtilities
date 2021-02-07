@@ -11,13 +11,13 @@ A collection of utility classes and extensions easing common operations in Core 
 | [SFBAudioChannelLayout](SFBAudioChannelLayout.hpp) | A class wrapping a Core Audio `AudioChannelLayout` |
 | [SFBAudioObjectPropertyAddress](SFBAudioObjectPropertyAddress.hpp) | A class extending the functionality of a Core Audio `AudioObjectPropertyAddress` |
 | [SFB::AudioRingBuffer](SFBAudioRingBuffer.hpp) | A ring buffer supporting non-interleaved audio |
-| [SFBAudioStreamBasicDescription](SFBAudioStreamBasicDescription.hpp) | A class extending the functionality of a Core Audio `AudioStreamBasicDescription` |
+| [SFB::CAStreamBasicDescription](SFBCAStreamBasicDescription.hpp) | A class extending the functionality of a Core Audio `AudioStreamBasicDescription` |
 | [SFBAudioTimeStamp](SFBAudioTimeStamp.hpp) | A class extending the functionality of a Core Audio `AudioTimeStamp` |
 | [SFBAudioUnitRecorder](SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
-| [SFB::ByteStream](SFBByteStream.hpp) | A `SFBByteStream` provides heterogeneous typed access to an untyped buffer. |
-| [SFBCARingBuffer](SFBCARingBuffer.hpp) | A ring buffer supporting timestamped non-interleaved audio based on Apple's `CARingBuffer`. |
-| [SFB::CFWrapper](SFBCFWrapper.hpp) | A wrapper around a Core Foundation object|
-| [SFB::DeferredClosure](SFBDeferredClosure.hpp) | A class that calls a closure upon destruction. |
+| [SFB::ByteStream](SFBByteStream.hpp) | A `ByteStream` provides heterogeneous typed access to an untyped buffer |
+| [SFBCARingBuffer](SFBCARingBuffer.hpp) | A ring buffer supporting timestamped non-interleaved audio based on Apple's `CARingBuffer` |
+| [SFB::CFWrapper](SFBCFWrapper.hpp) | A wrapper around a Core Foundation object |
+| [SFB::DeferredClosure](SFBDeferredClosure.hpp) | A class that calls a closure upon destruction |
 | [SFBExtAudioFile](SFBExtAudioFile.hpp) | A wrapper around `ExtAudioFile` |
 | [SFBHALAudioDevice](SFBHALAudioDevice.hpp) | |
 | [SFBHALAudioObject](SFBHALAudioObject.hpp) | |

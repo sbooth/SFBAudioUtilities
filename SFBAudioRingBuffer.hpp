@@ -9,7 +9,7 @@
 
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
-#import "SFBAudioStreamBasicDescription.hpp"
+#import "SFBCAStreamBasicDescription.hpp"
 
 namespace SFB {
 
@@ -51,7 +51,7 @@ public:
 	/// @param format The format of the audio that will be written to and read from this buffer.
 	/// @param capacityFrames The desired capacity, in frames
 	/// @return @c true on success, @c false on error
-	bool Allocate(const SFBAudioStreamBasicDescription& format, size_t capacityFrames) noexcept;
+	bool Allocate(const CAStreamBasicDescription& format, size_t capacityFrames) noexcept;
 
 	/// Frees the resources used by this @c AudioRingBuffer
 	/// @note This method is not thread safe.
@@ -70,7 +70,7 @@ public:
 	}
 
 	/// Returns the format of this @c AudioRingBuffer
-	inline const SFBAudioStreamBasicDescription& Format() const noexcept
+	inline const CAStreamBasicDescription& Format() const noexcept
 	{
 		return mFormat;
 	}
@@ -98,7 +98,7 @@ public:
 private:
 
 	/// The format of the audio
-	SFBAudioStreamBasicDescription mFormat;
+	CAStreamBasicDescription mFormat;
 
 	/// The channel pointers and buffers allocated in one chunk of memory
 	uint8_t * _Nonnull * _Nullable mBuffers;

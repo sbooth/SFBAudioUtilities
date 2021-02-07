@@ -69,7 +69,7 @@ SFB::AudioRingBuffer::~AudioRingBuffer()
 
 #pragma mark Buffer Management
 
-bool SFB::AudioRingBuffer::Allocate(const SFBAudioStreamBasicDescription& format, size_t capacityFrames) noexcept
+bool SFB::AudioRingBuffer::Allocate(const CAStreamBasicDescription& format, size_t capacityFrames) noexcept
 {
 	// Only non-interleaved formats are supported
 	if(format.IsInterleaved())
