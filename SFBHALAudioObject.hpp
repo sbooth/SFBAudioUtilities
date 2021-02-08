@@ -107,7 +107,7 @@ public:
 	{
 		Boolean settable = false;
 		auto result = AudioObjectIsPropertySettable(mObjectID, &inAddress, &settable);
-		SFBThrowIfAudioObjectError(result, "AudioObjectIsPropertySettable");
+		ThrowIfCAAudioObjectError(result, "AudioObjectIsPropertySettable");
 		return settable != 0;
 	}
 
@@ -115,7 +115,7 @@ public:
 	{
 		UInt32 size = 0;
 		auto result = AudioObjectGetPropertyDataSize(mObjectID, &inAddress, inQualifierDataSize, inQualifierData, &size);
-		SFBThrowIfAudioObjectError(result, "AudioObjectGetPropertyDataSize");
+		ThrowIfCAAudioObjectError(result, "AudioObjectGetPropertyDataSize");
 		return size;
 	}
 
@@ -123,13 +123,13 @@ public:
 	inline void GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32& ioDataSize, void * _Nonnull outData) const
 	{
 		auto result = AudioObjectGetPropertyData(mObjectID, &inAddress, inQualifierDataSize, inQualifierData, &ioDataSize, outData);
-		SFBThrowIfAudioObjectError(result, "AudioObjectGetPropertyData");
+		ThrowIfCAAudioObjectError(result, "AudioObjectGetPropertyData");
 	}
 
 	inline void SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void * _Nullable inQualifierData, UInt32 inDataSize, const void * _Nonnull inData)
 	{
 		auto result = AudioObjectSetPropertyData(mObjectID, &inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData);
-		SFBThrowIfAudioObjectError(result, "AudioObjectSetPropertyData");
+		ThrowIfCAAudioObjectError(result, "AudioObjectSetPropertyData");
 	}
 
 
@@ -173,26 +173,26 @@ public:
 	inline void AddPropertyListener(const AudioObjectPropertyAddress& inAddress, AudioObjectPropertyListenerProc _Nonnull inListenerProc, void * _Nullable inClientData)
 	{
 		auto result = AudioObjectAddPropertyListener(mObjectID, &inAddress, inListenerProc, inClientData);
-		SFBThrowIfAudioObjectError(result, "AudioObjectAddPropertyListener");
+		ThrowIfCAAudioObjectError(result, "AudioObjectAddPropertyListener");
 	}
 
 	inline void RemovePropertyListener(const AudioObjectPropertyAddress& inAddress, AudioObjectPropertyListenerProc _Nonnull inListenerProc, void * _Nullable inClientData)
 	{
 		auto result = AudioObjectRemovePropertyListener(mObjectID, &inAddress, inListenerProc, inClientData);
-		SFBThrowIfAudioObjectError(result, "AudioObjectRemovePropertyListener");
+		ThrowIfCAAudioObjectError(result, "AudioObjectRemovePropertyListener");
 	}
 
 
 	inline void AddPropertyListenerBlock(const AudioObjectPropertyAddress& inAddress, dispatch_queue_t _Nonnull inDispatchQueue, AudioObjectPropertyListenerBlock _Nonnull inListenerBlock)
 	{
 		auto result = AudioObjectAddPropertyListenerBlock(mObjectID, &inAddress, inDispatchQueue, inListenerBlock);
-		SFBThrowIfAudioObjectError(result, "AudioObjectAddPropertyListenerBlock");
+		ThrowIfCAAudioObjectError(result, "AudioObjectAddPropertyListenerBlock");
 	}
 
 	inline void RemovePropertyListenerBlock(const AudioObjectPropertyAddress& inAddress, dispatch_queue_t _Nonnull inDispatchQueue, AudioObjectPropertyListenerBlock _Nonnull inListenerBlock)
 	{
 		auto result = AudioObjectRemovePropertyListenerBlock(mObjectID, &inAddress, inDispatchQueue, inListenerBlock);
-		SFBThrowIfAudioObjectError(result, "AudioObjectRemovePropertyListenerBlock");
+		ThrowIfCAAudioObjectError(result, "AudioObjectRemovePropertyListenerBlock");
 	}
 
 #pragma mark AudioObject Properties

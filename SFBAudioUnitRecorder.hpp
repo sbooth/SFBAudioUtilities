@@ -62,13 +62,13 @@ public:
 				AudioStreamBasicDescription clientFormat;
 				UInt32 size = sizeof(clientFormat);
 				OSStatus result = AudioUnitGetProperty(mAudioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, mBusNumber, &clientFormat, &size);
-				SFBThrowIfAudioUnitError(result, "AudioUnitGetProperty");
+				ThrowIfCAAudioUnitError(result, "AudioUnitGetProperty");
 				mExtAudioFile.SetClientDataFormat(clientFormat);
 				mClientFormatIsSet = true;
 			}
 			mExtAudioFile.WriteAsync(0, nullptr);
 			auto result = AudioUnitAddRenderNotify(mAudioUnit, RenderCallback, this);
-			SFBThrowIfAudioUnitError(result, "AudioUnitAddRenderNotify");
+			ThrowIfCAAudioUnitError(result, "AudioUnitAddRenderNotify");
 		}
 	}
 
@@ -76,7 +76,7 @@ public:
 	void Stop() {
 		if(mExtAudioFile.IsValid()) {
 			OSStatus result = AudioUnitRemoveRenderNotify(mAudioUnit, RenderCallback, this);
-			SFBThrowIfAudioUnitError(result, "AudioUnitRemoveRenderNotify");
+			ThrowIfCAAudioUnitError(result, "AudioUnitRemoveRenderNotify");
 		}
 	}
 

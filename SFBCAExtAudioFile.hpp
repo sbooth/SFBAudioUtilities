@@ -87,7 +87,7 @@ public:
 	{
 		Close();
 		auto result = ExtAudioFileOpenURL(inURL, &mExtAudioFile);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileOpenURL");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileOpenURL");
 	}
 
 	/// Wraps an @c AudioFileID in an @c ExtAudioFileRef.
@@ -105,7 +105,7 @@ public:
 	{
 		Close();
 		auto result = ExtAudioFileWrapAudioFileID(inFileID, inForWriting, &mExtAudioFile);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileWrapAudioFileID");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileWrapAudioFileID");
 	}
 
 	/// Creates a new audio file.
@@ -128,7 +128,7 @@ public:
 	{
 		Close();
 		auto result = ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &mExtAudioFile);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileCreateWithURL");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileCreateWithURL");
 	}
 
 	/// Closes the file and disposes of the internal @c ExtAudioFileRef
@@ -137,7 +137,7 @@ public:
 	{
 		if(mExtAudioFile) {
 			auto result = ExtAudioFileDispose(mExtAudioFile);
-			SFBThrowIfExtAudioFileError(result, "ExtAudioFileDispose");
+			ThrowIfCAExtAudioFileError(result, "ExtAudioFileDispose");
 			mExtAudioFile = nullptr;
 		}
 	}
@@ -162,7 +162,7 @@ public:
 	void Read(UInt32& ioNumberFrames, AudioBufferList *ioData)
 	{
 		auto result = ExtAudioFileRead(mExtAudioFile, &ioNumberFrames, ioData);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileRead");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileRead");
 	}
 
 	/// Performs a synchronous sequential read.
@@ -197,7 +197,7 @@ public:
 				break;
 #endif
 			default:
-				SFBThrowIfExtAudioFileError(result, "ExtAudioFileWrite");
+				ThrowIfCAExtAudioFileError(result, "ExtAudioFileWrite");
 				break;
 		}
 		return result;
@@ -226,7 +226,7 @@ public:
 	void WriteAsync(UInt32 inNumberFrames, const AudioBufferList * _Nullable ioData)
 	{
 		auto result = ExtAudioFileWriteAsync(mExtAudioFile, inNumberFrames, ioData);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileOpenURL");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileOpenURL");
 	}
 
 	/// Seeks to a specific frame position.
@@ -244,7 +244,7 @@ public:
 	void Seek(SInt64 inFrameOffset)
 	{
 		auto result = ExtAudioFileSeek(mExtAudioFile, inFrameOffset);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileSeek");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileSeek");
 	}
 
 	/// Returns the file's read/write position.
@@ -255,7 +255,7 @@ public:
 	{
 		SInt64 pos;
 		auto result = ExtAudioFileTell(mExtAudioFile, &pos);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileTell");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileTell");
 		return pos;
 	}
 
@@ -268,7 +268,7 @@ public:
 	{
 		UInt32 size;
 		auto result = ExtAudioFileGetPropertyInfo(mExtAudioFile, inPropertyID, &size, outWritable);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileGetPropertyInfo");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileGetPropertyInfo");
 		return size;
 	}
 
@@ -281,7 +281,7 @@ public:
 	void GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const
 	{
 		auto result = ExtAudioFileGetProperty(mExtAudioFile, inPropertyID, &ioPropertyDataSize, outPropertyData);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileGetProperty");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileGetProperty");
 	}
 
 	/// Sets a property value
@@ -292,7 +292,7 @@ public:
 	void SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 	{
 		auto result = ExtAudioFileSetProperty(mExtAudioFile, inPropertyID, inPropertyDataSize, inPropertyData);
-		SFBThrowIfExtAudioFileError(result, "ExtAudioFileSetProperty");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileSetProperty");
 	}
 
 	/// Returns the file's channel layout (@c kExtAudioFileProperty_FileChannelLayout)
@@ -386,7 +386,7 @@ public:
 	void SetConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 	{
 		auto result = AudioConverterSetProperty(Converter(), inPropertyID, inPropertyDataSize, inPropertyData);
-		SFBThrowIfAudioConverterError(result, "AudioConverterSetProperty");
+		ThrowIfCAAudioConverterError(result, "AudioConverterSetProperty");
 		CFPropertyListRef config = nullptr;
 		SetProperty(kExtAudioFileProperty_ConverterConfig, sizeof(config), &config);
 	}
