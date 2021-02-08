@@ -121,7 +121,7 @@ bool SFB::CABufferList::SetFrameLength(UInt32 frameLength) noexcept
 
 	mFrameLength = frameLength;
 
-	for(auto i = 0; i < mBufferList->mNumberBuffers; ++i)
+	for(UInt32 i = 0; i < mBufferList->mNumberBuffers; ++i)
 		mBufferList->mBuffers[i].mDataByteSize = mFrameLength * mFormat.mBytesPerFrame;
 
 	return true;
@@ -133,7 +133,7 @@ bool SFB::CABufferList::InferFrameLengthFromABL()
 		return false;
 
 	auto buffer0ByteSize = mBufferList->mBuffers[0].mDataByteSize;
-	for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+	for(UInt32 i = 0; i < mBufferList->mNumberBuffers; ++i) {
 		if(mBufferList->mBuffers[i].mDataByteSize != buffer0ByteSize)
 			throw std::logic_error("inconsistent values for mBufferList->mBuffers[].mBytesPerFrame");
 	}
@@ -163,7 +163,7 @@ UInt32 SFB::CABufferList::InsertFromBuffer(const CABufferList& buffer, UInt32 re
 	auto framesToMove = mFrameLength - writeOffset;
 	if(framesToMove) {
 		auto moveToOffset = writeOffset + framesToInsert;
-		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+		for(UInt32 i = 0; i < mBufferList->mNumberBuffers; ++i) {
 			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (moveToOffset * mFormat.mBytesPerFrame);
 			const auto src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (writeOffset * mFormat.mBytesPerFrame);
 			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
@@ -171,7 +171,7 @@ UInt32 SFB::CABufferList::InsertFromBuffer(const CABufferList& buffer, UInt32 re
 	}
 
 	if(framesToInsert) {
-		for(auto i = 0; i < buffer.mBufferList->mNumberBuffers; ++i) {
+		for(UInt32 i = 0; i < buffer.mBufferList->mNumberBuffers; ++i) {
 			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (writeOffset * mFormat.mBytesPerFrame);
 			const auto src = static_cast<const uint8_t *>(buffer.mBufferList->mBuffers[i].mData) + (readOffset * mFormat.mBytesPerFrame);
 			std::memcpy(dst, src, framesToInsert * mFormat.mBytesPerFrame);
@@ -193,7 +193,7 @@ UInt32 SFB::CABufferList::TrimAtOffset(UInt32 offset, UInt32 frameLength) noexce
 	auto framesToMove = mFrameLength - (offset + framesToTrim);
 	if(framesToMove) {
 		auto moveFromOffset = offset + framesToTrim;
-		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+		for(UInt32 i = 0; i < mBufferList->mNumberBuffers; ++i) {
 			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
 			const auto src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (moveFromOffset * mFormat.mBytesPerFrame);
 			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
@@ -219,7 +219,7 @@ UInt32 SFB::CABufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noexc
 	auto framesToMove = mFrameLength - offset;
 	if(framesToMove) {
 		auto moveToOffset = offset + framesToZero;
-		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+		for(UInt32 i = 0; i < mBufferList->mNumberBuffers; ++i) {
 			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (moveToOffset * mFormat.mBytesPerFrame);
 			const auto src = static_cast<const uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
 			std::memmove(dst, src, framesToMove * mFormat.mBytesPerFrame);
@@ -229,7 +229,7 @@ UInt32 SFB::CABufferList::InsertSilence(UInt32 offset, UInt32 frameLength) noexc
 	if(framesToZero) {
 		// For floating-point numbers this code is non-portable: the C standard doesn't require IEEE 754 compliance
 		// However, setting all bits to 0 using memset() on macOS results in a floating-point value of 0
-		for(auto i = 0; i < mBufferList->mNumberBuffers; ++i) {
+		for(UInt32 i = 0; i < mBufferList->mNumberBuffers; ++i) {
 			auto dst = static_cast<uint8_t *>(mBufferList->mBuffers[i].mData) + (offset * mFormat.mBytesPerFrame);
 			std::memset(dst, 0, framesToZero * mFormat.mBytesPerFrame);
 		}
