@@ -7,10 +7,8 @@
 
 #import <CFNetwork/CFNetwork.h>
 #import <CoreFoundation/CoreFoundation.h>
-#if !TARGET_OS_IPHONE
 #import <ImageIO/ImageIO.h>
 #import <Security/Security.h>
-#endif
 
 namespace SFB {
 
@@ -311,15 +309,15 @@ using CFReadStream = CFWrapper<CFReadStreamRef>;
 using CFWriteStream = CFWrapper<CFWriteStreamRef>;
 /// A wrapped @c CFHTTPMessageRef
 using CFHTTPMessage = CFWrapper<CFHTTPMessageRef>;
+/// A wrapped @c CGImageSourceRef
+using CGImageSource = CFWrapper<CGImageSourceRef>;
+/// A wrapped @c SecCertificateRef
+using SecCertificate = CFWrapper<SecCertificateRef>;
 #if !TARGET_OS_IPHONE
 /// A wrapped @c SecKeychainItemRef
 using SecKeychainItem = CFWrapper<SecKeychainItemRef>;
-/// A wrapped @c SecCertificateRef
-using SecCertificate = CFWrapper<SecCertificateRef>;
 /// A wrapped @c SecTransformRef
 using SecTransform = CFWrapper<SecTransformRef>;
-/// A wrapped @c CGImageSourceRef
-using CGImageSource = CFWrapper<CGImageSourceRef>;
 #endif
 
 } // namespace SFB
