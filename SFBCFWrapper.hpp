@@ -28,12 +28,12 @@ public:
 #pragma mark Creation and Destruction
 
 	/// Creates a new @c CFWrapper
-	inline CFWrapper()
+	inline CFWrapper() noexcept
 	: CFWrapper(nullptr)
 	{}
 
 	/// Creates a new @c CFWrapper
-	CFWrapper(const CFWrapper& rhs)
+	CFWrapper(const CFWrapper& rhs) noexcept
 	: mObject(rhs.mObject), mRelease(rhs.mRelease)
 	{
 		if(mObject && mRelease)
@@ -41,7 +41,7 @@ public:
 	}
 
 	/// Replaces the wrapped object
-	CFWrapper& operator=(const CFWrapper& rhs)
+	CFWrapper& operator=(const CFWrapper& rhs) noexcept
 	{
 		if(mObject != rhs.mObject) {
 			if(mObject && mRelease)
@@ -66,14 +66,14 @@ public:
 	}
 
 	/// Creates a new @c CFWrapper
-	CFWrapper(CFWrapper&& rhs)
+	CFWrapper(CFWrapper&& rhs) noexcept
 	: mObject(rhs.mObject), mRelease(rhs.mRelease)
 	{
 		rhs.mObject = nullptr;
 	}
 
 	/// Replaces the wrapped object
-	CFWrapper& operator=(CFWrapper&& rhs)
+	CFWrapper& operator=(CFWrapper&& rhs) noexcept
 	{
 		if(mObject != rhs.mObject) {
 			if(mObject && mRelease)
@@ -92,14 +92,14 @@ public:
 	/// Create a new @c CFWrapper
 	/// @note The @c CFWrapper takes ownership of @c object
 	/// @param object The object to wrap
-	inline explicit CFWrapper(T object)
+	inline explicit CFWrapper(T object) noexcept
 	: CFWrapper(object, true)
 	{}
 
 	/// Creates a new @c CFWrapper
 	/// @param object The object to wrap
 	/// @param release Whether this @c CFWrapper should take ownership of @c object
-	CFWrapper(T object, bool release)
+	CFWrapper(T object, bool release) noexcept
 	: mObject(object), mRelease(release)
 	{}
 
@@ -108,7 +108,7 @@ public:
 	/// Replaces the wrapped object
 	/// @note The @c CFWrapper takes ownership of @c rhs
 	/// @param rhs The object to wrap
-	CFWrapper& operator=(const T& rhs)
+	CFWrapper& operator=(const T& rhs) noexcept
 	{
 		if(mObject != rhs) {
 			if(mObject && mRelease)
@@ -124,7 +124,7 @@ public:
 #pragma mark Pointer management
 
 	/// Relinquishes ownership of the wrapped object and returns it
-	inline T Relinquish()
+	inline T Relinquish() noexcept
 	{
 		T object = mObject;
 		mObject = nullptr;
@@ -135,7 +135,7 @@ public:
 #pragma mark Equality testing
 
 	/// Tests two @c CFWrapper objects for equality using @c CFEqual()
-	inline bool operator==(const CFWrapper& rhs) const
+	inline bool operator==(const CFWrapper& rhs) const noexcept
 	{
 		if(mObject == rhs.mObject)
 			return true;
@@ -148,7 +148,7 @@ public:
 	}
 
 	/// Tests two @c CFWrapper objects for inequality
-	inline bool operator!=(const CFWrapper& rhs) const
+	inline bool operator!=(const CFWrapper& rhs) const noexcept
 	{
 		return !operator==(rhs);
 	}
@@ -156,33 +156,33 @@ public:
 #pragma mark Core Foundation object access
 
 	/// Returns @c true if the wrapped object is not @c nullptr
-	inline explicit operator bool() const
+	inline explicit operator bool() const noexcept
 	{
 		return mObject != nullptr;
 	}
 
 	/// Returns @c true if the wrapped object is @c nullptr
-	inline bool operator!() const
+	inline bool operator!() const noexcept
 	{
 		return !operator bool();
 	}
 
 	/// Returns the wrapped object
-	inline operator T() const
+	inline operator T() const noexcept
 	{
 		return mObject;
 	}
 
 
 	/// Returns a pointer to the wrapped object
-	inline T * operator&()
+	inline T * operator&() noexcept
 	{
 		return &mObject;
 	}
 
 
 	/// Returns the wrapped object
-	inline T Object() const
+	inline T Object() const noexcept
 	{
 		return mObject;
 	}
