@@ -12,96 +12,88 @@
 
 namespace {
 
-	/// Returns @c v clamped to the interval @c [lo,hi]
-	template<typename T>
-	constexpr const T& clamp(const T& v, const T& lo, const T& hi)
-	{
-		assert(!(hi < lo));
-		return (v < lo) ? lo : (hi < v) ? hi : v;
-	}
+/// Zeroes a range of bytes in @c buffers
+/// @param buffers The destination buffers
+/// @param bufferCount The number of buffers
+/// @param byteOffset The byte offset in @c buffers to begin writing
+/// @param byteCount The number of bytes per non-interleaved buffer to write
+inline void ZeroRange(uint8_t * const _Nonnull * const _Nonnull buffers, size_t bufferCount, size_t byteOffset, size_t byteCount)
+{
+	for(size_t i = 0; i < bufferCount; ++i)
+		std::memset(buffers[i] + byteOffset, 0, byteCount);
+}
 
-	/// Zeroes a range of bytes in @c buffers
-	/// @param buffers The destination buffers
-	/// @param bufferCount The number of buffers
-	/// @param byteOffset The byte offset in @c buffers to begin writing
-	/// @param byteCount The number of bytes per non-interleaved buffer to write
-	inline void ZeroRange(uint8_t * const _Nonnull * const _Nonnull buffers, size_t bufferCount, size_t byteOffset, size_t byteCount)
-	{
-		for(auto bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
-			std::memset(buffers[bufferIndex] + byteOffset, 0, byteCount);
+/// Zeroes a range of bytes in @c bufferList
+/// @param bufferList The destination buffers
+/// @param byteOffset The byte offset in @c bufferList to begin writing
+/// @param byteCount The maximum number of bytes per non-interleaved buffer to write
+inline void ZeroABL(AudioBufferList * const _Nonnull bufferList, size_t byteOffset, size_t byteCount)
+{
+	for(UInt32 i = 0; i < bufferList->mNumberBuffers; ++i) {
+		if(byteOffset > bufferList->mBuffers[i].mDataByteSize)
+			continue;
+		std::memset(static_cast<uint8_t *>(bufferList->mBuffers[i].mData) + byteOffset, 0, std::min(byteCount, bufferList->mBuffers[i].mDataByteSize - byteOffset));
 	}
+}
 
-	/// Zeroes a range of bytes in @c bufferList
-	/// @param bufferList The destination buffers
-	/// @param byteOffset The byte offset in @c bufferList to begin writing
-	/// @param byteCount The maximum number of bytes per non-interleaved buffer to write
-	inline void ZeroABL(AudioBufferList * const _Nonnull bufferList, size_t byteOffset, size_t byteCount)
-	{
-		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
-			if(byteOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
-				continue;
-			std::memset(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + byteOffset, 0, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - byteOffset));
-		}
+/// Copies non-interleaved audio from @c bufferList to @c buffers
+/// @param buffers The destination buffers
+/// @param dstOffset The byte offset in @c buffers to begin writing
+/// @param bufferList The source buffers
+/// @param srcOffset The byte offset in @c bufferList to begin reading
+/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
+inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, size_t dstOffset, const AudioBufferList * const _Nonnull bufferList, size_t srcOffset, size_t byteCount) noexcept
+{
+	for(UInt32 i = 0; i < bufferList->mNumberBuffers; ++i) {
+		if(srcOffset > bufferList->mBuffers[i].mDataByteSize)
+			continue;
+		std::memcpy(buffers[i] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[i].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[i].mDataByteSize - srcOffset));
 	}
+}
 
-	/// Copies non-interleaved audio from @c bufferList to @c buffers
-	/// @param buffers The destination buffers
-	/// @param dstOffset The byte offset in @c buffers to begin writing
-	/// @param bufferList The source buffers
-	/// @param srcOffset The byte offset in @c bufferList to begin reading
-	/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-	inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, size_t dstOffset, const AudioBufferList * const _Nonnull bufferList, size_t srcOffset, size_t byteCount) noexcept
-	{
-		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
-			if(srcOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
-				continue;
-			std::memcpy(buffers[bufferIndex] + dstOffset, static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - srcOffset));
-		}
+/// Copies non-interleaved audio from @c buffers to @c bufferList
+/// @param bufferList The destination buffers
+/// @param dstOffset The byte offset in @c bufferList to begin writing
+/// @param buffers The source buffers
+/// @param srcOffset The byte offset in @c bufferList to begin reading
+/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
+inline void FetchABL(AudioBufferList * const _Nonnull bufferList, size_t dstOffset, const uint8_t * const _Nonnull * const _Nonnull buffers, size_t srcOffset, size_t byteCount) noexcept
+{
+	for(UInt32 i = 0; i < bufferList->mNumberBuffers; ++i) {
+		if(dstOffset > bufferList->mBuffers[i].mDataByteSize)
+			continue;
+		std::memcpy(static_cast<uint8_t *>(bufferList->mBuffers[i].mData) + dstOffset, buffers[i] + srcOffset, std::min(byteCount, bufferList->mBuffers[i].mDataByteSize - dstOffset));
 	}
+}
 
-	/// Copies non-interleaved audio from @c buffers to @c bufferList
-	/// @param bufferList The destination buffers
-	/// @param dstOffset The byte offset in @c bufferList to begin writing
-	/// @param buffers The source buffers
-	/// @param srcOffset The byte offset in @c bufferList to begin reading
-	/// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-	inline void FetchABL(AudioBufferList * const _Nonnull bufferList, size_t dstOffset, const uint8_t * const _Nonnull * const _Nonnull buffers, size_t srcOffset, size_t byteCount) noexcept
-	{
-		for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
-			if(dstOffset > bufferList->mBuffers[bufferIndex].mDataByteSize)
-				continue;
-			std::memcpy(static_cast<uint8_t *>(bufferList->mBuffers[bufferIndex].mData) + dstOffset, buffers[bufferIndex] + srcOffset, std::min(byteCount, bufferList->mBuffers[bufferIndex].mDataByteSize - dstOffset));
-		}
-	}
-
-	/// Returns the smallest power of two value greater than @c x
-	/// @param x A value in the range [2..2147483648]
-	/// @return The smallest power of two greater than @c x
-	inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
-	{
-		assert(x > 1);
-		assert(x <= ((std::numeric_limits<uint32_t>::max() / 2) + 1));
-		return static_cast<uint32_t>(1 << (32 - __builtin_clz(x - 1)));
-	}
+/// Returns the smallest power of two value greater than @c x
+/// @param x A value in the range [2..2147483648]
+/// @return The smallest power of two greater than @c x
+inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
+{
+	assert(x > 1);
+	assert(x <= ((std::numeric_limits<uint32_t>::max() / 2) + 1));
+	return static_cast<uint32_t>(1 << (32 - __builtin_clz(x - 1)));
+}
 
 }
 
 #pragma mark Creation and Destruction
 
-SFBCARingBuffer::SFBCARingBuffer() noexcept
+SFB::CARingBuffer::CARingBuffer() noexcept
 : mBuffers(nullptr), mCapacityFrames(0), mCapacityFramesMask(0)
 {
 	assert(mTimeBoundsQueueCounter.is_lock_free());
 }
 
-SFBCARingBuffer::~SFBCARingBuffer()
+SFB::CARingBuffer::~CARingBuffer()
 {
 	std::free(mBuffers);
 }
 
 #pragma mark Buffer Management
 
-bool SFBCARingBuffer::Allocate(const SFBAudioStreamBasicDescription& format, size_t capacityFrames) noexcept
+bool SFB::CARingBuffer::Allocate(const CAStreamBasicDescription& format, size_t capacityFrames) noexcept
 {
 	// Only non-interleaved formats are supported
 	if(format.IsInterleaved())
@@ -131,13 +123,13 @@ bool SFBCARingBuffer::Allocate(const SFBAudioStreamBasicDescription& format, siz
 	// Assign the pointers and channel buffers
 	mBuffers = reinterpret_cast<uint8_t **>(memoryChunk);
 	memoryChunk += format.mChannelsPerFrame * sizeof(uint8_t *);
-	for(auto i = 0; i < format.mChannelsPerFrame; ++i) {
+	for(UInt32 i = 0; i < format.mChannelsPerFrame; ++i) {
 		mBuffers[i] = memoryChunk;
 		memoryChunk += capacityBytes;
 	}
 
 	// Zero the time bounds queue
-	for(auto i = 0; i < sTimeBoundsQueueSize; ++i) {
+	for(size_t i = 0; i < sTimeBoundsQueueSize; ++i) {
 		mTimeBoundsQueue[i].mStartTime = 0;
 		mTimeBoundsQueue[i].mEndTime = 0;
 		mTimeBoundsQueue[i].mUpdateCounter = 0;
@@ -148,7 +140,7 @@ bool SFBCARingBuffer::Allocate(const SFBAudioStreamBasicDescription& format, siz
 	return true;
 }
 
-void SFBCARingBuffer::Deallocate() noexcept
+void SFB::CARingBuffer::Deallocate() noexcept
 {
 	if(mBuffers) {
 		std::free(mBuffers);
@@ -158,22 +150,29 @@ void SFBCARingBuffer::Deallocate() noexcept
 
 		mCapacityFrames = 0;
 		mCapacityFramesMask = 0;
+
+		for(size_t i = 0; i < sTimeBoundsQueueSize; ++i) {
+			mTimeBoundsQueue[i].mStartTime = 0;
+			mTimeBoundsQueue[i].mEndTime = 0;
+			mTimeBoundsQueue[i].mUpdateCounter = 0;
+		}
+
+		mTimeBoundsQueueCounter = 0;
 	}
 }
 
-bool SFBCARingBuffer::GetTimeBounds(int64_t& startTime, int64_t& endTime) const noexcept
+bool SFB::CARingBuffer::GetTimeBounds(int64_t& startTime, int64_t& endTime) const noexcept
 {
 	for(auto i = 0; i < 8; ++i) {
 		auto currentCounter = mTimeBoundsQueueCounter.load(std::memory_order_acquire);
 		auto currentIndex = currentCounter & sTimeBoundsQueueMask;
 
-		const SFBCARingBuffer::TimeBounds * const bounds = mTimeBoundsQueue + currentIndex;
+		const SFB::CARingBuffer::TimeBounds * const bounds = mTimeBoundsQueue + currentIndex;
 
 		startTime = bounds->mStartTime;
 		endTime = bounds->mEndTime;
 
 		auto counter = bounds->mUpdateCounter.load(std::memory_order_acquire);
-
 		if(counter == currentCounter)
 			return true;
 	}
@@ -183,14 +182,15 @@ bool SFBCARingBuffer::GetTimeBounds(int64_t& startTime, int64_t& endTime) const 
 
 #pragma mark Reading and Writing Audio
 
-bool SFBCARingBuffer::Read(AudioBufferList * const bufferList, size_t frameCount, int64_t startRead) noexcept
+bool SFB::CARingBuffer::Read(AudioBufferList * const bufferList, size_t frameCount, int64_t startRead) noexcept
 {
 	if(frameCount == 0)
 		return true;
 
-	startRead = std::max(0LL, startRead);
+	if(!bufferList || frameCount > mCapacityFrames || startRead < 0)
+		return false;
 
-	int64_t endRead = startRead + frameCount;
+	auto endRead = startRead + static_cast<int64_t>(frameCount);
 
 	auto startRead0 = startRead;
 	auto endRead0 = endRead;
@@ -203,21 +203,21 @@ bool SFBCARingBuffer::Read(AudioBufferList * const bufferList, size_t frameCount
 		return true;
 	}
 
-	size_t byteSize = (endRead - startRead) * mFormat.mBytesPerFrame;
+	size_t byteSize = static_cast<size_t>(endRead - startRead) * mFormat.mBytesPerFrame;
 
-	size_t destStartByteOffset = std::max(0LL, (startRead - startRead0) * mFormat.mBytesPerFrame);
+	size_t destStartByteOffset = static_cast<size_t>(std::max(static_cast<int64_t>(0), (startRead - startRead0) * mFormat.mBytesPerFrame));
 	if(destStartByteOffset > 0)
 		ZeroABL(bufferList, 0, std::min(frameCount * mFormat.mBytesPerFrame, destStartByteOffset));
 
-	size_t destEndSize = std::max(0LL, endRead0 - endRead);
-	if (destEndSize > 0)
+	size_t destEndSize = static_cast<size_t>(std::max(static_cast<int64_t>(0), endRead0 - endRead));
+	if(destEndSize > 0)
 		ZeroABL(bufferList, destStartByteOffset + byteSize, destEndSize * mFormat.mBytesPerFrame);
 
 	auto offset0 = FrameByteOffset(startRead);
 	auto offset1 = FrameByteOffset(endRead);
 	size_t byteCount;
 
-	if (offset0 < offset1) {
+	if(offset0 < offset1) {
 		byteCount = offset1 - offset0;
 		FetchABL(bufferList, destStartByteOffset, mBuffers, offset0, byteCount);
 	}
@@ -228,32 +228,31 @@ bool SFBCARingBuffer::Read(AudioBufferList * const bufferList, size_t frameCount
 		byteCount += offset1;
 	}
 
-	for(auto bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex)
-		bufferList->mBuffers[bufferIndex].mDataByteSize = static_cast<UInt32>(byteCount);
+	for(UInt32 i = 0; i < bufferList->mNumberBuffers; ++i)
+		bufferList->mBuffers[i].mDataByteSize = static_cast<UInt32>(byteCount);
 
 	return true;
 }
 
-bool SFBCARingBuffer::Write(const AudioBufferList * const bufferList, size_t frameCount, int64_t startWrite) noexcept
+bool SFB::CARingBuffer::Write(const AudioBufferList * const bufferList, size_t frameCount, int64_t startWrite) noexcept
 {
 	if(frameCount == 0)
 		return true;
 
-	if(frameCount > mCapacityFrames)
+	if(!bufferList || frameCount > mCapacityFrames || startWrite < 0)
 		return false;
 
-	int64_t endWrite = startWrite + frameCount;
+	auto endWrite = startWrite + static_cast<int64_t>(frameCount);
 
-	if(startWrite < EndTime()) {
-		// Going backwards, throw everything out
+	// Going backwards, throw everything out
+	if(startWrite < EndTime())
 		SetTimeBounds(startWrite, startWrite);
-	}
-	else if(endWrite - StartTime() <= mCapacityFrames) {
-		// The buffer has not yet wrapped and will not need to
-	}
+	// The buffer has not yet wrapped and will not need to
+	else if(endWrite - StartTime() <= static_cast<int64_t>(mCapacityFrames))
+		;
+	// Advance the start time past the region about to be overwritten
 	else {
-		// Advance the start time past the region about to be overwritten
-		int64_t newStart = endWrite - mCapacityFrames;	// one buffer of time behind the write position
+		int64_t newStart = endWrite - static_cast<int64_t>(mCapacityFrames);	// one buffer of time behind the write position
 		int64_t newEnd = std::max(newStart, EndTime());
 		SetTimeBounds(newStart, newEnd);
 	}
@@ -294,7 +293,7 @@ bool SFBCARingBuffer::Write(const AudioBufferList * const bufferList, size_t fra
 
 #pragma mark Internals
 
-void SFBCARingBuffer::SetTimeBounds(int64_t startTime, int64_t endTime) noexcept
+void SFB::CARingBuffer::SetTimeBounds(int64_t startTime, int64_t endTime) noexcept
 {
 	auto nextCounter = mTimeBoundsQueueCounter.load(std::memory_order_acquire) + 1;
 	auto nextIndex = nextCounter & sTimeBoundsQueueMask;
@@ -306,7 +305,7 @@ void SFBCARingBuffer::SetTimeBounds(int64_t startTime, int64_t endTime) noexcept
 	mTimeBoundsQueueCounter.store(nextCounter, std::memory_order_release);
 }
 
-bool SFBCARingBuffer::ClampTimesToBounds(int64_t& startRead, int64_t& endRead) const noexcept
+bool SFB::CARingBuffer::ClampTimesToBounds(int64_t& startRead, int64_t& endRead) const noexcept
 {
 	int64_t startTime, endTime;
 	if(!GetTimeBounds(startTime, endTime))
@@ -318,7 +317,7 @@ bool SFBCARingBuffer::ClampTimesToBounds(int64_t& startRead, int64_t& endRead) c
 	}
 
 	startRead = std::max(startRead, startTime);
-	endRead = clamp(endRead, startTime, endTime);
+	endRead = std::max(std::min(endRead, endTime), startRead);
 
 	return true;
 }
