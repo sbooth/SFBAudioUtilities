@@ -39,7 +39,7 @@ SFB::RingBuffer::~RingBuffer()
 
 #pragma mark Buffer Management
 
-bool SFB::RingBuffer::Allocate(size_t capacityBytes) noexcept
+bool SFB::RingBuffer::Allocate(uint32_t capacityBytes) noexcept
 {
 	if(capacityBytes < 2 || capacityBytes > 0x80000000)
 		return false;
@@ -79,7 +79,7 @@ void SFB::RingBuffer::Reset() noexcept
 	mWritePosition = 0;
 }
 
-size_t SFB::RingBuffer::BytesAvailableToRead() const noexcept
+uint32_t SFB::RingBuffer::BytesAvailableToRead() const noexcept
 {
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
 	auto readPosition = mReadPosition.load(std::memory_order_acquire);
@@ -90,7 +90,7 @@ size_t SFB::RingBuffer::BytesAvailableToRead() const noexcept
 		return (writePosition - readPosition + mCapacityBytes) & mCapacityBytesMask;
 }
 
-size_t SFB::RingBuffer::BytesAvailableToWrite() const noexcept
+uint32_t SFB::RingBuffer::BytesAvailableToWrite() const noexcept
 {
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
 	auto readPosition = mReadPosition.load(std::memory_order_acquire);
@@ -105,7 +105,7 @@ size_t SFB::RingBuffer::BytesAvailableToWrite() const noexcept
 
 #pragma mark Reading and Writing Data
 
-size_t SFB::RingBuffer::Read(void * const destinationBuffer, size_t byteCount) noexcept
+uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCount) noexcept
 {
 	if(!destinationBuffer || byteCount == 0)
 		return 0;
@@ -113,7 +113,7 @@ size_t SFB::RingBuffer::Read(void * const destinationBuffer, size_t byteCount) n
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
 	auto readPosition = mReadPosition.load(std::memory_order_acquire);
 
-	size_t bytesAvailable;
+	uint32_t bytesAvailable;
 	if(writePosition > readPosition)
 		bytesAvailable = writePosition - readPosition;
 	else
@@ -122,7 +122,7 @@ size_t SFB::RingBuffer::Read(void * const destinationBuffer, size_t byteCount) n
 	if(bytesAvailable == 0)
 		return 0;
 
-	size_t bytesToRead = std::min(bytesAvailable, byteCount);
+	auto bytesToRead = std::min(bytesAvailable, byteCount);
 	if(readPosition + bytesToRead > mCapacityBytes) {
 		auto bytesAfterReadPointer = mCapacityBytes - readPosition;
 		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesAfterReadPointer);
@@ -136,7 +136,7 @@ size_t SFB::RingBuffer::Read(void * const destinationBuffer, size_t byteCount) n
 	return bytesToRead;
 }
 
-size_t SFB::RingBuffer::Peek(void * const destinationBuffer, size_t byteCount) const noexcept
+uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCount) const noexcept
 {
 	if(!destinationBuffer || byteCount == 0)
 		return 0;
@@ -144,7 +144,7 @@ size_t SFB::RingBuffer::Peek(void * const destinationBuffer, size_t byteCount) c
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
 	auto readPosition = mReadPosition.load(std::memory_order_acquire);
 
-	size_t bytesAvailable;
+	uint32_t bytesAvailable;
 	if(writePosition > readPosition)
 		bytesAvailable = writePosition - readPosition;
 	else
@@ -153,7 +153,7 @@ size_t SFB::RingBuffer::Peek(void * const destinationBuffer, size_t byteCount) c
 	if(bytesAvailable == 0)
 		return 0;
 
-	size_t bytesToRead = std::min(bytesAvailable, byteCount);
+	auto bytesToRead = std::min(bytesAvailable, byteCount);
 	if(readPosition + bytesToRead > mCapacityBytes) {
 		auto bytesAfterReadPointer = mCapacityBytes - readPosition;
 		std::memcpy(destinationBuffer, mBuffer + readPosition, bytesAfterReadPointer);
@@ -165,7 +165,7 @@ size_t SFB::RingBuffer::Peek(void * const destinationBuffer, size_t byteCount) c
 	return bytesToRead;
 }
 
-size_t SFB::RingBuffer::Write(const void * const sourceBuffer, size_t byteCount) noexcept
+uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCount) noexcept
 {
 	if(!sourceBuffer || byteCount == 0)
 		return 0;
@@ -173,7 +173,7 @@ size_t SFB::RingBuffer::Write(const void * const sourceBuffer, size_t byteCount)
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
 	auto readPosition = mReadPosition.load(std::memory_order_acquire);
 
-	size_t bytesAvailable;
+	uint32_t bytesAvailable;
 	if(writePosition > readPosition)
 		bytesAvailable = ((readPosition - writePosition + mCapacityBytes) & mCapacityBytesMask) - 1;
 	else if(writePosition < readPosition)
@@ -184,7 +184,7 @@ size_t SFB::RingBuffer::Write(const void * const sourceBuffer, size_t byteCount)
 	if(bytesAvailable == 0)
 		return 0;
 
-	size_t bytesToWrite = std::min(bytesAvailable, byteCount);
+	auto bytesToWrite = std::min(bytesAvailable, byteCount);
 	if(writePosition + bytesToWrite > mCapacityBytes) {
 		auto bytesAfterWritePointer = mCapacityBytes - writePosition;
 		std::memcpy(mBuffer + writePosition, sourceBuffer, bytesAfterWritePointer);
@@ -198,12 +198,12 @@ size_t SFB::RingBuffer::Write(const void * const sourceBuffer, size_t byteCount)
 	return bytesToWrite;
 }
 
-void SFB::RingBuffer::AdvanceReadPosition(size_t byteCount) noexcept
+void SFB::RingBuffer::AdvanceReadPosition(uint32_t byteCount) noexcept
 {
 	mReadPosition.store((mReadPosition.load(std::memory_order_acquire) + byteCount) & mCapacityBytesMask, std::memory_order_release);
 }
 
-void SFB::RingBuffer::AdvanceWritePosition(size_t byteCount) noexcept
+void SFB::RingBuffer::AdvanceWritePosition(uint32_t byteCount) noexcept
 {
 	mWritePosition.store((mWritePosition.load(std::memory_order_acquire) + byteCount) & mCapacityBytesMask, std::memory_order_release);
 }
@@ -213,7 +213,7 @@ SFB::RingBuffer::BufferPair SFB::RingBuffer::ReadVector() const noexcept
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
 	auto readPosition = mReadPosition.load(std::memory_order_acquire);
 
-	size_t bytesAvailable;
+	uint32_t bytesAvailable;
 	if(writePosition > readPosition)
 		bytesAvailable = writePosition - readPosition;
 	else
@@ -232,7 +232,7 @@ SFB::RingBuffer::BufferPair SFB::RingBuffer::WriteVector() const noexcept
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
 	auto readPosition = mReadPosition.load(std::memory_order_acquire);
 
-	size_t bytesAvailable;
+	uint32_t bytesAvailable;
 	if(writePosition > readPosition)
 		bytesAvailable = ((readPosition - writePosition + mCapacityBytes) & mCapacityBytesMask) - 1;
 	else if(writePosition < readPosition)

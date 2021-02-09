@@ -73,7 +73,7 @@ public:
 	/// @param buf The buffer providing the data
 	/// @param len The length of @c buf in bytes
 	/// @throw @c std::invalid_argument if @c buf==nullptr and @c len>0
-	ByteStream(const void * const _Nullable buf, size_t len)
+	ByteStream(const void * const _Nullable buf, uint32_t len)
 	: mBuffer(buf), mBufferLength(len), mReadPosition(0)
 	{
 		if(!mBuffer && len > 0)
@@ -227,11 +227,11 @@ public:
 	/// @param buf The destination buffer or @c nullptr to discard the bytes
 	/// @param count The number of bytes to read
 	/// @return The number of bytes actually read
-	size_t Read(void * const _Nullable buf, size_t count) noexcept
+	uint32_t Read(void * const _Nullable buf, uint32_t count) noexcept
 	{
 		auto bytesToCopy = std::min(count, mBufferLength - mReadPosition);
 		if(buf)
-			memcpy(buf, static_cast<const uint8_t *>(mBuffer) + mReadPosition, bytesToCopy);
+			std::memcpy(buf, static_cast<const uint8_t *>(mBuffer) + mReadPosition, bytesToCopy);
 		mReadPosition += bytesToCopy;
 		return bytesToCopy;
 	}
@@ -239,7 +239,7 @@ public:
 	/// Advances the read position
 	/// @param count The number of bytes to skip
 	/// @return The number of bytes actually skipped
-	size_t Skip(size_t count) noexcept
+	uint32_t Skip(uint32_t count) noexcept
 	{
 		mReadPosition += std::min(count, mBufferLength - mReadPosition);
 		return mReadPosition;
@@ -248,7 +248,7 @@ public:
 	/// Rewinds the read position
 	/// @param count The number of bytes to rewind
 	/// @return The number of bytes actually skipped
-	size_t Rewind(size_t count) noexcept
+	uint32_t Rewind(uint32_t count) noexcept
 	{
 		auto bytesToSkip = std::min(count, mReadPosition);
 		mReadPosition -= bytesToSkip;
@@ -257,20 +257,20 @@ public:
 
 	/// Returns the number of bytes in the buffer
 	/// @return The number of bytes in the buffer
-	inline size_t Length() const noexcept
+	inline uint32_t Length() const noexcept
 	{
 		return mBufferLength;
 	}
 
 	/// Returns the number of bytes remaining
-	inline size_t Remaining() const noexcept
+	inline uint32_t Remaining() const noexcept
 	{
 		return mBufferLength - mReadPosition;
 	}
 
 	/// Returns the read position
 	/// @return The read posiiton
-	inline size_t Position() const noexcept
+	inline uint32_t Position() const noexcept
 	{
 		return mReadPosition;
 	}
@@ -278,7 +278,7 @@ public:
 	/// Sets the read position
 	/// @param pos The desired read position
 	/// @return The new read posiiton
-	inline size_t SetPosition(size_t pos) noexcept
+	inline uint32_t SetPosition(uint32_t pos) noexcept
 	{
 		mReadPosition = std::min(pos, mBufferLength);
 		return mReadPosition;
@@ -289,9 +289,9 @@ private:
 	/// The wrapped buffer
 	const void * _Nullable mBuffer;
 	/// The number of bytes in @c mBuffer
-	size_t mBufferLength;
+	uint32_t mBufferLength;
 	/// The current read position
-	size_t mReadPosition;
+	uint32_t mReadPosition;
 
 };
 

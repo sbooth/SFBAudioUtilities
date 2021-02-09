@@ -45,7 +45,7 @@ public:
 	/// @note Capacities from 2 to 2,147,483,648 (0x80000000) bytes are supported
 	/// @param byteCount The desired capacity, in bytes
 	/// @return @c true on success, @c false on error
-	bool Allocate(size_t byteCount) noexcept;
+	bool Allocate(uint32_t byteCount) noexcept;
 
 	/// Frees the resources used by this @c RingBuffer
 	/// @note This method is not thread safe.
@@ -58,16 +58,16 @@ public:
 
 
 	/// Returns the capacity of this RingBuffer in bytes
-	inline size_t CapacityBytes() const noexcept
+	inline uint32_t CapacityBytes() const noexcept
 	{
 		return mCapacityBytes;
 	}
 
 	/// Returns the number of bytes available for reading
-	size_t BytesAvailableToRead() const noexcept;
+	uint32_t BytesAvailableToRead() const noexcept;
 
 	/// Returns the free space available for writing in bytes
-	size_t BytesAvailableToWrite() const noexcept;
+	uint32_t BytesAvailableToWrite() const noexcept;
 
 #pragma mark Reading and writing data
 
@@ -75,26 +75,26 @@ public:
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
 	/// @return The number of bytes actually read
-	size_t Read(void * const _Nonnull destinationBuffer, size_t byteCount) noexcept;
+	uint32_t Read(void * const _Nonnull destinationBuffer, uint32_t byteCount) noexcept;
 
 	/// Read data from the @c RingBuffer without advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
 	/// @return The number of bytes actually read
-	size_t Peek(void * const _Nonnull destinationBuffer, size_t byteCount) const noexcept;
+	uint32_t Peek(void * const _Nonnull destinationBuffer, uint32_t byteCount) const noexcept;
 
 	/// Write data to the @c RingBuffer, advancing the write pointer.
 	/// @param sourceBuffer An address containing the data to copy
 	/// @param byteCount The desired number of frames to write
 	/// @return The number of bytes actually written
-	size_t Write(const void * const _Nonnull sourceBuffer, size_t byteCount) noexcept;
+	uint32_t Write(const void * const _Nonnull sourceBuffer, uint32_t byteCount) noexcept;
 
 
 	/// Advance the read position by the specified number of bytes
-	void AdvanceReadPosition(size_t byteCount) noexcept;
+	void AdvanceReadPosition(uint32_t byteCount) noexcept;
 
 	/// Advance the write position by the specified number of bytes
-	void AdvanceWritePosition(size_t byteCount) noexcept;
+	void AdvanceWritePosition(uint32_t byteCount) noexcept;
 
 
 	/// A struct wrapping a memory buffer location and capacity
@@ -102,7 +102,7 @@ public:
 		/// The memory buffer location
 		uint8_t	* const _Nullable mBuffer;
 		/// The capacity of @c mBuffer in bytes
-		size_t mBufferCapacity;
+		uint32_t mBufferCapacity;
 
 		/// Construct an empty @c Buffer
 		Buffer() noexcept
@@ -112,7 +112,7 @@ public:
 		/// Construct a @c Buffer for the specified location and capacity
 		/// @param buffer The memory buffer location
 		/// @param bufferCapacity The capacity of @c buffer in bytes
-		Buffer(uint8_t * const _Nullable buffer, size_t bufferCapacity) noexcept
+		Buffer(uint8_t * const _Nullable buffer, uint32_t bufferCapacity) noexcept
 		: mBuffer(buffer), mBufferCapacity(bufferCapacity)
 		{}
 	};
@@ -132,14 +132,14 @@ private:
 	uint8_t * _Nullable mBuffer;
 
 	/// The capacity of @c mBuffer in bytes
-	size_t mCapacityBytes;
+	uint32_t mCapacityBytes;
 	/// The capacity of @c mBuffer in bytes minus one
-	size_t mCapacityBytesMask;
+	uint32_t mCapacityBytesMask;
 
 	/// The offset into @c mBuffer of the read location
-	std::atomic_size_t mWritePosition;
+	std::atomic_uint32_t mWritePosition;
 	/// The offset into @c mBuffer of the write location
-	std::atomic_size_t mReadPosition;
+	std::atomic_uint32_t mReadPosition;
 
 };
 

@@ -51,7 +51,7 @@ public:
 	/// @param format The format of the audio that will be written to and read from this buffer.
 	/// @param capacityFrames The desired capacity, in frames
 	/// @return @c true on success, @c false on error
-	bool Allocate(const CAStreamBasicDescription& format, size_t capacityFrames) noexcept;
+	bool Allocate(const CAStreamBasicDescription& format, uint32_t capacityFrames) noexcept;
 
 	/// Frees the resources used by this @c AudioRingBuffer
 	/// @note This method is not thread safe.
@@ -64,7 +64,7 @@ public:
 
 
 	/// Returns the capacity in frames of this @c AudioRingBuffer
-	inline size_t CapacityFrames() const noexcept
+	inline uint32_t CapacityFrames() const noexcept
 	{
 		return mCapacityFrames;
 	}
@@ -76,10 +76,10 @@ public:
 	}
 
 	/// Returns the number of frames available for reading
-	size_t FramesAvailableToRead() const noexcept;
+	uint32_t FramesAvailableToRead() const noexcept;
 
 	/// Returns the free space available for writing in frames
-	size_t FramesAvailableToWrite() const noexcept;
+	uint32_t FramesAvailableToWrite() const noexcept;
 
 #pragma mark Reading and writing audio
 
@@ -87,13 +87,13 @@ public:
 	/// @param bufferList An @c AudioBufferList to receive the audio
 	/// @param frameCount The desired number of frames to read
 	/// @return The number of frames actually read
-	size_t Read(AudioBufferList * const _Nonnull bufferList, size_t frameCount) noexcept;
+	uint32_t Read(AudioBufferList * const _Nonnull bufferList, uint32_t frameCount) noexcept;
 
 	/// Writes audio to the @c AudioRingBuffer and advances the write pointer.
 	/// @param bufferList An @c AudioBufferList containing the audio to copy
 	/// @param frameCount The desired number of frames to write
 	/// @return The number of frames actually written
-	size_t Write(const AudioBufferList * const _Nonnull bufferList, size_t frameCount) noexcept;
+	uint32_t Write(const AudioBufferList * const _Nonnull bufferList, uint32_t frameCount) noexcept;
 
 private:
 
@@ -104,15 +104,15 @@ private:
 	uint8_t * _Nonnull * _Nullable mBuffers;
 
 	/// The frame capacity per channel
-	size_t mCapacityFrames;
+	uint32_t mCapacityFrames;
 	/// Mask used to wrap read and write locations
 	/// @note Equal to @c mCapacityFrames-1
-	size_t mCapacityFramesMask;
+	uint32_t mCapacityFramesMask;
 
 	/// The offset in frames of the write location
-	std::atomic_size_t mWritePointer;
+	std::atomic_uint32_t mWritePointer;
 	/// The offset in frames of the read location
-	std::atomic_size_t mReadPointer;
+	std::atomic_uint32_t mReadPointer;
 
 };
 

@@ -18,7 +18,7 @@ namespace {
 /// @param bufferList The source buffers
 /// @param srcOffset The byte offset in @c bufferList to begin reading
 /// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, size_t dstOffset, const AudioBufferList * const _Nonnull bufferList, size_t srcOffset, size_t byteCount) noexcept
+inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, uint32_t dstOffset, const AudioBufferList * const _Nonnull bufferList, uint32_t srcOffset, uint32_t byteCount) noexcept
 {
 	for(UInt32 i = 0; i < bufferList->mNumberBuffers; ++i) {
 		if(srcOffset > bufferList->mBuffers[i].mDataByteSize)
@@ -33,7 +33,7 @@ inline void StoreABL(uint8_t * const _Nonnull * const _Nonnull buffers, size_t d
 /// @param buffers The source buffers
 /// @param srcOffset The byte offset in @c bufferList to begin reading
 /// @param byteCount The maximum number of bytes per non-interleaved buffer to read and write
-inline void FetchABL(AudioBufferList * const _Nonnull bufferList, size_t dstOffset, const uint8_t * const _Nonnull * const _Nonnull buffers, size_t srcOffset, size_t byteCount) noexcept
+inline void FetchABL(AudioBufferList * const _Nonnull bufferList, uint32_t dstOffset, const uint8_t * const _Nonnull * const _Nonnull buffers, uint32_t srcOffset, uint32_t byteCount) noexcept
 {
 	for(UInt32 i = 0; i < bufferList->mNumberBuffers; ++i) {
 		if(dstOffset > bufferList->mBuffers[i].mDataByteSize)
@@ -69,10 +69,10 @@ SFB::AudioRingBuffer::~AudioRingBuffer()
 
 #pragma mark Buffer Management
 
-bool SFB::AudioRingBuffer::Allocate(const CAStreamBasicDescription& format, size_t capacityFrames) noexcept
+bool SFB::AudioRingBuffer::Allocate(const CAStreamBasicDescription& format, uint32_t capacityFrames) noexcept
 {
 	// Only non-interleaved formats are supported
-	if(format.IsInterleaved())
+	if(format.IsInterleaved() || capacityFrames < 2 || capacityFrames > 0x80000000)
 		return false;
 
 	Deallocate();
@@ -85,10 +85,10 @@ bool SFB::AudioRingBuffer::Allocate(const CAStreamBasicDescription& format, size
 	mCapacityFrames = capacityFrames;
 	mCapacityFramesMask = capacityFrames - 1;
 
-	size_t capacityBytes = capacityFrames * format.mBytesPerFrame;
+	uint32_t capacityBytes = capacityFrames * format.mBytesPerFrame;
 
 	// One memory allocation holds everything- first the pointers followed by the deinterleaved channels
-	size_t allocationSize = (capacityBytes + sizeof(uint8_t *)) * format.mChannelsPerFrame;
+	uint32_t allocationSize = (capacityBytes + sizeof(uint8_t *)) * format.mChannelsPerFrame;
 	uint8_t *memoryChunk = static_cast<uint8_t *>(std::malloc(allocationSize));
 	if(!memoryChunk)
 		return false;
@@ -132,7 +132,7 @@ void SFB::AudioRingBuffer::Reset() noexcept
 	mWritePointer = 0;
 }
 
-size_t SFB::AudioRingBuffer::FramesAvailableToRead() const noexcept
+uint32_t SFB::AudioRingBuffer::FramesAvailableToRead() const noexcept
 {
 	auto writePointer = mWritePointer.load(std::memory_order_acquire);
 	auto readPointer = mReadPointer.load(std::memory_order_acquire);
@@ -143,7 +143,7 @@ size_t SFB::AudioRingBuffer::FramesAvailableToRead() const noexcept
 		return (writePointer - readPointer + mCapacityFrames) & mCapacityFramesMask;
 }
 
-size_t SFB::AudioRingBuffer::FramesAvailableToWrite() const noexcept
+uint32_t SFB::AudioRingBuffer::FramesAvailableToWrite() const noexcept
 {
 	auto writePointer = mWritePointer.load(std::memory_order_acquire);
 	auto readPointer = mReadPointer.load(std::memory_order_acquire);
@@ -158,7 +158,7 @@ size_t SFB::AudioRingBuffer::FramesAvailableToWrite() const noexcept
 
 #pragma mark Reading and Writing Audio
 
-size_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, size_t frameCount) noexcept
+uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t frameCount) noexcept
 {
 	if(!bufferList || frameCount == 0)
 		return 0;
@@ -166,7 +166,7 @@ size_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, size_t fra
 	auto writePointer = mWritePointer.load(std::memory_order_acquire);
 	auto readPointer = mReadPointer.load(std::memory_order_acquire);
 
-	size_t framesAvailable;
+	uint32_t framesAvailable;
 	if(writePointer > readPointer)
 		framesAvailable = writePointer - readPointer;
 	else
@@ -175,7 +175,7 @@ size_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, size_t fra
 	if(framesAvailable == 0)
 		return 0;
 
-	size_t framesToRead = std::min(framesAvailable, frameCount);
+	auto framesToRead = std::min(framesAvailable, frameCount);
 	if(readPointer + framesToRead > mCapacityFrames) {
 		auto framesAfterReadPointer = mCapacityFrames - readPointer;
 		auto bytesAfterReadPointer = framesAfterReadPointer * mFormat.mBytesPerFrame;
@@ -195,7 +195,7 @@ size_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, size_t fra
 	return framesToRead;
 }
 
-size_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, size_t frameCount) noexcept
+uint32_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, uint32_t frameCount) noexcept
 {
 	if(!bufferList || frameCount == 0)
 		return 0;
@@ -203,7 +203,7 @@ size_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, siz
 	auto writePointer = mWritePointer.load(std::memory_order_acquire);
 	auto readPointer = mReadPointer.load(std::memory_order_acquire);
 
-	size_t framesAvailable;
+	uint32_t framesAvailable;
 	if(writePointer > readPointer)
 		framesAvailable = ((readPointer - writePointer + mCapacityFrames) & mCapacityFramesMask) - 1;
 	else if(writePointer < readPointer)
@@ -214,7 +214,7 @@ size_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, siz
 	if(framesAvailable == 0)
 		return 0;
 
-	size_t framesToWrite = std::min(framesAvailable, frameCount);
+	auto framesToWrite = std::min(framesAvailable, frameCount);
 	if(writePointer + framesToWrite > mCapacityFrames) {
 		auto framesAfterWritePointer = mCapacityFrames - writePointer;
 		auto bytesAfterWritePointer = framesAfterWritePointer * mFormat.mBytesPerFrame;

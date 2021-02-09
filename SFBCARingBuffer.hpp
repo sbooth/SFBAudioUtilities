@@ -51,7 +51,7 @@ public:
 	/// @param format The format of the audio that will be written to and read from this buffer.
 	/// @param capacityFrames The desired capacity, in frames
 	/// @return @c true on success, @c false on error
-	bool Allocate(const CAStreamBasicDescription& format, size_t capacityFrames) noexcept;
+	bool Allocate(const CAStreamBasicDescription& format, uint32_t capacityFrames) noexcept;
 
 	/// Frees the resources used by this @c CARingBuffer
 	/// @note This method is not thread safe.
@@ -59,7 +59,7 @@ public:
 
 
 	/// Returns the capacity in frames of this @c CARingBuffer
-	inline size_t CapacityFrames() const noexcept
+	inline uint32_t CapacityFrames() const noexcept
 	{
 		return mCapacityFrames;
 	}
@@ -88,7 +88,7 @@ public:
 	/// @param frameCount The desired number of frames to read
 	/// @param timeStamp The starting sample time
 	/// @return @c true on success, @c false on error
-	bool Read(AudioBufferList * const _Nonnull bufferList, size_t frameCount, int64_t timeStamp) noexcept;
+	bool Read(AudioBufferList * const _Nonnull bufferList, uint32_t frameCount, int64_t timeStamp) noexcept;
 
 	/// Writes audio to the @c CARingBuffer
 	/// @note Negative time stamps are not supported
@@ -96,14 +96,14 @@ public:
 	/// @param frameCount The desired number of frames to write
 	/// @param timeStamp The starting sample time
 	/// @return @c true on success, @c false on error
-	bool Write(const AudioBufferList * const _Nonnull bufferList, size_t frameCount, int64_t timeStamp) noexcept;
+	bool Write(const AudioBufferList * const _Nonnull bufferList, uint32_t frameCount, int64_t timeStamp) noexcept;
 
 protected:
 
 	/// Returns the byte offset of @c frameNumber
-	inline size_t FrameByteOffset(int64_t frameNumber) const noexcept
+	inline uint32_t FrameByteOffset(int64_t frameNumber) const noexcept
 	{
-		return (static_cast<size_t>(frameNumber) & mCapacityFramesMask) * mFormat.mBytesPerFrame;
+		return (static_cast<uint64_t>(frameNumber) & mCapacityFramesMask) * mFormat.mBytesPerFrame;
 	}
 
 	/// Constrains @c startRead and @c endRead to valid timestamps in the buffer
@@ -136,10 +136,10 @@ private:
 	uint8_t * _Nonnull * _Nullable mBuffers;
 
 	/// The frame capacity per channel
-	size_t mCapacityFrames;
+	uint32_t mCapacityFrames;
 	/// Mask used to wrap read and write locations
 	/// @note Equal to @c mCapacityFrames-1
-	size_t mCapacityFramesMask;
+	uint32_t mCapacityFramesMask;
 
 	/// A range of valid sample times in the buffer
 	struct TimeBounds {
@@ -152,10 +152,10 @@ private:
 	};
 
 	/// The number of elements in @c mTimeBoundsQueue
-	static const size_t sTimeBoundsQueueSize = 32;
+	static const uint32_t sTimeBoundsQueueSize = 32;
 	/// Mask value used to wrap time bounds counters
 	/// @note Equal to @c sTimeBoundsQueueSize-1
-	static const size_t sTimeBoundsQueueMask = sTimeBoundsQueueSize - 1;
+	static const uint32_t sTimeBoundsQueueMask = sTimeBoundsQueueSize - 1;
 
 	/// Array of @c TimeBounds structs
 	TimeBounds mTimeBoundsQueue[sTimeBoundsQueueSize];
