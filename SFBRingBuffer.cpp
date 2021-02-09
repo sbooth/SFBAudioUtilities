@@ -34,8 +34,7 @@ SFB::RingBuffer::RingBuffer() noexcept
 
 SFB::RingBuffer::~RingBuffer()
 {
-	if(mBuffer)
-		std::free(mBuffer);
+	std::free(mBuffer);
 }
 
 #pragma mark Buffer Management
