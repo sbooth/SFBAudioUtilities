@@ -59,14 +59,18 @@ public:
 
 	/// Move constructor
 	CAChannelLayout(CAChannelLayout&& rhs) noexcept
-	: mChannelLayout(std::move(rhs.mChannelLayout))
-	{}
+	: mChannelLayout(rhs.mChannelLayout)
+	{
+		rhs.mChannelLayout = nullptr;
+	}
 
 	/// Move assignment operator
 	CAChannelLayout& operator=(CAChannelLayout&& rhs) noexcept
 	{
-		if(this != &rhs)
-			mChannelLayout = std::move(rhs.mChannelLayout);
+		if(this != &rhs) {
+			mChannelLayout = rhs.mChannelLayout;
+			rhs.mChannelLayout = nullptr;
+		}
 		return *this;
 	}
 
