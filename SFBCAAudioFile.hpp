@@ -83,7 +83,7 @@ public:
 	{
 		Close();
 		auto result = AudioFileOpenURL(inURL, inPermissions, inFileTypeHint, &mAudioFileID);
-		SFBThrowIfAudioFileError(result, "AudioFileOpenURL");
+		ThrowIfCAAudioFileError(result, "AudioFileOpenURL");
 	}
 
 	/// Creates a new audio file  (or initialises an existing file).
@@ -92,7 +92,7 @@ public:
 	{
 		Close();
 		auto result = AudioFileCreateWithURL(inURL, inFileType, &inFormat, inFlags, &mAudioFileID);
-		SFBThrowIfAudioFileError(result, "AudioFileCreateWithURL");
+		ThrowIfCAAudioFileError(result, "AudioFileCreateWithURL");
 	}
 
 	/// Wipes clean an existing file. You provide callbacks that the AudioFile API will use to get the data.
@@ -101,16 +101,16 @@ public:
 	{
 		Close();
 		auto result = AudioFileInitializeWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileType, &inFormat, inFlags, &mAudioFileID);
-		SFBThrowIfAudioFileError(result, "AudioFileInitializeWithCallbacks");
+		ThrowIfCAAudioFileError(result, "AudioFileInitializeWithCallbacks");
 	}
 
 	/// Opens an existing file. You provide callbacks that the AudioFile API will use to get the data.
 	/// @throw @c std::system_error
-	void OpenWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc inSetSizeFunc, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags)
+	void OpenWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc inSetSizeFunc, AudioFileTypeID inFileTypeHint)
 	{
 		Close();
-		auto result = AudioFileInitializeWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileType, &inFormat, inFlags, &mAudioFileID);
-		SFBThrowIfAudioFileError(result, "AudioFileInitializeWithCallbacks");
+		auto result = AudioFileOpenWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileTypeHint, &mAudioFileID);
+		ThrowIfCAAudioFileError(result, "AudioFileOpenWithCallbacks");
 	}
 
 	/// Close an existing audio file.
@@ -119,7 +119,7 @@ public:
 	{
 		if(mAudioFileID) {
 			auto result = AudioFileClose(mAudioFileID);
-			SFBThrowIfAudioFileError(result, "AudioFileClose");
+			ThrowIfCAAudioFileError(result, "AudioFileClose");
 			mAudioFileID = nullptr;
 		}
 	}
@@ -129,7 +129,7 @@ public:
 	void Optimize()
 	{
 		auto result = AudioFileOptimize(mAudioFileID);
-		SFBThrowIfAudioFileError(result, "AudioFileOptimize");
+		ThrowIfCAAudioFileError(result, "AudioFileOptimize");
 	}
 
 	/// Reads bytes of audio data from the audio file.
@@ -142,7 +142,7 @@ public:
 			case kAudioFileEndOfFileError:
 				break;
 			default:
-				SFBThrowIfAudioFileError(result, "AudioFileReadBytes");
+				ThrowIfCAAudioFileError(result, "AudioFileReadBytes");
 				break;
 		}
 		return result;
@@ -153,7 +153,7 @@ public:
 	void WriteBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, const void *inBuffer)
 	{
 		auto result = AudioFileWriteBytes(mAudioFileID, inUseCache, inStartingByte, &ioNumBytes, inBuffer);
-		SFBThrowIfAudioFileError(result, "AudioFileWriteBytes");
+		ThrowIfCAAudioFileError(result, "AudioFileWriteBytes");
 	}
 
 	/// Reads packets of audio data from the audio file.
@@ -166,7 +166,7 @@ public:
 			case kAudioFileEndOfFileError:
 				break;
 			default:
-				SFBThrowIfAudioFileError(result, "AudioFileReadPacketData");
+				ThrowIfCAAudioFileError(result, "AudioFileReadPacketData");
 				break;
 		}
 		return result;
@@ -177,7 +177,7 @@ public:
 	void WritePackets(bool inUseCache, UInt32 inNumBytes, const AudioStreamPacketDescription * __nullable inPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, const void *inBuffer)
 	{
 		auto result = AudioFileWritePackets(mAudioFileID, inUseCache, inNumBytes, inPacketDescriptions, inStartingPacket, &ioNumPackets, inBuffer);
-		SFBThrowIfAudioFileError(result, "AudioFileWritePackets");
+		ThrowIfCAAudioFileError(result, "AudioFileWritePackets");
 	}
 
 	/// Gets the size of user data in a file.
@@ -186,7 +186,7 @@ public:
 	{
 		UInt32 size;
 		auto result = AudioFileGetUserDataSize(mAudioFileID, inUserDataID, inIndex, &size);
-		SFBThrowIfAudioFileError(result, "AudioFileGetUserDataSize");
+		ThrowIfCAAudioFileError(result, "AudioFileGetUserDataSize");
 		return size;
 	}
 
@@ -195,7 +195,7 @@ public:
 	void GetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32& ioUserDataSize, void *outUserData)
 	{
 		auto result = AudioFileGetUserData(mAudioFileID, inUserDataID, inIndex, &ioUserDataSize, outUserData);
-		SFBThrowIfAudioFileError(result, "AudioFileGetUserData");
+		ThrowIfCAAudioFileError(result, "AudioFileGetUserData");
 	}
 
 	/// Sets the data of a chunk in a file.
@@ -203,7 +203,7 @@ public:
 	void SetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32 inUserDataSize, const void *inUserData)
 	{
 		auto result = AudioFileSetUserData(mAudioFileID, inUserDataID, inIndex, inUserDataSize, inUserData);
-		SFBThrowIfAudioFileError(result, "AudioFileGetUserData");
+		ThrowIfCAAudioFileError(result, "AudioFileGetUserData");
 	}
 
 	/// Removes a user chunk in a file.
@@ -211,7 +211,7 @@ public:
 	void RemoveUserData(UInt32 inUserDataID, UInt32 inIndex)
 	{
 		auto result = AudioFileRemoveUserData(mAudioFileID, inUserDataID, inIndex);
-		SFBThrowIfAudioFileError(result, "AudioFileRemoveUserData");
+		ThrowIfCAAudioFileError(result, "AudioFileRemoveUserData");
 	}
 
 	/// Gets information about the size of a property of an AudioFile  and whether it can be set.
@@ -220,7 +220,7 @@ public:
 	{
 		UInt32 size;
 		auto result = AudioFileGetPropertyInfo(mAudioFileID, inPropertyID, &size, isWritable);
-		SFBThrowIfAudioFileError(result, "AudioFileGetPropertyInfo");
+		ThrowIfCAAudioFileError(result, "AudioFileGetPropertyInfo");
 		return size;
 	}
 
@@ -229,7 +229,7 @@ public:
 	void GetProperty(AudioFilePropertyID inPropertyID, UInt32& ioDataSize, void *outPropertyData) const
 	{
 		auto result = AudioFileGetProperty(mAudioFileID, inPropertyID, &ioDataSize, outPropertyData);
-		SFBThrowIfAudioFileError(result, "AudioFileGetProperty");
+		ThrowIfCAAudioFileError(result, "AudioFileGetProperty");
 	}
 
 	/// Sets the value for a property of an AudioFile.
@@ -237,7 +237,7 @@ public:
 	void SetProperty(AudioFilePropertyID inPropertyID, UInt32 inDataSize, const void *inPropertyData)
 	{
 		auto result = AudioFileSetProperty(mAudioFileID, inPropertyID, inDataSize, inPropertyData);
-		SFBThrowIfAudioFileError(result, "AudioFileSetProperty");
+		ThrowIfCAAudioFileError(result, "AudioFileSetProperty");
 	}
 
 	/// Returns the file's  format (@c kAudioFilePropertyFileFormat)
@@ -252,9 +252,9 @@ public:
 
 	/// Returns the file's data format (@c kAudioFilePropertyDataFormat)
 	/// @throw @c std::system_error
-	SFBAudioStreamBasicDescription FileDataFormat() const
+	CAStreamBasicDescription FileDataFormat() const
 	{
-		SFBAudioStreamBasicDescription fileDataFormat;
+		CAStreamBasicDescription fileDataFormat;
 		UInt32 size = sizeof(fileDataFormat);
 		GetProperty(kAudioFilePropertyDataFormat, size, &fileDataFormat);
 		return fileDataFormat;
@@ -268,7 +268,7 @@ public:
 	{
 		UInt32 size;
 		auto result = AudioFileGetGlobalInfoSize(inPropertyID, inSpecifierSize, inSpecifier, &size);
-		SFBThrowIfAudioFileError(result, "AudioFileGetGlobalInfoSize");
+		ThrowIfCAAudioFileError(result, "AudioFileGetGlobalInfoSize");
 		return size;
 	}
 
@@ -277,7 +277,7 @@ public:
 	static void GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * __nullable inSpecifier, UInt32& ioDataSize, void *outPropertyData)
 	{
 		auto result = AudioFileGetGlobalInfo(inPropertyID, inSpecifierSize, inSpecifier, &ioDataSize, outPropertyData);
-		SFBThrowIfAudioFileError(result, "AudioFileGetGlobalInfo");
+		ThrowIfCAAudioFileError(result, "AudioFileGetGlobalInfo");
 	}
 
 	/// Returns an array of UInt32 containing the file types (i.e. AIFF, WAVE, etc) that can be opened for reading.
