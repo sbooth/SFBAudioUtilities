@@ -47,7 +47,7 @@ SFB::CABufferList::~CABufferList()
 	std::free(mBufferList);
 }
 
-SFB::CABufferList::CABufferList(CABufferList&& rhs)
+SFB::CABufferList::CABufferList(CABufferList&& rhs) noexcept
 : mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity), mFrameLength(rhs.mFrameLength)
 {
 	rhs.mBufferList = nullptr;
@@ -56,7 +56,7 @@ SFB::CABufferList::CABufferList(CABufferList&& rhs)
 	rhs.mFrameLength = 0;
 }
 
-SFB::CABufferList& SFB::CABufferList::operator=(CABufferList&& rhs)
+SFB::CABufferList& SFB::CABufferList::operator=(CABufferList&& rhs) noexcept
 {
 	if(this != &rhs) {
 		Deallocate();
@@ -102,17 +102,17 @@ bool SFB::CABufferList::Allocate(const CAStreamBasicDescription& format, UInt32 
 	return true;
 }
 
-bool SFB::CABufferList::Deallocate() noexcept
+void SFB::CABufferList::Deallocate() noexcept
 {
-	if(!mBufferList)
-		return false;
+	if(mBufferList) {
+		std::free(mBufferList);
+		mBufferList = nullptr;
 
-	std::free(mBufferList);
-	mFormat.Reset();
-	mFrameCapacity = 0;
-	mFrameLength = 0;
+		mFormat.Reset();
 
-	return true;
+		mFrameCapacity = 0;
+		mFrameLength = 0;
+	}
 }
 
 bool SFB::CABufferList::SetFrameLength(UInt32 frameLength) noexcept

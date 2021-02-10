@@ -41,10 +41,10 @@ public:
 	~CABufferList();
 
 	/// Creates a new @c CABufferList
-	CABufferList(CABufferList&& rhs);
+	CABufferList(CABufferList&& rhs) noexcept;
 
 	/// Replaces the buffer
-	CABufferList& operator=(CABufferList&& rhs);
+	CABufferList& operator=(CABufferList&& rhs) noexcept;
 
 
 	/// Creates a new @c CABufferList
@@ -63,7 +63,7 @@ public:
 	bool Allocate(const CAStreamBasicDescription& format, UInt32 frameCapacity) noexcept;
 
 	/// Deallocates the memory associated with this @c CABufferList
-	bool Deallocate() noexcept;
+	void Deallocate() noexcept;
 
 
 	/// Resets the @c CABufferList to the default state in preparation for reading
