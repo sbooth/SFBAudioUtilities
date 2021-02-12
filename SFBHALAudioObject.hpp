@@ -34,17 +34,10 @@ public:
 	{}
 
 	/// Copy constructor
-	inline constexpr HALAudioObject(const HALAudioObject& rhs) noexcept
-	: mObjectID(rhs.mObjectID)
-	{}
+	inline constexpr HALAudioObject(const HALAudioObject& rhs) noexcept = default;
 
 	/// Assignment operator
-	inline HALAudioObject& operator=(const HALAudioObject& rhs) noexcept
-	{
-		if(this != &rhs)
-			mObjectID = rhs.mObjectID;
-		return *this;
-	}
+	inline HALAudioObject& operator=(const HALAudioObject& rhs) noexcept = default;
 
 	/// Destructor
 	virtual ~HALAudioObject() = default;
