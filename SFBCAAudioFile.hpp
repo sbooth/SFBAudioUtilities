@@ -326,7 +326,7 @@ public:
 
 	/// Returns an array of supported formats for the @c fileType and @c formatID combination
 	/// @throw @c std::system_error
-	static std::vector<CAStreamBasicDescription> AvailableStreamDescriptions(AudioFileTypeID fileType, UInt32 formatID)
+	static std::vector<CAStreamBasicDescription> AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID)
 	{
 		AudioFileTypeAndFormatID spec{ fileType, formatID };
 		auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof(spec), &spec);
@@ -339,11 +339,11 @@ public:
 
 	/// Returns an array of format IDs that can be read.
 	/// @throw @c std::system_error
-	static std::vector<UInt32> AvailableFormatIDs(AudioFileTypeID type)
+	static std::vector<AudioFormatID> AvailableFormatIDs(AudioFileTypeID type)
 	{
 		auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof(type), &type);
-		auto count = size / sizeof(AudioFileTypeID);
-		auto formatIDs = std::vector<AudioFileTypeID>(count);
+		auto count = size / sizeof(AudioFormatID);
+		auto formatIDs = std::vector<AudioFormatID>(count);
 		GetGlobalInfo(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof(type), &type, size, &formatIDs[0]);
 		return formatIDs;
 	}
