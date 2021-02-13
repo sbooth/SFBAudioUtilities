@@ -11,6 +11,10 @@
 #import <ImageIO/ImageIO.h>
 #import <Security/Security.h>
 
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#endif
+
 namespace SFB {
 
 /// A wrapper around a Core Foundation object.
@@ -167,12 +171,6 @@ public:
 	}
 
 	/// Returns the wrapped object
-	inline T operator*() const noexcept
-	{
-		return mObject;
-	}
-
-	/// Returns the wrapped object
 	inline operator T() const noexcept
 	{
 		return mObject;
@@ -246,6 +244,31 @@ public:
 	CFWrapper(const UInt8 *bytes, CFIndex length)
 	: CFWrapper(CFDataCreate(kCFAllocatorDefault, bytes, length))
 	{}
+
+#ifdef __OBJC__
+
+	/// Returns the wrapped string
+	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
+	NSString * _Nullable NSString() const noexcept
+	{
+		return (__bridge ::NSString *)mObject;
+	}
+
+	/// Returns the wrapped array
+	template <typename = std::enable_if<std::is_same<T, CFArrayRef>::value>>
+	NSArray * _Nullable NSArray() const noexcept
+	{
+		return (__bridge ::NSArray *)mObject;
+	}
+
+	/// Returns the wrapped dictionary
+	template <typename = std::enable_if<std::is_same<T, CFDictionaryRef>::value>>
+	NSDictionary * _Nullable NSDictionary() const noexcept
+	{
+		return (__bridge ::NSDictionary *)mObject;
+	}
+
+#endif
 
 private:
 
