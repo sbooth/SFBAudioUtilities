@@ -291,6 +291,7 @@ public:
 		ThrowIfCAAudioFileError(result, "AudioFileGetGlobalInfo");
 	}
 
+
 	/// Returns an array of UInt32 containing the file types (i.e. AIFF, WAVE, etc) that can be opened for reading.
 	/// @throw @c std::system_error
 	static std::vector<AudioFileTypeID> ReadableTypes()
@@ -310,6 +311,136 @@ public:
 		auto count = size / sizeof(AudioFileTypeID);
 		auto types = std::vector<AudioFileTypeID>(count);
 		GetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, nullptr, size, &types[0]);
+		return types;
+	}
+
+	/// Returns the name of @c type
+	/// @throw @c std::system_error
+	static CFString FileTypeName(AudioFileTypeID type)
+	{
+		CFStringRef s;
+		UInt32 size = sizeof(s);
+		GetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, sizeof(type), &type, size, &s);
+		return CFString(s);
+	}
+
+	/// Returns an array of supported formats for the @c fileType and @c formatID combination
+	/// @throw @c std::system_error
+	static std::vector<CAStreamBasicDescription> AvailableStreamDescriptions(AudioFileTypeID fileType, UInt32 formatID)
+	{
+		AudioFileTypeAndFormatID spec{ fileType, formatID };
+		auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof(spec), &spec);
+		auto count = size / sizeof(AudioStreamBasicDescription);
+		auto streamDescriptions = std::vector<CAStreamBasicDescription>(count);
+		GetGlobalInfo(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof(spec), &spec, size, &streamDescriptions[0]);
+		return streamDescriptions;
+
+	}
+
+	/// Returns an array of format IDs that can be read.
+	/// @throw @c std::system_error
+	static std::vector<UInt32> AvailableFormatIDs(AudioFileTypeID type)
+	{
+		auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof(type), &type);
+		auto count = size / sizeof(AudioFileTypeID);
+		auto formatIDs = std::vector<AudioFileTypeID>(count);
+		GetGlobalInfo(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof(type), &type, size, &formatIDs[0]);
+		return formatIDs;
+	}
+
+
+	/// Returns an array of recognized file extensions
+	/// @throw @c std::system_error
+	static CFArray AllExtensions()
+	{
+		CFArrayRef a;
+		UInt32 size = sizeof(a);
+		GetGlobalInfo(kAudioFileGlobalInfo_AllExtensions, 0, nullptr, size, &a);
+		return CFArray(a);
+	}
+
+	/// Returns an array of recognized UTIs
+	/// @throw @c std::system_error
+	static CFArray AllUTIs()
+	{
+		CFArrayRef a;
+		UInt32 size = sizeof(a);
+		GetGlobalInfo(kAudioFileGlobalInfo_AllUTIs, 0, nullptr, size, &a);
+		return CFArray(a);
+	}
+
+	/// Returns an array of recognized MIME types
+	/// @throw @c std::system_error
+	static CFArray AllMIMETypes()
+	{
+		CFArrayRef a;
+		UInt32 size = sizeof(a);
+		GetGlobalInfo(kAudioFileGlobalInfo_AllMIMETypes, 0, nullptr, size, &a);
+		return CFArray(a);
+	}
+
+
+	/// Returns an array of file extensions for @c type
+	/// @throw @c std::system_error
+	static CFArray ExtensionsForType(AudioFileTypeID type)
+	{
+		CFArrayRef a;
+		UInt32 size = sizeof(a);
+		GetGlobalInfo(kAudioFileGlobalInfo_ExtensionsForType, sizeof(type), &type, size, &a);
+		return CFArray(a);
+	}
+
+	/// Returns an array of UTIs for @c type
+	/// @throw @c std::system_error
+	static CFArray UTIsForType(AudioFileTypeID type)
+	{
+		CFArrayRef a;
+		UInt32 size = sizeof(a);
+		GetGlobalInfo(kAudioFileGlobalInfo_UTIsForType, sizeof(type), &type, size, &a);
+		return CFArray(a);
+	}
+
+	/// Returns an array of MIME types for @c type
+	/// @throw @c std::system_error
+	static CFArray MIMETypesForType(AudioFileTypeID type)
+	{
+		CFArrayRef mimeTypes;
+		UInt32 size = sizeof(mimeTypes);
+		GetGlobalInfo(kAudioFileGlobalInfo_MIMETypesForType, sizeof(type), &type, size, &mimeTypes);
+		return CFArray(mimeTypes);
+	}
+
+
+	/// Returns an array of @c AudioFileTypeID that support @c mimeType
+	/// @throw @c std::system_error
+	static std::vector<AudioFileTypeID> TypesForMIMEType(CFStringRef mimeType)
+	{
+		auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForMIMEType, sizeof(mimeType), const_cast<void *>(reinterpret_cast<const void *>(mimeType)));
+		auto count = size / sizeof(AudioFileTypeID);
+		auto types = std::vector<AudioFileTypeID>(count);
+		GetGlobalInfo(kAudioFileGlobalInfo_TypesForMIMEType, sizeof(mimeType), const_cast<void *>(reinterpret_cast<const void *>(mimeType)), size, &types[0]);
+		return types;
+	}
+
+	/// Returns an array of @c AudioFileTypeID that support @c uti
+	/// @throw @c std::system_error
+	static std::vector<AudioFileTypeID> TypesForUTI(CFStringRef uti)
+	{
+		auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForUTI, sizeof(uti), const_cast<void *>(reinterpret_cast<const void *>(uti)));
+		auto count = size / sizeof(AudioFileTypeID);
+		auto types = std::vector<AudioFileTypeID>(count);
+		GetGlobalInfo(kAudioFileGlobalInfo_TypesForUTI, sizeof(uti), const_cast<void *>(reinterpret_cast<const void *>(uti)), size, &types[0]);
+		return types;
+	}
+
+	/// Returns an array of @c AudioFileTypeID that support @c extension
+	/// @throw @c std::system_error
+	static std::vector<AudioFileTypeID> TypesForExtension(CFStringRef extension)
+	{
+		auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForExtension, sizeof(extension), const_cast<void *>(reinterpret_cast<const void *>(extension)));
+		auto count = size / sizeof(AudioFileTypeID);
+		auto types = std::vector<AudioFileTypeID>(count);
+		GetGlobalInfo(kAudioFileGlobalInfo_TypesForExtension, sizeof(extension), const_cast<void *>(reinterpret_cast<const void *>(extension)), size, &types[0]);
 		return types;
 	}
 
