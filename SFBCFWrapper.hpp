@@ -167,6 +167,12 @@ public:
 	}
 
 	/// Returns the wrapped object
+	inline T operator*() const noexcept
+	{
+		return mObject;
+	}
+
+	/// Returns the wrapped object
 	inline operator T() const noexcept
 	{
 		return mObject;
