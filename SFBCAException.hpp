@@ -90,6 +90,19 @@ enum class CAAudioUnitErrorCode {
 	componentInvalidFormat 				= kAudioComponentErr_InvalidFormat,
 };
 
+// AudioFormat error codes
+enum class CAAudioFormatErrorCode {
+	noError = 0,
+
+	// AudioFormat.h
+	unspecifiedError 			= kAudioFormatUnspecifiedError,
+	unsupportedPropertyError 	= kAudioFormatUnsupportedPropertyError,
+	badPropertySizeError 		= kAudioFormatBadPropertySizeError,
+	badSpecifierSizeError 		= kAudioFormatBadSpecifierSizeError,
+	unsupportedDataFormatError 	= kAudioFormatUnsupportedDataFormatError,
+	unknownFormatError 			= kAudioFormatUnknownFormatError,
+};
+
 // AudioCodec error codes
 enum class CAAudioCodecErrorCode {
 	noError = 0,
@@ -266,6 +279,44 @@ public:
 			case CAAudioUnitErrorCode::componentNotPermitted: 				return "App needs \"inter-app-audio\" entitlement or host app needs \"audio\" in its UIBackgroundModes. Or app is trying to register a component not declared in its Info.plist";
 			case CAAudioUnitErrorCode::componentInitializationTimedOut: 	return "Host did not render in a timely manner; must uninitialize and reinitialize";
 			case CAAudioUnitErrorCode::componentInvalidFormat: 				return "Inter-app AU element formats must have sample rates matching the hardware";
+
+			default:
+				switch(static_cast<CAGeneralErrorCode>(condition)) {
+					case CAGeneralErrorCode::noError: 					return "The function call completed successfully";
+
+					case CAGeneralErrorCode::unimplementedError: 		return "Unimplemented core routine";
+					case CAGeneralErrorCode::fileNotFoundError: 		return "File not found";
+					case CAGeneralErrorCode::filePermissionError: 		return "File cannot be opened due to either file, directory, or sandbox permissions";
+					case CAGeneralErrorCode::tooManyFilesOpenError: 	return "File cannot be opened because too many files are already open";
+					case CAGeneralErrorCode::badFilePathError: 			return "File cannot be opened because the specified path is malformed";
+					case CAGeneralErrorCode::paramError: 				return "Error in user parameter list";
+					case CAGeneralErrorCode::memFullError: 				return "Not enough room in heap zone";
+
+					default:											return "unknown";
+				}
+		}
+	}
+};
+
+class CAAudioFormatErrorCategory : public std::error_category
+{
+
+public:
+
+	virtual const char * name() const noexcept override final
+	{
+		return "AudioFormat";
+	}
+
+	virtual std::string message(int condition) const override final
+	{
+		switch(static_cast<CAAudioFormatErrorCode>(condition)) {
+			case CAAudioFormatErrorCode::unspecifiedError: 				return "kAudioFormatUnspecifiedError";
+			case CAAudioFormatErrorCode::unsupportedPropertyError: 		return "kAudioFormatUnsupportedPropertyError";
+			case CAAudioFormatErrorCode::badPropertySizeError: 			return "kAudioFormatBadPropertySizeError";
+			case CAAudioFormatErrorCode::badSpecifierSizeError: 		return "kAudioFormatBadSpecifierSizeError";
+			case CAAudioFormatErrorCode::unsupportedDataFormatError: 	return "kAudioFormatUnsupportedDataFormatError";
+			case CAAudioFormatErrorCode::unknownFormatError: 			return "kAudioFormatUnknownFormatError";
 
 			default:
 				switch(static_cast<CAGeneralErrorCode>(condition)) {
@@ -482,6 +533,12 @@ extern inline const detail::CAAudioUnitErrorCategory& CAAudioUnitErrorCategory()
 	return c;
 }
 
+extern inline const detail::CAAudioFormatErrorCategory& CAAudioFormatErrorCategory()
+{
+	static detail::CAAudioFormatErrorCategory c;
+	return c;
+}
+
 extern inline const detail::CAAudioCodecErrorCategory& CAAudioCodecErrorCategory()
 {
 	static detail::CAAudioCodecErrorCategory c;
@@ -516,6 +573,11 @@ inline std::error_code make_error_code(CAAudioUnitErrorCode e)
 	return { static_cast<int>(e), CAAudioUnitErrorCategory() };
 }
 
+inline std::error_code make_error_code(CAAudioFormatErrorCode e)
+{
+	return { static_cast<int>(e), CAAudioFormatErrorCategory() };
+}
+
 inline std::error_code make_error_code(CAAudioCodecErrorCode e)
 {
 	return { static_cast<int>(e), CAAudioCodecErrorCategory() };
@@ -542,6 +604,7 @@ namespace std {
 
 template <> struct is_error_code_enum<SFB::CAAudioObjectErrorCode> : true_type {};
 template <> struct is_error_code_enum<SFB::CAAudioUnitErrorCode> : true_type {};
+template <> struct is_error_code_enum<SFB::CAAudioFormatErrorCode> : true_type {};
 template <> struct is_error_code_enum<SFB::CAAudioCodecErrorCode> : true_type {};
 template <> struct is_error_code_enum<SFB::CAAudioConverterErrorCode> : true_type {};
 template <> struct is_error_code_enum<SFB::CAAudioFileErrorCode> : true_type {};
@@ -571,6 +634,17 @@ inline void ThrowIfCAAudioUnitError(OSStatus result, const char * const operatio
 {
 	if(__builtin_expect(result != 0, 0))
 		throw std::system_error(result, CAAudioUnitErrorCategory(), operation);
+}
+
+/// Throws a @c std::system_error in the @c CAAudioFormatErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioFormat API
+/// @param result An @c OSStatus result code
+/// @param operation An optional string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAAudioFormatErrorCategory
+inline void ThrowIfCAAudioFormatError(OSStatus result, const char * const operation = nullptr)
+{
+	if(__builtin_expect(result != 0, 0))
+		throw std::system_error(result, CAAudioFormatErrorCategory(), operation);
 }
 
 /// Throws a @c std::system_error in the @c CAAudioCodecErrorCategory if @c result!=0
