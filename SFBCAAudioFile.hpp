@@ -6,6 +6,8 @@
 
 #pragma once
 
+#import <vector>
+
 #import <AudioToolbox/AudioFile.h>
 
 #import "SFBCAException.hpp"
