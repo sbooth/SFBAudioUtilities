@@ -269,13 +269,13 @@ public:
 	AudioBufferList * _Nullable RelinquishABL() noexcept;
 
 	/// Returns a pointer to this object's internal @c AudioBufferList
-	inline AudioBufferList * const _Nullable ABL() noexcept
+	inline AudioBufferList * _Nullable ABL() noexcept
 	{
 		return mBufferList;
 	}
 
 	/// Returns a const pointer to this object's internal @c AudioBufferList
-	inline const AudioBufferList * const _Nullable ABL() const noexcept
+	inline const AudioBufferList * _Nullable ABL() const noexcept
 	{
 		return mBufferList;
 	}
@@ -295,13 +295,13 @@ public:
 
 
 	/// Returns a pointer to this object's internal @c AudioBufferList
-	inline AudioBufferList * const _Nullable operator->() noexcept
+	inline AudioBufferList * _Nullable operator->() noexcept
 	{
 		return mBufferList;
 	}
 
 	/// Returns a const pointer to this object's internal @c AudioBufferList
-	inline const AudioBufferList * const _Nullable operator->() const noexcept
+	inline const AudioBufferList * _Nullable operator->() const noexcept
 	{
 		return mBufferList;
 	}

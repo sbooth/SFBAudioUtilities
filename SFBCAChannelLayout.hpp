@@ -116,7 +116,7 @@ public:
 #pragma mark AudioChannelLayout access
 
 	/// Returns the size in bytes of this object's internal @c AudioChannelLayout
-	inline const size_t Size() const noexcept
+	inline size_t Size() const noexcept
 	{
 		return AudioChannelLayoutSize(mChannelLayout);
 	}
@@ -126,7 +126,7 @@ public:
 	AudioChannelLayout * _Nullable RelinquishACL() noexcept;
 
 	/// Retrieves a const pointer to this object's internal @c AudioChannelLayout
-	inline const AudioChannelLayout * const _Nullable ACL() const noexcept
+	inline const AudioChannelLayout * _Nullable ACL() const noexcept
 	{
 		return mChannelLayout;
 	}
@@ -146,7 +146,7 @@ public:
 
 
 	/// Retrieve a const pointer to this object's internal @c AudioChannelLayout
-	inline const AudioChannelLayout * const _Nullable operator->() const noexcept
+	inline const AudioChannelLayout * _Nullable operator->() const noexcept
 	{
 		return mChannelLayout;
 	}
