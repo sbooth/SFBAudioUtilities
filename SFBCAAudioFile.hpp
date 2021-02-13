@@ -47,11 +47,22 @@ public:
 			AudioFileClose(mAudioFileID);
 	}
 
-	// This class is non-movable
-	CAAudioFile(CAAudioFile&& rhs) = delete;
+	/// Move constructor
+	CAAudioFile(CAAudioFile&& rhs) noexcept
+	: mAudioFileID(rhs.mAudioFileID)
+	{
+		rhs.mAudioFileID = nullptr;
+	}
 
-	// This class is non-move assignable
-	CAAudioFile& operator=(CAAudioFile&& rhs) = delete;
+	/// Move assignment operator
+	CAAudioFile& operator=(CAAudioFile&& rhs) noexcept
+	{
+		if(this != &rhs) {
+			mAudioFileID = rhs.mAudioFileID;
+			rhs.mAudioFileID = nullptr;
+		}
+		return *this;
+	}
 
 	/// Returns @c true if this object's internal @c AudioFileID is not @c nullptr
 	inline explicit operator bool() const noexcept

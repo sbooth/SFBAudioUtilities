@@ -49,11 +49,22 @@ public:
 			ExtAudioFileDispose(mExtAudioFile);
 	}
 
-	// This class is non-movable
-	CAExtAudioFile(CAExtAudioFile&& rhs) = delete;
+	/// Move constructor
+	CAExtAudioFile(CAExtAudioFile&& rhs) noexcept
+	: mExtAudioFile(rhs.mExtAudioFile)
+	{
+		rhs.mExtAudioFile = nullptr;
+	}
 
-	// This class is non-move assignable
-	CAExtAudioFile& operator=(CAExtAudioFile&& rhs) = delete;
+	/// Move assignment operator
+	CAExtAudioFile& operator=(CAExtAudioFile&& rhs) noexcept
+	{
+		if(this != &rhs) {
+			mExtAudioFile = rhs.mExtAudioFile;
+			rhs.mExtAudioFile = nullptr;
+		}
+		return *this;
+	}
 
 	/// Returns @c true if this object's internal @c ExtAudioFileRef is not @c nullptr
 	inline explicit operator bool() const noexcept
