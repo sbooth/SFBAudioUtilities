@@ -23,6 +23,8 @@ A collection of utility classes and extensions easing common operations in Core 
 
 | C++ Class | Description |
 | --- | --- |
+| [SFB::AudioFileWrapper](SFBAudioFileWrapper.hpp) | A bare-bones wrapper around `AudioFile` modeled after `std::unique_ptr` |
+| [SFB::ExtAudioFileWrapper](SFBExtAudioFileWrapper.hpp) | A bare-bones wrapper around `ExtAudioFile` modeled after `std::unique_ptr` |
 | [SFB::CAAudioFile](SFBCAAudioFile.hpp) | A wrapper around `AudioFile` |
 | [SFB::CAExtAudioFile](SFBCAExtAudioFile.hpp) | A wrapper around `ExtAudioFile` |
 
