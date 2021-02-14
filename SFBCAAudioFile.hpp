@@ -171,7 +171,7 @@ public:
 
 	/// Reads packets of audio data from the audio file.
 	/// @throw @c std::system_error
-	OSStatus ReadPacketData(bool inUseCache, UInt32& ioNumBytes, AudioStreamPacketDescription * __nullable outPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, void * __nullable outBuffer)
+	OSStatus ReadPacketData(bool inUseCache, UInt32& ioNumBytes, AudioStreamPacketDescription * _Nullable outPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, void * _Nullable outBuffer)
 	{
 		auto result = AudioFileReadPacketData(mAudioFileID, inUseCache, &ioNumBytes, outPacketDescriptions, inStartingPacket, &ioNumPackets, outBuffer);
 		switch(result) {
@@ -187,7 +187,7 @@ public:
 
 	/// Writes packets of audio data to the audio file.
 	/// @throw @c std::system_error
-	void WritePackets(bool inUseCache, UInt32 inNumBytes, const AudioStreamPacketDescription * __nullable inPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, const void *inBuffer)
+	void WritePackets(bool inUseCache, UInt32 inNumBytes, const AudioStreamPacketDescription * _Nullable inPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, const void *inBuffer)
 	{
 		auto result = AudioFileWritePackets(mAudioFileID, inUseCache, inNumBytes, inPacketDescriptions, inStartingPacket, &ioNumPackets, inBuffer);
 		ThrowIfCAAudioFileError(result, "AudioFileWritePackets");
@@ -277,7 +277,7 @@ public:
 
 	/// Gets information about the size of a property of an AudioFile  and whether it can be set.
 	/// @throw @c std::system_error
-	static UInt32 GetGlobalInfoSize(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * __nullable inSpecifier)
+	static UInt32 GetGlobalInfoSize(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier)
 	{
 		UInt32 size;
 		auto result = AudioFileGetGlobalInfoSize(inPropertyID, inSpecifierSize, inSpecifier, &size);
@@ -287,7 +287,7 @@ public:
 
 	/// Copies the value for a property of an AudioFile into a buffer.
 	/// @throw @c std::system_error
-	static void GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * __nullable inSpecifier, UInt32& ioDataSize, void *outPropertyData)
+	static void GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier, UInt32& ioDataSize, void *outPropertyData)
 	{
 		auto result = AudioFileGetGlobalInfo(inPropertyID, inSpecifierSize, inSpecifier, &ioDataSize, outPropertyData);
 		ThrowIfCAAudioFileError(result, "AudioFileGetGlobalInfo");
