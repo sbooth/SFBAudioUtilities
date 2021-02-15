@@ -275,7 +275,7 @@ public:
 
 #pragma mark Global Properties
 
-	/// Gets information about the size of a property of an AudioFile  and whether it can be set.
+	/// Gets the size of a global audio file property.
 	/// @throw @c std::system_error
 	static UInt32 GetGlobalInfoSize(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier)
 	{
@@ -285,7 +285,7 @@ public:
 		return size;
 	}
 
-	/// Copies the value for a property of an AudioFile into a buffer.
+	/// Copies the value of a global property into a buffer.
 	/// @throw @c std::system_error
 	static void GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier, UInt32& ioDataSize, void *outPropertyData)
 	{
@@ -294,7 +294,7 @@ public:
 	}
 
 
-	/// Returns an array of UInt32 containing the file types (i.e. AIFF, WAVE, etc) that can be opened for reading.
+	/// Returns an array of @c AudioFileTypeID containing the file types (i.e. AIFF, WAVE, etc) that can be opened for reading.
 	/// @throw @c std::system_error
 	static std::vector<AudioFileTypeID> ReadableTypes()
 	{
@@ -305,7 +305,7 @@ public:
 		return types;
 	}
 
-	/// Returns an array of UInt32 containing the file types (i.e. AIFF, WAVE, etc) that can be opened for writing.
+	/// Returns an array of @c AudioFileTypeID containing the file types (i.e. AIFF, WAVE, etc) that can be opened for writing.
 	/// @throw @c std::system_error
 	static std::vector<AudioFileTypeID> WritableTypes()
 	{
