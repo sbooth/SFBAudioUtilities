@@ -249,21 +249,42 @@ public:
 
 	/// Returns the wrapped string
 	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
-	NSString * _Nullable NSString() const noexcept
+	inline NSString * _Nullable NSString() const noexcept
+	{
+		return (__bridge ::NSString *)mObject;
+	}
+
+	/// Returns the wrapped string
+	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
+	inline operator ::NSString * _Nullable () const noexcept
 	{
 		return (__bridge ::NSString *)mObject;
 	}
 
 	/// Returns the wrapped array
 	template <typename = std::enable_if<std::is_same<T, CFArrayRef>::value>>
-	NSArray * _Nullable NSArray() const noexcept
+	inline NSArray * _Nullable NSArray() const noexcept
+	{
+		return (__bridge ::NSArray *)mObject;
+	}
+
+	/// Returns the wrapped array
+	template <typename = std::enable_if<std::is_same<T, CFArrayRef>::value>>
+	inline operator ::NSArray * _Nullable () const noexcept
 	{
 		return (__bridge ::NSArray *)mObject;
 	}
 
 	/// Returns the wrapped dictionary
 	template <typename = std::enable_if<std::is_same<T, CFDictionaryRef>::value>>
-	NSDictionary * _Nullable NSDictionary() const noexcept
+	inline NSDictionary * _Nullable NSDictionary() const noexcept
+	{
+		return (__bridge ::NSDictionary *)mObject;
+	}
+
+	/// Returns the wrapped dictionary
+	template <typename = std::enable_if<std::is_same<T, CFDictionaryRef>::value>>
+	inline operator ::NSDictionary * _Nullable () const noexcept
 	{
 		return (__bridge ::NSDictionary *)mObject;
 	}
