@@ -124,7 +124,7 @@ public:
 	/// Returns the read vector containing the current readable data
 	BufferPair ReadVector() const noexcept;
 
-	/// Returns the write vector containing the current writeable data
+	/// Returns the write vector containing the current writable data
 	BufferPair WriteVector() const noexcept;
 
 private:
