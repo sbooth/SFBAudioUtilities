@@ -98,34 +98,58 @@ public:
 	void AdvanceWritePosition(uint32_t byteCount) noexcept;
 
 
-	/// A struct wrapping a memory buffer location and capacity
-	struct Buffer {
+	/// A read-only memory buffer
+	struct ReadBuffer {
+		/// The memory buffer location
+		const uint8_t * const _Nullable mBuffer;
+		/// The number of bytes of valid data in @c mBuffer
+		const uint32_t mBufferSize;
+
+		/// Construct an empty @c ReadBuffer
+		ReadBuffer() noexcept
+		: ReadBuffer(nullptr, 0)
+		{}
+
+		/// Construct a @c ReadBuffer for the specified location and size
+		/// @param buffer The memory buffer location
+		/// @param bufferSize The number of bytes of valid data in @c buffer
+		ReadBuffer(const uint8_t * const _Nullable buffer, uint32_t bufferSize) noexcept
+		: mBuffer(buffer), mBufferSize(bufferSize)
+		{}
+	};
+
+	/// A pair of @c ReadBuffer objects
+	using ReadBufferPair = std::pair<const ReadBuffer, const ReadBuffer>;
+
+	/// Returns the read vector containing the current readable data
+	const ReadBufferPair ReadVector() const noexcept;
+
+
+	/// A write-only memory buffer
+	struct WriteBuffer {
 		/// The memory buffer location
 		uint8_t * const _Nullable mBuffer;
 		/// The capacity of @c mBuffer in bytes
 		const uint32_t mBufferCapacity;
 
-		/// Construct an empty @c Buffer
-		Buffer() noexcept
-		: Buffer(nullptr, 0)
+		/// Construct an empty @c WriteBuffer
+		WriteBuffer() noexcept
+		: WriteBuffer(nullptr, 0)
 		{}
 
-		/// Construct a @c Buffer for the specified location and capacity
+		/// Construct a @c WriteBuffer for the specified location and capacity
 		/// @param buffer The memory buffer location
 		/// @param bufferCapacity The capacity of @c buffer in bytes
-		Buffer(uint8_t * const _Nullable buffer, uint32_t bufferCapacity) noexcept
+		WriteBuffer(uint8_t * const _Nullable buffer, uint32_t bufferCapacity) noexcept
 		: mBuffer(buffer), mBufferCapacity(bufferCapacity)
 		{}
 	};
 
-	/// A pair of @c Buffer objects
-	using BufferPair = std::pair<Buffer, Buffer>;
+	/// A pair of @c WriteBuffer objects
+	using WriteBufferPair = std::pair<const WriteBuffer, const WriteBuffer>;
 
-	/// Returns the read vector containing the current readable data
-	BufferPair ReadVector() const noexcept;
-
-	/// Returns the write vector containing the current writable data
-	BufferPair WriteVector() const noexcept;
+	/// Returns the write vector containing the current writable space
+	const WriteBufferPair WriteVector() const noexcept;
 
 private:
 
