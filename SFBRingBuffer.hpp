@@ -101,9 +101,9 @@ public:
 	/// A struct wrapping a memory buffer location and capacity
 	struct Buffer {
 		/// The memory buffer location
-		uint8_t	* const _Nullable mBuffer;
+		uint8_t * const _Nullable mBuffer;
 		/// The capacity of @c mBuffer in bytes
-		uint32_t mBufferCapacity;
+		const uint32_t mBufferCapacity;
 
 		/// Construct an empty @c Buffer
 		Buffer() noexcept
