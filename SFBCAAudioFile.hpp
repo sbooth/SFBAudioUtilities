@@ -99,7 +99,7 @@ public:
 		ThrowIfCAAudioFileError(result, "AudioFileOpenURL");
 	}
 
-	/// Creates a new audio file  (or initialises an existing file).
+	/// Creates a new audio file (or initialises an existing file).
 	/// @throw @c std::system_error
 	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags)
 	{
@@ -227,7 +227,7 @@ public:
 		ThrowIfCAAudioFileError(result, "AudioFileRemoveUserData");
 	}
 
-	/// Gets information about the size of a property of an AudioFile  and whether it can be set.
+	/// Gets information about the size of a property of an AudioFile and whether it can be set.
 	/// @throw @c std::system_error
 	UInt32 GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable isWritable) const
 	{
@@ -253,7 +253,7 @@ public:
 		ThrowIfCAAudioFileError(result, "AudioFileSetProperty");
 	}
 
-	/// Returns the file's  format (@c kAudioFilePropertyFileFormat)
+	/// Returns the file's format (@c kAudioFilePropertyFileFormat)
 	/// @throw @c std::system_error
 	AudioFileTypeID FileFormat() const
 	{

@@ -10,7 +10,7 @@
 
 namespace SFB {
 
-/// A bare-bones wrapper around @c ExtAudioFile that does little more than call  @c ExtAudioFileDispose on destruction
+/// A bare-bones wrapper around @c ExtAudioFile that does little more than call @c ExtAudioFileDispose on destruction
 class ExtAudioFileWrapper
 {
 
@@ -46,7 +46,7 @@ public:
 		return *this;
 	}
 
-	/// Creates  an @c ExtAudioFileWrapper managing @c extAudioFile
+	/// Creates an @c ExtAudioFileWrapper managing @c extAudioFile
 	inline ExtAudioFileWrapper(ExtAudioFileRef extAudioFile) noexcept
 	: mExtAudioFile(extAudioFile)
 	{}

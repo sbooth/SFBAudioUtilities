@@ -198,7 +198,7 @@ public:
 		return InsertFromBuffer(buffer, 0, buffer.mFrameLength, writeOffset);
 	}
 
-	/// Inserts at most @c readLength frames from @c buffer starting at @c readOffset  starting at @c writeOffset
+	/// Inserts at most @c readLength frames from @c buffer starting at @c readOffset starting at @c writeOffset
 	/// @note The format of @c buffer must match the format of this @c CABufferList
 	/// @param buffer A buffer of audio data
 	/// @param readOffset The desired starting offset in @c buffer

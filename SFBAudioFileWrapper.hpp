@@ -10,7 +10,7 @@
 
 namespace SFB {
 
-/// A bare-bones wrapper around @c AudioFile that does little more than call  @c AudioFileClose on destruction
+/// A bare-bones wrapper around @c AudioFile that does little more than call @c AudioFileClose on destruction
 class AudioFileWrapper
 {
 
@@ -46,7 +46,7 @@ public:
 		return *this;
 	}
 
-	/// Creates  an @c AudioFileWrapper managing @c audioFile
+	/// Creates an @c AudioFileWrapper managing @c audioFile
 	inline AudioFileWrapper(AudioFileID audioFile) noexcept
 	: mAudioFile(audioFile)
 	{}

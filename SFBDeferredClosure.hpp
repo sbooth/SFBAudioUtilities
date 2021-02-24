@@ -10,8 +10,8 @@ namespace SFB {
 
 /// A class that calls a closure upon destruction.
 ///
-/// This allows similar functionality to @c defer  in Swift and Go.
-/// This is useful to limit the lifetime of non-C++ objects and provides an alternative to @c std::unique_ptr  with a
+/// This allows similar functionality to @c defer in Swift and Go.
+/// This is useful to limit the lifetime of non-C++ objects and provides an alternative to @c std::unique_ptr with a
 /// custom deleter.
 ///
 /// @code
