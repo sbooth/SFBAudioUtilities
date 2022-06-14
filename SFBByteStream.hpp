@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 - 2021 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2020 - 2022 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -242,8 +242,9 @@ public:
 	/// @return The number of bytes actually skipped
 	size_t Skip(size_t count) noexcept
 	{
-		mReadPosition += std::min(count, mBufferLength - mReadPosition);
-		return mReadPosition;
+		auto bytesToSkip = std::min(count, mBufferLength - mReadPosition);
+		mReadPosition += bytesToSkip;
+		return bytesToSkip;
 	}
 
 	/// Rewinds the read position
