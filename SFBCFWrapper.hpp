@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012 - 2021 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2012 - 2022 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -32,7 +32,7 @@ public:
 
 	/// Creates a new @c CFWrapper
 	inline CFWrapper() noexcept
-	: CFWrapper(nullptr)
+	: CFWrapper(nullptr, true)
 	{}
 
 	/// Creates a new @c CFWrapper
@@ -91,6 +91,11 @@ public:
 		return *this;
 	}
 
+
+	/// Create a new @c CFWrapper
+	inline CFWrapper(std::nullptr_t) noexcept
+	: CFWrapper(nullptr, true)
+	{}
 
 	/// Create a new @c CFWrapper
 	/// @note The @c CFWrapper takes ownership of @c object
@@ -354,6 +359,12 @@ using CFBoolean = CFWrapper<CFBooleanRef>;
 using CFError = CFWrapper<CFErrorRef>;
 /// A wrapped @c CFDateRef
 using CFDate = CFWrapper<CFDateRef>;
+/// A wrapped @c CFDateFormatterRef
+using CFDateFormatter = CFWrapper<CFDateFormatterRef>;
+/// A wrapped @c CFLocaleRef
+using CFLocale = CFWrapper<CFLocaleRef>;
+/// A wrapped @c CFTimeZoneRef
+using CFTimeZone = CFWrapper<CFTimeZoneRef>;
 /// A wrapped @c CFReadStreamRef
 using CFReadStream = CFWrapper<CFReadStreamRef>;
 /// A wrapped @c CFWriteStreamRef
@@ -362,8 +373,18 @@ using CFWriteStream = CFWrapper<CFWriteStreamRef>;
 using CFHTTPMessage = CFWrapper<CFHTTPMessageRef>;
 /// A wrapped @c CGImageSourceRef
 using CGImageSource = CFWrapper<CGImageSourceRef>;
+/// A wrapped @c CGImageDestinationRef
+using CGImageDestination = CFWrapper<CGImageDestinationRef>;
 /// A wrapped @c SecCertificateRef
 using SecCertificate = CFWrapper<SecCertificateRef>;
+/// A wrapped @c SecStaticCodeRef
+using SecStaticCode = CFWrapper<SecStaticCodeRef>;
+/// A wrapped @c SecRequirementRef
+using SecRequirement = CFWrapper<SecRequirementRef>;
+/// A wrapped @c SecPolicyRef
+using SecPolicy = CFWrapper<SecPolicyRef>;
+/// A wrapped @c CMSDecoderRef
+using CMSDecoder = CFWrapper<CMSDecoderRef>;
 #if !TARGET_OS_IPHONE
 /// A wrapped @c SecKeychainItemRef
 using SecKeychainItem = CFWrapper<SecKeychainItemRef>;
