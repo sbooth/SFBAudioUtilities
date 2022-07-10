@@ -377,15 +377,15 @@ using CGImageSource = CFWrapper<CGImageSourceRef>;
 using CGImageDestination = CFWrapper<CGImageDestinationRef>;
 /// A wrapped @c SecCertificateRef
 using SecCertificate = CFWrapper<SecCertificateRef>;
+/// A wrapped @c SecPolicyRef
+using SecPolicy = CFWrapper<SecPolicyRef>;
+#if !TARGET_OS_IPHONE
 /// A wrapped @c SecStaticCodeRef
 using SecStaticCode = CFWrapper<SecStaticCodeRef>;
 /// A wrapped @c SecRequirementRef
 using SecRequirement = CFWrapper<SecRequirementRef>;
-/// A wrapped @c SecPolicyRef
-using SecPolicy = CFWrapper<SecPolicyRef>;
 /// A wrapped @c CMSDecoderRef
 using CMSDecoder = CFWrapper<CMSDecoderRef>;
-#if !TARGET_OS_IPHONE
 /// A wrapped @c SecKeychainItemRef
 using SecKeychainItem = CFWrapper<SecKeychainItemRef>;
 /// A wrapped @c SecTransformRef
