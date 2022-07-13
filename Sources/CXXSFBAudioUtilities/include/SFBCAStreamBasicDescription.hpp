@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 - 2021 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2022 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //

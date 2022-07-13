@@ -1,11 +1,12 @@
 //
-// Copyright (c) 2006 - 2021 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2006 - 2022 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
 
 import Foundation
 import CoreAudio
+@_exported import ObjCSFBAudioUtilities
 
 extension AudioChannelLayout {
 	/// Returns the number of channels in this channel layout
