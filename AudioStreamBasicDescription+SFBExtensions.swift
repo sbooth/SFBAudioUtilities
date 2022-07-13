@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2006 - 2021 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2006 - 2022 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -308,5 +308,13 @@ extension AudioStreamBasicDescription: CustomDebugStringConvertible {
 		}
 
 		return result
+	}
+}
+
+private extension UInt32 {
+	/// Returns the value of `self` interpreted as a four character code.
+	var fourCC: String {
+		let chars: [UInt8] = [UInt8((self >> 24) & 0xff), UInt8((self >> 16) & 0xff), UInt8((self >> 8) & 0xff), UInt8(self & 0xff), 0]
+		return String(cString: chars)
 	}
 }
