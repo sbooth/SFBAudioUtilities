@@ -2,9 +2,24 @@
 
 A collection of utility classes and extensions easing common operations in Core Audio, Audio Toolbox, and AVFoundation.
 
-The project is organized into three libraries grouped by language for the Swift package manager.
+The project is organized into three libraries grouped by language for the Swift Package Manager.
 
-# CXXSFBAudioUtilities
+| Framework Name | Description |
+| --- | --- |
+| CXXSFBAudioUtilities | C++ classes |
+| ObjCSFBAudioUtilities | Objective-C class extensions |
+| SFBAudioUtilities | Swift class extensions |
+
+## Installation
+
+Swift Package Manager
+
+Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode.
+
+Manual or Custom Build
+
+1. Clone the [SFBAudioUtilities](https://github.com/sbooth/SFBAudioUtilities) repository.
+2. `swift build`.
 
 ## CoreAudio Wrappers
 
@@ -53,8 +68,6 @@ The project is organized into three libraries grouped by language for the Swift 
 | --- | --- |
 | [SFB::AudioUnitRecorder](SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
 
-# ObjCSFBAudioUtilities
-
 ## AVFoundation Extensions
 
 | Extended Class | Description |
@@ -62,8 +75,6 @@ The project is organized into three libraries grouped by language for the Swift 
 | [AVAudioChannelLayout](AVAudioChannelLayout+SFBChannelLabels.h) | Functions for building channel layouts from channel labels |
 | [AVAudioFormat](AVAudioFormat+SFBFormatTransformation.h) | Format transformations |
 | [AVAudioPCMBuffer](AVAudioPCMBuffer+SFBBufferUtilities.h) | Functions for buffer manipulation |
-
-# SFBAudioUtilities
 
 ## Swift Extensions
 
