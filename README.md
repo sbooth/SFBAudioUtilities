@@ -2,6 +2,10 @@
 
 A collection of utility classes and extensions easing common operations in Core Audio, Audio Toolbox, and AVFoundation.
 
+The project is organized into three libraries grouped by language for the Swift package manager.
+
+# CXXSFBAudioUtilities
+
 ## CoreAudio Wrappers
 
 | C++ Class | Description |
@@ -49,6 +53,8 @@ A collection of utility classes and extensions easing common operations in Core 
 | --- | --- |
 | [SFB::AudioUnitRecorder](SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
 
+# ObjCSFBAudioUtilities
+
 ## AVFoundation Extensions
 
 | Extended Class | Description |
@@ -56,6 +62,8 @@ A collection of utility classes and extensions easing common operations in Core 
 | [AVAudioChannelLayout](AVAudioChannelLayout+SFBChannelLabels.h) | Functions for building channel layouts from channel labels |
 | [AVAudioFormat](AVAudioFormat+SFBFormatTransformation.h) | Format transformations |
 | [AVAudioPCMBuffer](AVAudioPCMBuffer+SFBBufferUtilities.h) | Functions for buffer manipulation |
+
+# SFBAudioUtilities
 
 ## Swift Extensions
 
