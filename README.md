@@ -32,11 +32,14 @@ Manual or Custom Build
 | [SFB::CAPropertyAddress](SFBCAPropertyAddress.hpp) | A class extending the functionality of a Core Audio `AudioObjectPropertyAddress` |
 | [SFB::CAStreamBasicDescription](SFBCAStreamBasicDescription.hpp) | A class extending the functionality of a Core Audio `AudioStreamBasicDescription` |
 | [SFB::CATimeStamp](SFBCATimeStamp.hpp) | A class extending the functionality of a Core Audio `AudioTimeStamp` |
+| [SFB::CAException](SFBCAException.hpp) | `std::error_category` for handling Core Audio errors as exceptions |
+
+### HAL
 
 | C++ Class | Description |
 | --- | --- |
-| [SFB::HALAudioDevice](SFBHALAudioDevice.hpp) | A wrapper around a HAL audio device |
 | [SFB::HALAudioObject](SFBHALAudioObject.hpp) | A wrapper around a HAL audio object |
+| [SFB::HALAudioDevice](SFBHALAudioDevice.hpp) | A wrapper around a HAL audio device |
 | [SFB::HALAudioStream](SFBHALAudioStream.hpp) | A wrapper around a HAL audio stream |
 | [SFB::HALAudioSystemObject](SFBHALAudioSystemObject.hpp) | A wrapper around `kAudioObjectSystemObject` |
 
@@ -48,6 +51,7 @@ Manual or Custom Build
 | [SFB::ExtAudioFileWrapper](SFBExtAudioFileWrapper.hpp) | A bare-bones wrapper around `ExtAudioFile` modeled after `std::unique_ptr` |
 | [SFB::CAAudioFile](SFBCAAudioFile.hpp) | A wrapper around `AudioFile` |
 | [SFB::CAExtAudioFile](SFBCAExtAudioFile.hpp) | A wrapper around `ExtAudioFile` |
+| [SFB::CAAudioFormat](SFBCAAudioFormat.hpp) | A wrapper around `AudioFormat` |
 
 ## Ring Buffers
 
