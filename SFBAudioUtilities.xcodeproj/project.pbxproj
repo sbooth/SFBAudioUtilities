@@ -47,6 +47,46 @@
 		320CDC60287FC3F00025F936 /* SFBDeferredClosure.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC3B287FC3EF0025F936 /* SFBDeferredClosure.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		320CDC63287FC6040025F936 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 320CDC61287FC6040025F936 /* LICENSE.txt */; };
 		320CDC64287FC6040025F936 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 320CDC62287FC6040025F936 /* README.md */; };
+		320CDC77287FCEE40025F936 /* SFBByteStream.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC1A287FC3EF0025F936 /* SFBByteStream.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC78287FCEE40025F936 /* SFBAudioUnitRecorder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC37287FC3EF0025F936 /* SFBAudioUnitRecorder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC79287FCEE40025F936 /* SFBCAPropertyAddress.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC1D287FC3EF0025F936 /* SFBCAPropertyAddress.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC7A287FCEE40025F936 /* SFBCARingBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC1F287FC3EF0025F936 /* SFBCARingBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC7B287FCEE40025F936 /* SFBAudioFileWrapper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC2D287FC3EF0025F936 /* SFBAudioFileWrapper.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC7C287FCEE40025F936 /* SFBHALAudioSystemObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC18287FC3EF0025F936 /* SFBHALAudioSystemObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC7D287FCEE40025F936 /* SFBCABufferList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC29287FC3EF0025F936 /* SFBCABufferList.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC7E287FCEE40025F936 /* SFBCAExtAudioFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC19287FC3EF0025F936 /* SFBCAExtAudioFile.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC7F287FCEE40025F936 /* SFBHALAudioStream.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC35287FC3EF0025F936 /* SFBHALAudioStream.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC80287FCEE40025F936 /* SFBAudioRingBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC30287FC3EF0025F936 /* SFBAudioRingBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC81287FCEE40025F936 /* SFBCAAudioFormat.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC17287FC3EF0025F936 /* SFBCAAudioFormat.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC82287FCEE40025F936 /* SFBDeferredClosure.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC3B287FC3EF0025F936 /* SFBDeferredClosure.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC83287FCEE40025F936 /* AVAudioFormat+SFBFormatTransformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC1E287FC3EF0025F936 /* AVAudioFormat+SFBFormatTransformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC84287FCEE40025F936 /* SFBCAException.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC21287FC3EF0025F936 /* SFBCAException.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC85287FCEE40025F936 /* SFBHALAudioObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC22287FC3EF0025F936 /* SFBHALAudioObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC86287FCEE40025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC39287FC3EF0025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC87287FCEE40025F936 /* SFBCATimeStamp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC3A287FC3EF0025F936 /* SFBCATimeStamp.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC88287FCEE40025F936 /* SFBCAChannelLayout.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC2A287FC3EF0025F936 /* SFBCAChannelLayout.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC89287FCEE40025F936 /* SFBCFWrapper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC20287FC3EF0025F936 /* SFBCFWrapper.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC8A287FCEE40025F936 /* SFBCAStreamBasicDescription.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC34287FC3EF0025F936 /* SFBCAStreamBasicDescription.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC8B287FCEE40025F936 /* SFBCAAudioFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC36287FC3EF0025F936 /* SFBCAAudioFile.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC8C287FCEE40025F936 /* SFBUnfairLock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC25287FC3EF0025F936 /* SFBUnfairLock.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC8D287FCEE40025F936 /* SFBAudioUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC10287FC3680025F936 /* SFBAudioUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC8E287FCEE40025F936 /* AVAudioChannelLayout+SFBChannelLabels.h in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC27287FC3EF0025F936 /* AVAudioChannelLayout+SFBChannelLabels.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC8F287FCEE40025F936 /* SFBRingBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC24287FC3EF0025F936 /* SFBRingBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC90287FCEE40025F936 /* SFBHALAudioDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC1B287FC3EF0025F936 /* SFBHALAudioDevice.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC91287FCEE40025F936 /* SFBExtAudioFileWrapper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 320CDC28287FC3EF0025F936 /* SFBExtAudioFileWrapper.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		320CDC93287FCEE40025F936 /* SFBAudioRingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC2E287FC3EF0025F936 /* SFBAudioRingBuffer.cpp */; };
+		320CDC94287FCEE40025F936 /* SFBCABufferList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC31287FC3EF0025F936 /* SFBCABufferList.cpp */; };
+		320CDC95287FCEE40025F936 /* SFBRingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC2F287FC3EF0025F936 /* SFBRingBuffer.cpp */; };
+		320CDC96287FCEE40025F936 /* AudioChannelLayout+SFBExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC2B287FC3EF0025F936 /* AudioChannelLayout+SFBExtensions.swift */; };
+		320CDC97287FCEE40025F936 /* SFBCAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC1C287FC3EF0025F936 /* SFBCAStreamBasicDescription.cpp */; };
+		320CDC98287FCEE40025F936 /* SFBCARingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC32287FC3EF0025F936 /* SFBCARingBuffer.cpp */; };
+		320CDC99287FCEE40025F936 /* AVAudioChannelLayout+SFBChannelLabels.m in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC2C287FC3EF0025F936 /* AVAudioChannelLayout+SFBChannelLabels.m */; };
+		320CDC9A287FCEE40025F936 /* AVAudioFormat+SFBFormatTransformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC26287FC3EF0025F936 /* AVAudioFormat+SFBFormatTransformation.m */; };
+		320CDC9B287FCEE40025F936 /* AudioStreamBasicDescription+SFBExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC33287FC3EF0025F936 /* AudioStreamBasicDescription+SFBExtensions.swift */; };
+		320CDC9C287FCEE40025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC23287FC3EF0025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.m */; };
+		320CDC9D287FCEE40025F936 /* SFBCAChannelLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC38287FC3EF0025F936 /* SFBCAChannelLayout.cpp */; };
+		320CDCA0287FCEE40025F936 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 320CDC62287FC6040025F936 /* README.md */; };
+		320CDCA1287FCEE40025F936 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 320CDC61287FC6040025F936 /* LICENSE.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,10 +131,18 @@
 		320CDC3B287FC3EF0025F936 /* SFBDeferredClosure.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFBDeferredClosure.hpp; sourceTree = "<group>"; };
 		320CDC61287FC6040025F936 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		320CDC62287FC6040025F936 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		320CDCA5287FCEE40025F936 /* SFBAudioUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SFBAudioUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		320CDC0A287FC3680025F936 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		320CDC9E287FCEE40025F936 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -118,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				320CDC0D287FC3680025F936 /* SFBAudioUtilities.framework */,
+				320CDCA5287FCEE40025F936 /* SFBAudioUtilities.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -260,12 +309,46 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		320CDC76287FCEE40025F936 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				320CDC77287FCEE40025F936 /* SFBByteStream.hpp in Headers */,
+				320CDC78287FCEE40025F936 /* SFBAudioUnitRecorder.hpp in Headers */,
+				320CDC79287FCEE40025F936 /* SFBCAPropertyAddress.hpp in Headers */,
+				320CDC7A287FCEE40025F936 /* SFBCARingBuffer.hpp in Headers */,
+				320CDC7B287FCEE40025F936 /* SFBAudioFileWrapper.hpp in Headers */,
+				320CDC7C287FCEE40025F936 /* SFBHALAudioSystemObject.hpp in Headers */,
+				320CDC7D287FCEE40025F936 /* SFBCABufferList.hpp in Headers */,
+				320CDC7E287FCEE40025F936 /* SFBCAExtAudioFile.hpp in Headers */,
+				320CDC7F287FCEE40025F936 /* SFBHALAudioStream.hpp in Headers */,
+				320CDC80287FCEE40025F936 /* SFBAudioRingBuffer.hpp in Headers */,
+				320CDC81287FCEE40025F936 /* SFBCAAudioFormat.hpp in Headers */,
+				320CDC82287FCEE40025F936 /* SFBDeferredClosure.hpp in Headers */,
+				320CDC83287FCEE40025F936 /* AVAudioFormat+SFBFormatTransformation.h in Headers */,
+				320CDC84287FCEE40025F936 /* SFBCAException.hpp in Headers */,
+				320CDC85287FCEE40025F936 /* SFBHALAudioObject.hpp in Headers */,
+				320CDC86287FCEE40025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.h in Headers */,
+				320CDC87287FCEE40025F936 /* SFBCATimeStamp.hpp in Headers */,
+				320CDC88287FCEE40025F936 /* SFBCAChannelLayout.hpp in Headers */,
+				320CDC89287FCEE40025F936 /* SFBCFWrapper.hpp in Headers */,
+				320CDC8A287FCEE40025F936 /* SFBCAStreamBasicDescription.hpp in Headers */,
+				320CDC8B287FCEE40025F936 /* SFBCAAudioFile.hpp in Headers */,
+				320CDC8C287FCEE40025F936 /* SFBUnfairLock.hpp in Headers */,
+				320CDC8D287FCEE40025F936 /* SFBAudioUtilities.h in Headers */,
+				320CDC8E287FCEE40025F936 /* AVAudioChannelLayout+SFBChannelLabels.h in Headers */,
+				320CDC8F287FCEE40025F936 /* SFBRingBuffer.hpp in Headers */,
+				320CDC90287FCEE40025F936 /* SFBHALAudioDevice.hpp in Headers */,
+				320CDC91287FCEE40025F936 /* SFBExtAudioFileWrapper.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		320CDC0C287FC3680025F936 /* SFBAudioUtilities */ = {
+		320CDC0C287FC3680025F936 /* macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 320CDC14287FC3680025F936 /* Build configuration list for PBXNativeTarget "SFBAudioUtilities" */;
+			buildConfigurationList = 320CDC14287FC3680025F936 /* Build configuration list for PBXNativeTarget "macOS" */;
 			buildPhases = (
 				320CDC08287FC3680025F936 /* Headers */,
 				320CDC09287FC3680025F936 /* Sources */,
@@ -276,9 +359,27 @@
 			);
 			dependencies = (
 			);
-			name = SFBAudioUtilities;
+			name = macOS;
 			productName = SFBAudioUtilities;
 			productReference = 320CDC0D287FC3680025F936 /* SFBAudioUtilities.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		320CDC75287FCEE40025F936 /* iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 320CDCA2287FCEE40025F936 /* Build configuration list for PBXNativeTarget "iOS" */;
+			buildPhases = (
+				320CDC76287FCEE40025F936 /* Headers */,
+				320CDC92287FCEE40025F936 /* Sources */,
+				320CDC9E287FCEE40025F936 /* Frameworks */,
+				320CDC9F287FCEE40025F936 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iOS;
+			productName = SFBAudioUtilities;
+			productReference = 320CDCA5287FCEE40025F936 /* SFBAudioUtilities.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -309,7 +410,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				320CDC0C287FC3680025F936 /* SFBAudioUtilities */,
+				320CDC0C287FC3680025F936 /* macOS */,
+				320CDC75287FCEE40025F936 /* iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -321,6 +423,15 @@
 			files = (
 				320CDC64287FC6040025F936 /* README.md in Resources */,
 				320CDC63287FC6040025F936 /* LICENSE.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		320CDC9F287FCEE40025F936 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				320CDCA0287FCEE40025F936 /* README.md in Resources */,
+				320CDCA1287FCEE40025F936 /* LICENSE.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,6 +453,24 @@
 				320CDC58287FC3EF0025F936 /* AudioStreamBasicDescription+SFBExtensions.swift in Sources */,
 				320CDC48287FC3EF0025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.m in Sources */,
 				320CDC5D287FC3F00025F936 /* SFBCAChannelLayout.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		320CDC92287FCEE40025F936 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				320CDC93287FCEE40025F936 /* SFBAudioRingBuffer.cpp in Sources */,
+				320CDC94287FCEE40025F936 /* SFBCABufferList.cpp in Sources */,
+				320CDC95287FCEE40025F936 /* SFBRingBuffer.cpp in Sources */,
+				320CDC96287FCEE40025F936 /* AudioChannelLayout+SFBExtensions.swift in Sources */,
+				320CDC97287FCEE40025F936 /* SFBCAStreamBasicDescription.cpp in Sources */,
+				320CDC98287FCEE40025F936 /* SFBCARingBuffer.cpp in Sources */,
+				320CDC99287FCEE40025F936 /* AVAudioChannelLayout+SFBChannelLabels.m in Sources */,
+				320CDC9A287FCEE40025F936 /* AVAudioFormat+SFBFormatTransformation.m in Sources */,
+				320CDC9B287FCEE40025F936 /* AudioStreamBasicDescription+SFBExtensions.swift in Sources */,
+				320CDC9C287FCEE40025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.m in Sources */,
+				320CDC9D287FCEE40025F936 /* SFBCAChannelLayout.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,7 +614,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.sbooth.SFBAudioUtilities;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = SFBAudioUtilities;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -515,7 +644,68 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.sbooth.SFBAudioUtilities;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = SFBAudioUtilities;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		320CDCA3287FCEE40025F936 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2013-2022 Stephen F. Booth";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sbooth.SFBAudioUtilities;
+				PRODUCT_NAME = SFBAudioUtilities;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		320CDCA4287FCEE40025F936 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2013-2022 Stephen F. Booth";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sbooth.SFBAudioUtilities;
+				PRODUCT_NAME = SFBAudioUtilities;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -534,11 +724,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		320CDC14287FC3680025F936 /* Build configuration list for PBXNativeTarget "SFBAudioUtilities" */ = {
+		320CDC14287FC3680025F936 /* Build configuration list for PBXNativeTarget "macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				320CDC15287FC3680025F936 /* Debug */,
 				320CDC16287FC3680025F936 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		320CDCA2287FCEE40025F936 /* Build configuration list for PBXNativeTarget "iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				320CDCA3287FCEE40025F936 /* Debug */,
+				320CDCA4287FCEE40025F936 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
