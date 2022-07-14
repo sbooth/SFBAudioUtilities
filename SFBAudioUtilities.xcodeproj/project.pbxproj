@@ -83,6 +83,10 @@
 		320CDC9B287FCEE40025F936 /* AudioStreamBasicDescription+SFBExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC33287FC3EF0025F936 /* AudioStreamBasicDescription+SFBExtensions.swift */; };
 		320CDC9C287FCEE40025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC23287FC3EF0025F936 /* AVAudioPCMBuffer+SFBBufferUtilities.m */; };
 		320CDC9D287FCEE40025F936 /* SFBCAChannelLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320CDC38287FC3EF0025F936 /* SFBCAChannelLayout.cpp */; };
+		32B374C72880A4CB0067A4AE /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 320CDC61287FC6040025F936 /* LICENSE.txt */; };
+		32B374C82880A4CB0067A4AE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 320CDC62287FC6040025F936 /* README.md */; };
+		32B374C92880A4CB0067A4AE /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 320CDC61287FC6040025F936 /* LICENSE.txt */; };
+		32B374CA2880A4CB0067A4AE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 320CDC62287FC6040025F936 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -417,6 +421,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32B374C82880A4CB0067A4AE /* README.md in Resources */,
+				32B374C72880A4CB0067A4AE /* LICENSE.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +430,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32B374CA2880A4CB0067A4AE /* README.md in Resources */,
+				32B374C92880A4CB0067A4AE /* LICENSE.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
