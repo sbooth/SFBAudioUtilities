@@ -12,7 +12,7 @@
 
 #import <AudioToolbox/AudioUnit.h>
 
-#import "SFBCAExtAudioFile.hpp"
+#import <SFBAudioUtilities/SFBCAExtAudioFile.hpp>
 
 CF_ASSUME_NONNULL_BEGIN
 

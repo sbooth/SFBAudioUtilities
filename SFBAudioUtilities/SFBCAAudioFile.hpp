@@ -10,8 +10,8 @@
 
 #import <AudioToolbox/AudioFile.h>
 
-#import "SFBCAException.hpp"
-#import "SFBCAStreamBasicDescription.hpp"
+#import <SFBAudioUtilities/SFBCAException.hpp>
+#import <SFBAudioUtilities/SFBCAStreamBasicDescription.hpp>
 
 CF_ASSUME_NONNULL_BEGIN
 

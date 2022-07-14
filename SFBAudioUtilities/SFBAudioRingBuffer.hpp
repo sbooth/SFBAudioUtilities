@@ -10,7 +10,7 @@
 
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
-#import "SFBCAStreamBasicDescription.hpp"
+#import <SFBAudioUtilities/SFBCAStreamBasicDescription.hpp>
 
 namespace SFB {
 

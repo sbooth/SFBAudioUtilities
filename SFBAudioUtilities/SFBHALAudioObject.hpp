@@ -10,9 +10,9 @@
 
 #import <CoreAudio/CoreAudio.h>
 
-#import "SFBCAException.hpp"
-#import "SFBCAPropertyAddress.hpp"
-#import "SFBCFWrapper.hpp"
+#import <SFBAudioUtilities/SFBCAException.hpp>
+#import <SFBAudioUtilities/SFBCAPropertyAddress.hpp>
+#import <SFBAudioUtilities/SFBCFWrapper.hpp>
 
 namespace SFB {
 

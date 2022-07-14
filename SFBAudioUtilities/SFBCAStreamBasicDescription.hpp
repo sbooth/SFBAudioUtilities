@@ -10,7 +10,7 @@
 
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
-#import "SFBCFWrapper.hpp"
+#import <SFBAudioUtilities/SFBCFWrapper.hpp>
 
 namespace SFB {
 

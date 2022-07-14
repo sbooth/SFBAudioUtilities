@@ -10,7 +10,7 @@
 
 #import <AudioToolbox/AudioFormat.h>
 
-#import "SFBCAException.hpp"
+#import <SFBAudioUtilities/SFBCAException.hpp>
 
 CF_ASSUME_NONNULL_BEGIN
 

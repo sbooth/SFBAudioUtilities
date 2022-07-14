@@ -6,8 +6,8 @@
 
 #pragma once
 
-#import "SFBHALAudioObject.hpp"
-#import "SFBHALAudioDevice.hpp"
+#import <SFBAudioUtilities/SFBHALAudioObject.hpp>
+#import <SFBAudioUtilities/SFBHALAudioDevice.hpp>
 
 namespace SFB {
 
