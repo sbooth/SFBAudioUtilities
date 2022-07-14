@@ -342,9 +342,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		320CDC0C287FC3680025F936 /* macOS */ = {
+		320CDC0C287FC3680025F936 /* macOS Framework */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 320CDC14287FC3680025F936 /* Build configuration list for PBXNativeTarget "macOS" */;
+			buildConfigurationList = 320CDC14287FC3680025F936 /* Build configuration list for PBXNativeTarget "macOS Framework" */;
 			buildPhases = (
 				320CDC08287FC3680025F936 /* Headers */,
 				320CDC09287FC3680025F936 /* Sources */,
@@ -355,14 +355,14 @@
 			);
 			dependencies = (
 			);
-			name = macOS;
+			name = "macOS Framework";
 			productName = SFBAudioUtilities;
 			productReference = 320CDC0D287FC3680025F936 /* SFBAudioUtilities.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		320CDC75287FCEE40025F936 /* iOS */ = {
+		320CDC75287FCEE40025F936 /* iOS Framework */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 320CDCA2287FCEE40025F936 /* Build configuration list for PBXNativeTarget "iOS" */;
+			buildConfigurationList = 320CDCA2287FCEE40025F936 /* Build configuration list for PBXNativeTarget "iOS Framework" */;
 			buildPhases = (
 				320CDC76287FCEE40025F936 /* Headers */,
 				320CDC92287FCEE40025F936 /* Sources */,
@@ -373,7 +373,7 @@
 			);
 			dependencies = (
 			);
-			name = iOS;
+			name = "iOS Framework";
 			productName = SFBAudioUtilities;
 			productReference = 320CDCA5287FCEE40025F936 /* SFBAudioUtilities.framework */;
 			productType = "com.apple.product-type.framework";
@@ -406,8 +406,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				320CDC0C287FC3680025F936 /* macOS */,
-				320CDC75287FCEE40025F936 /* iOS */,
+				320CDC0C287FC3680025F936 /* macOS Framework */,
+				320CDC75287FCEE40025F936 /* iOS Framework */,
 			);
 		};
 /* End PBXProject section */
@@ -718,7 +718,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		320CDC14287FC3680025F936 /* Build configuration list for PBXNativeTarget "macOS" */ = {
+		320CDC14287FC3680025F936 /* Build configuration list for PBXNativeTarget "macOS Framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				320CDC15287FC3680025F936 /* Debug */,
@@ -727,7 +727,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		320CDCA2287FCEE40025F936 /* Build configuration list for PBXNativeTarget "iOS" */ = {
+		320CDCA2287FCEE40025F936 /* Build configuration list for PBXNativeTarget "iOS Framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				320CDCA3287FCEE40025F936 /* Debug */,
