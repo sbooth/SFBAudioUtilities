@@ -45,14 +45,15 @@
 ##
 ## Running 'make' will create './SFBAudioUtilities.xcframework'.
 
-# The default name of the schemes that build the framework for macOS
+# The default name of the scheme that builds the framework for macOS
 MACOS_SCHEME ?= macOS
-# The default name of the schemes that build the framework for iOS
+# The default name of the scheme that builds the framework for iOS
 IOS_SCHEME ?= iOS
 
 # The name of the output XCFramework
 XCFRAMEWORK := $(FRAMEWORK_NAME).xcframework
 
+# Build products directory
 ARCHIVE_DIR := archive
 
 MACOS_ARCHIVE := $(ARCHIVE_DIR)/macOS.xcarchive
