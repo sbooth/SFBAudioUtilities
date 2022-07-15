@@ -245,7 +245,7 @@ private func makeASBDForLinearPCM(sampleRate: Float64, channelsPerFrame: UInt32,
 extension AudioStreamBasicDescription: CustomDebugStringConvertible {
 	public var debugDescription: String {
 		// General description
-		var result = String(format: "%u ch, %.2f Hz, '%@' (0x%0.8x) ", mChannelsPerFrame, mSampleRate, mFormatID.fourCC, mFormatFlags)
+		var result = String(format: "%u ch, %.2f Hz, '%@' (0x%0.8x) ", mChannelsPerFrame, mSampleRate, fourCC(mFormatID), mFormatFlags)
 
 		if isPCM {
 			// Bit depth
@@ -311,10 +311,8 @@ extension AudioStreamBasicDescription: CustomDebugStringConvertible {
 	}
 }
 
-private extension UInt32 {
-	/// Returns the value of `self` interpreted as a four character code.
-	var fourCC: String {
-		let chars: [UInt8] = [UInt8((self >> 24) & 0xff), UInt8((self >> 16) & 0xff), UInt8((self >> 8) & 0xff), UInt8(self & 0xff), 0]
-		return String(cString: chars)
-	}
+/// Returns `value`interpreted as a four character code.
+private func fourCC(_ value: UInt32) -> String {
+	let chars: [UInt8] = [UInt8((value >> 24) & 0xff), UInt8((value >> 16) & 0xff), UInt8((value >> 8) & 0xff), UInt8(value & 0xff), 0]
+	return String(cString: chars)
 }
