@@ -23,6 +23,7 @@ extension AudioChannelLayout {
 }
 
 extension AudioChannelDescription {
+	/// Returns a description of `self`
 	public var channelDescription: String {
 		if mChannelLabel == kAudioChannelLabel_UseCoordinates {
 			return "\(mChannelFlags.channelFlagsDescription): (\(mCoordinates.0), \(mCoordinates.1), \(mCoordinates.2))"

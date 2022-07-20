@@ -243,6 +243,7 @@ private func makeASBDForLinearPCM(sampleRate: Float64, channelsPerFrame: UInt32,
 }
 
 extension AudioStreamBasicDescription: CustomDebugStringConvertible {
+	// A textual representation of this instance, suitable for debugging.
 	public var debugDescription: String {
 		// General description
 		var result = String(format: "%u ch, %.2f Hz, '%@' (0x%0.8x) ", mChannelsPerFrame, mSampleRate, fourCC(mFormatID), mFormatFlags)
