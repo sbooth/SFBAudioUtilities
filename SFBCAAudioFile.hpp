@@ -84,7 +84,7 @@ public:
 		return operator bool();
 	}
 
-	/// Returns the file's internal @c AudioFileID
+	/// Returns the object's internal @c AudioFileID
 	inline operator AudioFileID const _Nullable () const noexcept
 	{
 		return mAudioFileID;
