@@ -123,7 +123,7 @@ public:
 
 	/// Returns the number of nodes in the audio processing graph.
 	/// @throw @c std::system_error
-	UInt32 GetNodeCount()
+	UInt32 GetNodeCount() const
 	{
 		UInt32 numberOfNodes = 0;
 		auto result = AUGraphGetNodeCount(mAUGraph, &numberOfNodes);
@@ -133,7 +133,7 @@ public:
 
 	/// Returns the node at a given index
 	/// @throw @c std::system_error
-	AUNode GetIndNode(UInt32 inIndex)
+	AUNode GetIndNode(UInt32 inIndex) const
 	{
 		AUNode node = -1;
 		auto result = AUGraphGetIndNode(mAUGraph, inIndex, &node);
@@ -143,7 +143,7 @@ public:
 
 	/// Returns information about a particular AUNode.
 	/// @throw @c std::system_error
-	void NodeInfo(AUNode inNode, AudioComponentDescription * __nullable outDescription, AudioUnit __nullable * __nullable outAudioUnit)
+	void NodeInfo(AUNode inNode, AudioComponentDescription * __nullable outDescription, AudioUnit __nullable * __nullable outAudioUnit) const
 	{
 		auto result = AUGraphNodeInfo(mAUGraph, inNode, outDescription, outAudioUnit);
 		ThrowIfCAAUGraphError(result, "AUGraphNodeInfo");
@@ -165,7 +165,7 @@ public:
 
 	/// Returns the sub graph represented by a particular AUNode.
 	/// @throw @c std::system_error
-	AUGraph GetNodeInfoSubGraph(AUNode inNode)
+	AUGraph GetNodeInfoSubGraph(AUNode inNode) const
 	{
 		AUGraph subGraph = nullptr;
 		auto result = AUGraphGetNodeInfoSubGraph(mAUGraph, inNode, &subGraph);
@@ -175,7 +175,7 @@ public:
 
 	/// Returns @c true if the node represents a sub graph.
 	/// @throw @c std::system_error
-	bool IsNodeSubGraph(AUNode inNode)
+	bool IsNodeSubGraph(AUNode inNode) const
 	{
 		Boolean flag = 0;
 		auto result = AUGraphIsNodeSubGraph(mAUGraph, inNode, &flag);
@@ -220,7 +220,7 @@ public:
 
 	/// Returns the number of interactions in the audio processing graph.
 	/// @throw @c std::system_error
-	UInt32 GetNumberOfInteractions()
+	UInt32 GetNumberOfInteractions() const
 	{
 		UInt32 numberOfInteractions = 0;
 		auto result = AUGraphGetNumberOfInteractions(mAUGraph, &numberOfInteractions);
@@ -230,7 +230,7 @@ public:
 
 	/// Returns information about a particular interaction in a graph.
 	/// @throw @c std::system_error
-	AUNodeInteraction GetInteractionInfo(UInt32 inInteractionIndex)
+	AUNodeInteraction GetInteractionInfo(UInt32 inInteractionIndex) const
 	{
 		AUNodeInteraction interaction{};
 		auto result = AUGraphGetInteractionInfo(mAUGraph, inInteractionIndex, &interaction);
@@ -240,7 +240,7 @@ public:
 
 	/// Returns the number of interactions of a graph's node.
 	/// @throw @c std::system_error
-	UInt32 CountNodeInteractions(AUNode inNode)
+	UInt32 CountNodeInteractions(AUNode inNode) const
 	{
 		UInt32 numberOfInteractions = 0;
 		auto result = AUGraphCountNodeInteractions(mAUGraph, inNode, &numberOfInteractions);
@@ -250,7 +250,7 @@ public:
 
 	/// Retrieves information about the interactions in a graph for a given node.
 	/// @throw @c std::system_error
-	void GetNodeInteractions(AUNode inNode, UInt32 *ioNumInteractions, AUNodeInteraction *outInteractions)
+	void GetNodeInteractions(AUNode inNode, UInt32 *ioNumInteractions, AUNodeInteraction *outInteractions) const
 	{
 		auto result = AUGraphGetNodeInteractions(mAUGraph, inNode, ioNumInteractions, outInteractions);
 		ThrowIfCAAUGraphError(result, "AUGraphGetNodeInteractions");
@@ -320,7 +320,7 @@ public:
 
 	/// Returns @c true if the audio processing graph is open.
 	/// @throw @c std::system_error
-	bool IsOpen()
+	bool IsOpen() const
 	{
 		Boolean flag = 0;
 		auto result = AUGraphIsOpen(mAUGraph, &flag);
@@ -330,7 +330,7 @@ public:
 
 	/// Returns @c true if the audio processing graph is initialized.
 	/// @throw @c std::system_error
-	bool IsInitialized()
+	bool IsInitialized() const
 	{
 		Boolean flag = 0;
 		auto result = AUGraphIsInitialized(mAUGraph, &flag);
@@ -340,7 +340,7 @@ public:
 
 	/// Returns @c true if the audio processing graph is running.
 	/// @throw @c std::system_error
-	bool IsRunning()
+	bool IsRunning() const
 	{
 		Boolean flag = 0;
 		auto result = AUGraphIsRunning(mAUGraph, &flag);
@@ -352,7 +352,7 @@ public:
 
 	/// Returns a short-term running average of the current CPU load of the graph.
 	/// @throw @c std::system_error
-	Float32 GetCPULoad()
+	Float32 GetCPULoad() const
 	{
 		Float32 value = 0;
 		auto result = AUGraphGetCPULoad(mAUGraph, &value);
@@ -362,7 +362,7 @@ public:
 
 	/// Returns the max CPU load of the graph since this call was last made or the graph was last started.
 	/// @throw @c std::system_error
-	Float32 GetMaxCPULoad()
+	Float32 GetMaxCPULoad() const
 	{
 		Float32 value = 0;
 		auto result = AUGraphGetMaxCPULoad(mAUGraph, &value);
@@ -390,7 +390,7 @@ public:
 
 	/// Returns the graph's nodes.
 	/// @throw @c std::system_error
-	std::vector<AUNode> Nodes()
+	std::vector<AUNode> Nodes() const
 	{
 		auto nodeCount = GetNodeCount();
 		auto nodes = std::vector<AUNode>(nodeCount);
@@ -403,12 +403,56 @@ public:
 
 	/// Returns a node's interactions.
 	/// @throw @c std::system_error
-	std::vector<AUNodeInteraction> NodeInteractions(AUNode inNode)
+	std::vector<AUNodeInteraction> NodeInteractions(AUNode inNode) const
 	{
 		auto interactionCount = CountNodeInteractions(inNode);
 		auto interactions = std::vector<AUNodeInteraction>(interactionCount);
 		GetNodeInteractions(inNode, &interactionCount, &interactions[0]);
 		return interactions;
+	}
+
+	/// Returns the audio processing graph's latency.
+	/// @throw @c std::system_error
+	Float64 Latency() const
+	{
+		Float64 latency = 0;
+		auto nodeCount = GetNodeCount();
+		for(UInt32 i = 0; i < nodeCount; ++i) {
+			auto node = GetIndNode(i);
+			AudioUnit au = nullptr;
+			NodeInfo(node, nullptr, &au);
+
+			Float64 auLatency = 0;
+			UInt32 dataSize = sizeof(auLatency);
+			auto result = AudioUnitGetProperty(au, kAudioUnitProperty_Latency, kAudioUnitScope_Global, 0, &auLatency, &dataSize);
+			ThrowIfCAAudioUnitError(result, "AudioUnitGetProperty (kAudioUnitProperty_Latency, kAudioUnitScope_Global)");
+
+			latency += auLatency;
+		}
+
+		return latency;
+	}
+
+	/// Returns the audio processing graph's tail time.
+	/// @throw @c std::system_error
+	Float64 TailTime() const
+	{
+		Float64 tailTime = 0;
+		auto nodeCount = GetNodeCount();
+		for(UInt32 i = 0; i < nodeCount; ++i) {
+			auto node = GetIndNode(i);
+			AudioUnit au = nullptr;
+			NodeInfo(node, nullptr, &au);
+
+			Float64 auTailTime = 0;
+			UInt32 dataSize = sizeof(auTailTime);
+			auto result = AudioUnitGetProperty(au, kAudioUnitProperty_TailTime, kAudioUnitScope_Global, 0, &auTailTime, &dataSize);
+			ThrowIfCAAudioUnitError(result, "AudioUnitGetProperty (kAudioUnitProperty_TailTime, kAudioUnitScope_Global)");
+
+			tailTime += auTailTime;
+		}
+
+		return tailTime;
 	}
 
 private:
