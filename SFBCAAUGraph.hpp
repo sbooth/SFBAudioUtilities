@@ -33,7 +33,7 @@ public:
 	// This class is non-assignable
 	CAAUGraph& operator=(const CAAUGraph& rhs) = delete;
 
-	/// Destroys the @c CAAUGraph and release all associated resources.
+	/// Destroys the @c CAAUGraph and releases all associated resources.
 	inline ~CAAUGraph()
 	{
 		if(mAUGraph)
