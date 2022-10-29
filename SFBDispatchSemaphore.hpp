@@ -24,9 +24,9 @@ public:
 	/// @param value The starting value for the semaphore.
 	/// @throw @c std::runtime_error If the semaphore could not be created
 	inline DispatchSemaphore(intptr_t value)
-	: mSemaphore(dispatch_semaphore_create(value))
 	{
-		if(mSemaphore == nullptr)
+		mSemaphore = dispatch_semaphore_create(value);
+		if(!mSemaphore)
 			throw std::runtime_error("Unable to create the semaphore");
 	}
 
