@@ -39,7 +39,9 @@ public:
 	// Destructor
 	~DispatchSemaphore()
 	{
+#if !__has_feature(objc_arc)
 		dispatch_release(mSemaphore);
+#endif
 	}
 
 	// This class is non-movable
