@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2006 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2006 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -253,8 +253,7 @@ extension AudioStreamBasicDescription: CustomDebugStringConvertible {
 			let fractionalBits = (mFormatFlags & kLinearPCMFormatFlagsSampleFractionMask) >> kLinearPCMFormatFlagsSampleFractionShift
 			if fractionalBits > 0 {
 				result.append(String(format: "%d.%d-bit", mBitsPerChannel - fractionalBits, fractionalBits))
-			}
-			else {
+			} else {
 				result.append(String(format: "%d-bit", mBitsPerChannel))
 			}
 
@@ -288,23 +287,26 @@ extension AudioStreamBasicDescription: CustomDebugStringConvertible {
 		else if mFormatID == kAudioFormatAppleLossless {
 			var sourceBitDepth: UInt32 = 0;
 			switch mFormatFlags {
-			case kAppleLosslessFormatFlag_16BitSourceData:		sourceBitDepth = 16
-			case kAppleLosslessFormatFlag_20BitSourceData:		sourceBitDepth = 20
-			case kAppleLosslessFormatFlag_24BitSourceData:		sourceBitDepth = 24
-			case kAppleLosslessFormatFlag_32BitSourceData:		sourceBitDepth = 32
-			default: 											break
+			case kAppleLosslessFormatFlag_16BitSourceData:
+				sourceBitDepth = 16
+			case kAppleLosslessFormatFlag_20BitSourceData:
+				sourceBitDepth = 20
+			case kAppleLosslessFormatFlag_24BitSourceData:
+				sourceBitDepth = 24
+			case kAppleLosslessFormatFlag_32BitSourceData:
+				sourceBitDepth = 32
+			default:
+				break
 			}
 
 			if sourceBitDepth != 0 {
 				result.append(String(format: "from %d-bit source, ", sourceBitDepth))
-			}
-			else {
+			} else {
 				result.append("from UNKNOWN source bit depth, ")
 			}
 
 			result.append(String(format: " %d frames/packet", mFramesPerPacket))
-		}
-		else {
+		} else {
 			result.append(String(format: "%u bits/channel, %u bytes/packet, %u frames/packet, %u bytes/frame", mBitsPerChannel, mBytesPerPacket, mFramesPerPacket, mBytesPerFrame))
 		}
 
