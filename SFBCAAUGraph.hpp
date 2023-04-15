@@ -6,6 +6,7 @@
 
 #pragma once
 
+#import <map>
 #import <vector>
 
 #import <AudioToolbox/AUGraph.h>
@@ -409,6 +410,17 @@ public:
 		auto interactions = std::vector<AUNodeInteraction>(interactionCount);
 		GetNodeInteractions(inNode, &interactionCount, &interactions[0]);
 		return interactions;
+	}
+
+	/// Returns the graph's nodes and their interactions.
+	/// @throw @c std::system_error
+	std::map<AUNode, std::vector<AUNodeInteraction>> NodesAndInteractions() const
+	{
+		auto nodes = Nodes();
+		auto nodesAndInteractions = std::map<AUNode, std::vector<AUNodeInteraction>>();
+		for(auto node : nodes)
+			nodesAndInteractions[node] = NodeInteractions(node);
+		return nodesAndInteractions;
 	}
 
 	/// Returns the audio processing graph's latency.
