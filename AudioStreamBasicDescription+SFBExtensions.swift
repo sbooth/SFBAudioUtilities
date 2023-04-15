@@ -283,8 +283,7 @@ extension AudioStreamBasicDescription: CustomDebugStringConvertible {
 			if !isInterleaved {
 				result.append(", deinterleaved")
 			}
-		}
-		else if mFormatID == kAudioFormatAppleLossless {
+		} else if mFormatID == kAudioFormatAppleLossless {
 			var sourceBitDepth: UInt32 = 0;
 			switch mFormatFlags {
 			case kAppleLosslessFormatFlag_16BitSourceData:
