@@ -5,6 +5,7 @@
 //
 
 #import <algorithm>
+#import <cassert>
 #import <cstdlib>
 #import <cstring>
 #import <limits>
