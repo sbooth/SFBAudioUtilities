@@ -34,7 +34,7 @@ public:
 	// This class is non-assignable
 	AudioRingBuffer& operator=(const AudioRingBuffer& rhs) = delete;
 
-	/// Destroys the @c AudioRingBuffer and release all associated resources.
+	/// Destroys the @c AudioRingBuffer and releases all associated resources.
 	~AudioRingBuffer();
 
 	// This class is non-movable
