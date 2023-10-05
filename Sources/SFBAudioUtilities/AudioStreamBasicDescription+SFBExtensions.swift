@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2006 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2006 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -243,17 +243,17 @@ private func makeASBDForLinearPCM(sampleRate: Float64, channelsPerFrame: UInt32,
 }
 
 extension AudioStreamBasicDescription: CustomDebugStringConvertible {
+	// A textual representation of this instance, suitable for debugging.
 	public var debugDescription: String {
 		// General description
-		var result = String(format: "%u ch, %.2f Hz, '%@' (0x%0.8x) ", mChannelsPerFrame, mSampleRate, mFormatID.fourCC, mFormatFlags)
+		var result = String(format: "%u ch, %.2f Hz, '%@' (0x%0.8x) ", mChannelsPerFrame, mSampleRate, fourCC(mFormatID), mFormatFlags)
 
 		if isPCM {
 			// Bit depth
 			let fractionalBits = (mFormatFlags & kLinearPCMFormatFlagsSampleFractionMask) >> kLinearPCMFormatFlagsSampleFractionShift
 			if fractionalBits > 0 {
 				result.append(String(format: "%d.%d-bit", mBitsPerChannel - fractionalBits, fractionalBits))
-			}
-			else {
+			} else {
 				result.append(String(format: "%d-bit", mBitsPerChannel))
 			}
 
@@ -283,27 +283,29 @@ extension AudioStreamBasicDescription: CustomDebugStringConvertible {
 			if !isInterleaved {
 				result.append(", deinterleaved")
 			}
-		}
-		else if mFormatID == kAudioFormatAppleLossless {
+		} else if mFormatID == kAudioFormatAppleLossless {
 			var sourceBitDepth: UInt32 = 0;
 			switch mFormatFlags {
-			case kAppleLosslessFormatFlag_16BitSourceData:		sourceBitDepth = 16
-			case kAppleLosslessFormatFlag_20BitSourceData:		sourceBitDepth = 20
-			case kAppleLosslessFormatFlag_24BitSourceData:		sourceBitDepth = 24
-			case kAppleLosslessFormatFlag_32BitSourceData:		sourceBitDepth = 32
-			default: 											break
+			case kAppleLosslessFormatFlag_16BitSourceData:
+				sourceBitDepth = 16
+			case kAppleLosslessFormatFlag_20BitSourceData:
+				sourceBitDepth = 20
+			case kAppleLosslessFormatFlag_24BitSourceData:
+				sourceBitDepth = 24
+			case kAppleLosslessFormatFlag_32BitSourceData:
+				sourceBitDepth = 32
+			default:
+				break
 			}
 
 			if sourceBitDepth != 0 {
 				result.append(String(format: "from %d-bit source, ", sourceBitDepth))
-			}
-			else {
+			} else {
 				result.append("from UNKNOWN source bit depth, ")
 			}
 
 			result.append(String(format: " %d frames/packet", mFramesPerPacket))
-		}
-		else {
+		} else {
 			result.append(String(format: "%u bits/channel, %u bytes/packet, %u frames/packet, %u bytes/frame", mBitsPerChannel, mBytesPerPacket, mFramesPerPacket, mBytesPerFrame))
 		}
 
@@ -311,10 +313,8 @@ extension AudioStreamBasicDescription: CustomDebugStringConvertible {
 	}
 }
 
-private extension UInt32 {
-	/// Returns the value of `self` interpreted as a four character code.
-	var fourCC: String {
-		let chars: [UInt8] = [UInt8((self >> 24) & 0xff), UInt8((self >> 16) & 0xff), UInt8((self >> 8) & 0xff), UInt8(self & 0xff), 0]
-		return String(cString: chars)
-	}
+/// Returns `value`interpreted as a four character code.
+private func fourCC(_ value: UInt32) -> String {
+	let chars: [UInt8] = [UInt8((value >> 24) & 0xff), UInt8((value >> 16) & 0xff), UInt8((value >> 8) & 0xff), UInt8(value & 0xff), 0]
+	return String(cString: chars)
 }

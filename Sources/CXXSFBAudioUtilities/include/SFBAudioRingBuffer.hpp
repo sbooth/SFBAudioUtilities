@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -34,7 +34,7 @@ public:
 	// This class is non-assignable
 	AudioRingBuffer& operator=(const AudioRingBuffer& rhs) = delete;
 
-	/// Destroys the @c AudioRingBuffer and release all associated resources.
+	/// Destroys the @c AudioRingBuffer and releases all associated resources.
 	~AudioRingBuffer();
 
 	// This class is non-movable

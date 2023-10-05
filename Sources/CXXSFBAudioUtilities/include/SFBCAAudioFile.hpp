@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -20,15 +20,6 @@ namespace SFB {
 /// A wrapper around @c AudioFile
 class CAAudioFile
 {
-
-private:
-
-	struct free_deleter {
-		template <typename T>
-		void operator()(T * _Nonnull ptr) const {
-			std::free(const_cast<std::remove_const_t<T> *>(ptr));
-		}
-	};
 
 public:
 	/// Creates a @c CAAudioFile
@@ -84,7 +75,7 @@ public:
 		return operator bool();
 	}
 
-	/// Returns the file's internal @c AudioFileID
+	/// Returns the object's internal @c AudioFileID
 	inline operator AudioFileID const _Nullable () const noexcept
 	{
 		return mAudioFileID;

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2020 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable AVAudioFormat *)interleavedEquivalent;
 /// Returns a copy of @c self converted to the equivalent standard format
 - (nullable AVAudioFormat *)standardEquivalent;
+/// Returns the specified common format with the same sample rate and channel layout as @c self
+- (nullable AVAudioFormat *)transformedToCommonFormat:(AVAudioCommonFormat)commonFormat interleaved:(BOOL)interleaved;
 @end
 
 NS_ASSUME_NONNULL_END

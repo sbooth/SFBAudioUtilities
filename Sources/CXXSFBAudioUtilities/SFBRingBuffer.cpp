@@ -1,10 +1,11 @@
 //
-// Copyright (c) 2014 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
 
 #import <algorithm>
+#import <cassert>
 #import <cstdlib>
 #import <cstring>
 #import <limits>

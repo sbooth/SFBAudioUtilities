@@ -68,6 +68,7 @@ Manual or Custom Build
 | [SFB::ByteStream](SFBByteStream.hpp) | A `ByteStream` provides heterogeneous typed access to an untyped buffer |
 | [SFB::CFWrapper](SFBCFWrapper.hpp) | A wrapper around a Core Foundation object |
 | [SFB::DeferredClosure](SFBDeferredClosure.hpp) | A class that calls a closure upon destruction |
+| [SFB::DispatchSemaphore](SFBDispatchSemaphore.hpp) | A wrapper around `dispatch_semaphore_t` |
 | [SFB::UnfairLock](SFBUnfairLock.hpp) | A wrapper around `os_unfair_lock` implementing C++ `Lockable` |
 
 | C++ Class | Description |

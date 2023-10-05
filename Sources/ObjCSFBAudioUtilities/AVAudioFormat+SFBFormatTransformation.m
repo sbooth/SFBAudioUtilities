@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2020 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -50,6 +50,14 @@
 		return [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.sampleRate channelLayout:self.channelLayout];
 	else
 		return [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.sampleRate channels:self.channelCount];
+}
+
+- (nullable AVAudioFormat *)transformedToCommonFormat:(AVAudioCommonFormat)commonFormat interleaved:(BOOL)interleaved
+{
+	if(self.channelLayout)
+		return [[AVAudioFormat alloc] initWithCommonFormat:commonFormat sampleRate:self.sampleRate interleaved:interleaved channelLayout:self.channelLayout];
+	else
+		return [[AVAudioFormat alloc] initWithCommonFormat:commonFormat sampleRate:self.sampleRate channels:self.channelCount interleaved:interleaved];
 }
 
 @end

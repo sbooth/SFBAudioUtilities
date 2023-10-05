@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -30,7 +30,7 @@ public:
 	// This class is non-assignable
 	RingBuffer& operator=(const RingBuffer& rhs) = delete;
 
-	/// Destroys the @c RingBuffer and release all associated resources.
+	/// Destroys the @c RingBuffer and releases all associated resources.
 	~RingBuffer();
 
 	// This class is non-movable

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2022 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -58,7 +58,7 @@ AudioChannelLayout * CopyChannelLayout(const AudioChannelLayout * _Nullable rhs)
 }
 
 /// Returns the string representation of an @c AudioChannelLayoutTag
-const char * const GetChannelLayoutTagName(AudioChannelLayoutTag layoutTag) noexcept
+constexpr const char * GetChannelLayoutTagName(AudioChannelLayoutTag layoutTag) noexcept
 {
 	switch(layoutTag) {
 		case kAudioChannelLayoutTag_Mono:					return "kAudioChannelLayoutTag_Mono";
@@ -168,7 +168,7 @@ const char * const GetChannelLayoutTagName(AudioChannelLayoutTag layoutTag) noex
 }
 
 /// Returns the string representation of an @c AudioChannelLabel
-const char * const GetChannelLabelName(AudioChannelLabel label) noexcept
+constexpr const char * GetChannelLabelName(AudioChannelLabel label) noexcept
 {
 	switch(label) {
 		case kAudioChannelLabel_Unknown:					return "kAudioChannelLabel_Unknown";
@@ -404,8 +404,12 @@ AudioChannelLayout * SFB::CAChannelLayout::RelinquishACL() noexcept
 
 SFB::CFString SFB::CAChannelLayout::Description(const char * const prefix) const noexcept
 {
-	if(!mChannelLayout)
-		return CFString(prefix, kCFStringEncodingUTF8);
+	if(!mChannelLayout) {
+		if(prefix)
+			return CFString(prefix, kCFStringEncodingUTF8);
+		else
+			return CFString{};
+	}
 
 	CFMutableString result{ CFStringCreateMutable(kCFAllocatorDefault, 0) };
 
