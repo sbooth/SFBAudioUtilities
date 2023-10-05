@@ -5,8 +5,7 @@
 //
 
 import Foundation
-import CoreAudio
-@_exported import ObjCSFBAudioUtilities
+@_exported import CoreAudio
 
 extension AudioChannelLayout {
 	/// Returns the number of channels in this channel layout
