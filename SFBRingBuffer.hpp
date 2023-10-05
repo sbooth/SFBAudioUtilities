@@ -30,7 +30,7 @@ public:
 	// This class is non-assignable
 	RingBuffer& operator=(const RingBuffer& rhs) = delete;
 
-	/// Destroys the @c RingBuffer and release all associated resources.
+	/// Destroys the @c RingBuffer and releases all associated resources.
 	~RingBuffer();
 
 	// This class is non-movable
