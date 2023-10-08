@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Returns an initialized @c AVAudioChannelLayout object with the specified channel labels or @c nil on failure
 /// @param channelLabels An array of channel labels
 /// @param count The number of channel labels
-+ (nullable instancetype)layoutWithChannelLabels:(AudioChannelLabel *)channelLabels count:(AVAudioChannelCount)count;
++ (nullable instancetype)layoutWithChannelLabels:(const AudioChannelLabel *)channelLabels count:(AVAudioChannelCount)count;
 /// Returns an initialized @c AVAudioChannelLayout object according to the specified channel label string or @c nil on failure
 /// @param channelLabelString A string containing the channel labels
 + (nullable instancetype)layoutWithChannelLabelString:(NSString *)channelLabelString;
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Returns an initialized @c AVAudioChannelLayout object with the specified channel labels or @c nil on failure
 /// @param channelLabels An array of channel labels
 /// @param count The number of channel labels
-- (nullable instancetype)initWithChannelLabels:(AudioChannelLabel *)channelLabels count:(AVAudioChannelCount)count;
+- (nullable instancetype)initWithChannelLabels:(const AudioChannelLabel *)channelLabels count:(AVAudioChannelCount)count;
 /// Returns an initialized @c AVAudioChannelLayout object according to the specified channel label string or @c nil on failure
 /// @note The string comparisons are case-insensitive
 ///
@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Rw @c kAudioChannelLabel_RightWide
 /// All other strings are mapped to @c kAudioChannelLabel_Unknown
 /// @param channelLabelString A string containing the channel labels
-- (nullable instancetype)initWithChannelLabelString:(NSString *)channelLabelString;
+- (nullable instancetype)initWithChannelLabelString:(NSString *)channelLabelString NS_SWIFT_NAME(init(channelLabelString:));
 @end
 
 NS_ASSUME_NONNULL_END
