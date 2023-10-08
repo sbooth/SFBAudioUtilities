@@ -6,7 +6,7 @@ The package is organized into three libraries:
 
 | Module Name | Description |
 | --- | --- |
-| CXXSFBAudioUtilities | C++ classes |
+| CXXAudioUtilities | C++ classes |
 | ObjCSFBAudioUtilities | Objective-C class extensions |
 | SFBAudioUtilities | Swift class extensions |
 

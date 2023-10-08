@@ -1,4 +1,4 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -8,8 +8,8 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "CXXSFBAudioUtilities",
-            targets: ["CXXSFBAudioUtilities"]),
+            name: "CXXAudioUtilities",
+            targets: ["CXXAudioUtilities"]),
 		.library(
 			name: "ObjCSFBAudioUtilities",
 			targets: ["ObjCSFBAudioUtilities"]),
@@ -17,25 +17,38 @@ let package = Package(
 			name: "SFBAudioUtilities",
 			targets: ["SFBAudioUtilities"]),
     ],
-    dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
-    ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "CXXSFBAudioUtilities",
-            dependencies: []),
+            name: "CXXAudioUtilities",
+            dependencies: [],
+			linkerSettings: [
+				.linkedFramework("AudioToolbox")
+			]),
 		.target(
 			name: "ObjCSFBAudioUtilities",
 			dependencies: []),
 		.target(
 			name: "SFBAudioUtilities",
-			dependencies: ["ObjCSFBAudioUtilities"]),
+			dependencies: [
+				"ObjCSFBAudioUtilities"
+			]),
         .testTarget(
-            name: "SFBAudioUtilitiesTests",
-            dependencies: ["SFBAudioUtilities"]),
+            name: "CXXAudioUtilitiesTests",
+            dependencies: ["CXXAudioUtilities"],
+			swiftSettings: [
+				.interoperabilityMode(.Cxx)
+			]),
+		.testTarget(
+			name: "ObjCSFBAudioUtilitiesTests",
+			dependencies: ["ObjCSFBAudioUtilities"],
+			swiftSettings: [
+				.interoperabilityMode(.Cxx)
+			]),
+		.testTarget(
+			name: "SFBAudioUtilitiesTests",
+			dependencies: ["SFBAudioUtilities"]),
     ],
     cxxLanguageStandard: .cxx17
 )
