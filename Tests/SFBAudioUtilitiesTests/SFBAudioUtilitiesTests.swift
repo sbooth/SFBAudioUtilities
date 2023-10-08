@@ -1,5 +1,5 @@
 import XCTest
-import AVFAudio
+import CoreAudio
 @testable import SFBAudioUtilities
 
 final class SFBAudioUtilitiesTests: XCTestCase {
