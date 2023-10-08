@@ -219,11 +219,17 @@ public:
 
 	/// Returns the frame count of @c byteSize bytes
 	/// @note This is equivalent to @c byteSize/mBytesPerFrame
-	inline UInt32 ByteSizeToFrameCount(UInt32 byteSize) const
+	inline UInt32 ByteSizeToFrameCount(UInt32 byteSize) const noexcept
 	{
 		if(!mBytesPerFrame)
 			return 0;
 		return byteSize / mBytesPerFrame;
+	}
+
+	/// Returns the duration of a single packet in seconds
+	inline double GetPacketDuration() const noexcept
+	{
+		return (1 / mSampleRate) * mFramesPerPacket;
 	}
 
 #pragma mark Format transformation
