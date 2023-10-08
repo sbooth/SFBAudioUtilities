@@ -39,7 +39,7 @@ public:
 	/// @param selector The property selector
 	/// @param scope The property element
 	/// @param element The property scope
-	inline CAPropertyAddress(AudioObjectPropertySelector selector, AudioObjectPropertyScope scope = kAudioObjectPropertyScopeGlobal, AudioObjectPropertyElement element = kAudioObjectPropertyElementMaster) noexcept
+	inline CAPropertyAddress(AudioObjectPropertySelector selector, AudioObjectPropertyScope scope = kAudioObjectPropertyScopeGlobal, AudioObjectPropertyElement element = kAudioObjectPropertyElementMain) noexcept
 	: AudioObjectPropertyAddress{selector, scope, element}
 	{}
 

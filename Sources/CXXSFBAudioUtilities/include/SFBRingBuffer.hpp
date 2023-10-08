@@ -7,6 +7,7 @@
 #pragma once
 
 #import <atomic>
+#import <utility>
 
 namespace SFB {
 
