@@ -269,7 +269,7 @@ public:
 		return flag != 0;
 	}
 
-	/// MARK: - State Management
+	// MARK: - State Management
 
 	/// Opens a graph.
 	/// @throw @c std::system_error
@@ -349,7 +349,7 @@ public:
 		return flag != 0;
 	}
 
-	/// MARK: - Utilities
+	// MARK: - Utilities
 
 	/// Returns a short-term running average of the current CPU load of the graph.
 	/// @throw @c std::system_error
