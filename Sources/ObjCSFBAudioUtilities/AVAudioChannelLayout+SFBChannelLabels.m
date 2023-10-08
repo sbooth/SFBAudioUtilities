@@ -77,7 +77,7 @@ static AudioChannelLabel ChannelLabelForString(NSString *s)
 	return layout;
 }
 
-+ (instancetype)layoutWithChannelLabels:(AudioChannelLabel *)channelLabels count:(AVAudioChannelCount)count
++ (instancetype)layoutWithChannelLabels:(const AudioChannelLabel *)channelLabels count:(AVAudioChannelCount)count
 {
 	return [[AVAudioChannelLayout alloc] initWithChannelLabels:channelLabels count:count];
 }
@@ -119,7 +119,7 @@ static AudioChannelLabel ChannelLabelForString(NSString *s)
 	return self;
 }
 
-- (instancetype)initWithChannelLabels:(AudioChannelLabel *)channelLabels count:(AVAudioChannelCount)count
+- (instancetype)initWithChannelLabels:(const AudioChannelLabel *)channelLabels count:(AVAudioChannelCount)count
 {
 	NSParameterAssert(channelLabels != NULL);
 	NSParameterAssert(count > 0);
