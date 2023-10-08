@@ -155,6 +155,11 @@ extension AudioStreamBasicDescription {
 		return byteSize / Int(mBytesPerFrame)
 	}
 
+	/// Returns the duration of a single packet in seconds
+	public var packetDuration: TimeInterval {
+		(1 / mSampleRate) * Double(mFramesPerPacket)
+	}
+
 	// MARK: Format Transformation
 
 	/// Returns the equivalent non-interleaved format of `self`
