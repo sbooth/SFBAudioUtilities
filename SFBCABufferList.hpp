@@ -6,6 +6,8 @@
 
 #pragma once
 
+#import <algorithm>
+
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
 #import "SFBCAStreamBasicDescription.hpp"
