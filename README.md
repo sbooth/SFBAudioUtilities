@@ -6,8 +6,8 @@ The package is organized into two libraries:
 
 | Module Name | Description |
 | --- | --- |
-| CXXAudioUtilities | C++ classes |
-| SFBAudioUtilities | Swift and Objective-C class extensions |
+| [CXXAudioUtilities](#cxxaudioutilities) | C++ classes |
+| [SFBAudioUtilities](#sfbaudioutilities) | Swift and Objective-C class extensions |
 
 ## Installation
 
@@ -20,7 +20,9 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 1. Clone the [SFBAudioUtilities](https://github.com/sbooth/SFBAudioUtilities) repository.
 2. `swift build`.
 
-## CoreAudio Wrappers
+## CXXAudioUtilities
+
+### CoreAudio Wrappers
 
 | C++ Class | Description |
 | --- | --- |
@@ -31,7 +33,7 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | [SFB::CATimeStamp](SFBCATimeStamp.hpp) | A class extending the functionality of a Core Audio `AudioTimeStamp` |
 | [SFB::CAException](SFBCAException.hpp) | `std::error_category` for handling Core Audio errors as exceptions |
 
-### HAL
+#### HAL
 
 | C++ Class | Description |
 | --- | --- |
@@ -40,7 +42,7 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | [SFB::HALAudioStream](SFBHALAudioStream.hpp) | A wrapper around a HAL audio stream |
 | [SFB::HALAudioSystemObject](SFBHALAudioSystemObject.hpp) | A wrapper around `kAudioObjectSystemObject` |
 
-## AudioToolbox Wrappers
+### AudioToolbox Wrappers
 
 | C++ Class | Description |
 | --- | --- |
@@ -51,7 +53,7 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | [SFB::CAExtAudioFile](SFBCAExtAudioFile.hpp) | A wrapper around `ExtAudioFile` |
 | [SFB::CAAudioFormat](SFBCAAudioFormat.hpp) | A wrapper around `AudioFormat` |
 
-## Ring Buffers
+### Ring Buffers
 
 | C++ Class | Description |
 | --- | --- |
@@ -59,7 +61,7 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | [SFB::AudioRingBuffer](SFBAudioRingBuffer.hpp) | A ring buffer supporting non-interleaved audio |
 | [SFB::CARingBuffer](SFBCARingBuffer.hpp) | A ring buffer supporting timestamped non-interleaved audio |
 
-## Utility Classes
+### Utility Classes
 
 | C++ Class | Description |
 | --- | --- |
@@ -73,7 +75,9 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | --- | --- |
 | [SFB::AudioUnitRecorder](SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
 
-## AVFoundation Extensions
+## SFBAudioUtilities
+
+### AVFoundation Extensions
 
 | Extended Class | Description |
 | --- | --- |
@@ -81,7 +85,7 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | [AVAudioFormat](AVAudioFormat+SFBFormatTransformation.h) | Format transformations |
 | [AVAudioPCMBuffer](AVAudioPCMBuffer+SFBBufferUtilities.h) | Functions for buffer manipulation |
 
-## Swift Extensions
+### Swift Extensions
 
 | Extended Entity | Description |
 | --- | --- |
