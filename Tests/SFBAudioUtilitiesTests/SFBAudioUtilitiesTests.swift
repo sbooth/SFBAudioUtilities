@@ -1,6 +1,5 @@
 import XCTest
 import CoreAudio
-import AVFAudio
 @testable import SFBAudioUtilities
 
 final class SFBAudioUtilitiesTests: XCTestCase {
@@ -12,7 +11,5 @@ final class SFBAudioUtilitiesTests: XCTestCase {
 		XCTAssertTrue(asbd.channelCount == 2)
 		XCTAssertTrue(asbd.channelStreamCount == 2)
 		XCTAssertTrue(asbd.packetDuration == 1/44100)
-
-//		let layout = AVAudioChannelLayout(channelLabelString: "L R")
 	}
 }
