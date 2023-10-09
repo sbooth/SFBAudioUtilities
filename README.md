@@ -11,11 +11,11 @@ The package is organized into two libraries:
 
 ## Installation
 
-Swift Package Manager
+### Swift Package Manager
 
 Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode.
 
-Manual or Custom Build
+### Manual or Custom Build
 
 1. Clone the [SFBAudioUtilities](https://github.com/sbooth/SFBAudioUtilities) repository.
 2. `swift build`.
