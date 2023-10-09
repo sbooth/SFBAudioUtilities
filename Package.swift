@@ -23,29 +23,20 @@ let package = Package(
         .target(
             name: "CXXAudioUtilities",
             dependencies: [],
-			linkerSettings: [
-				.linkedFramework("AudioToolbox")
-			]),
+			linkerSettings: [.linkedFramework("AudioToolbox")]),
 		.target(
 			name: "ObjCSFBAudioUtilities",
 			dependencies: []),
 		.target(
 			name: "SFBAudioUtilities",
-			dependencies: [
-				"ObjCSFBAudioUtilities"
-			]),
+			dependencies: []),
         .testTarget(
             name: "CXXAudioUtilitiesTests",
             dependencies: ["CXXAudioUtilities"],
-			swiftSettings: [
-				.interoperabilityMode(.Cxx)
-			]),
+			swiftSettings: [.interoperabilityMode(.Cxx)]),
 		.testTarget(
 			name: "ObjCSFBAudioUtilitiesTests",
-			dependencies: ["ObjCSFBAudioUtilities"],
-			swiftSettings: [
-				.interoperabilityMode(.Cxx)
-			]),
+			dependencies: ["ObjCSFBAudioUtilities"]),
 		.testTarget(
 			name: "SFBAudioUtilitiesTests",
 			dependencies: ["SFBAudioUtilities"]),
