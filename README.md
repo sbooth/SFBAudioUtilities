@@ -7,7 +7,7 @@ The package is organized into three libraries:
 | Module Name | Description |
 | --- | --- |
 | CXXAudioUtilities | C++ classes |
-| ObjCSFBAudioUtilities | Objective-C class extensions |
+| ObjCAudioUtilities | Objective-C class extensions |
 | SFBAudioUtilities | Swift class extensions |
 
 The per-language split is driven by Swift Package Manager's inability to process mixed language targets.

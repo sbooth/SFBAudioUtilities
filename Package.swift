@@ -11,8 +11,8 @@ let package = Package(
             name: "CXXAudioUtilities",
             targets: ["CXXAudioUtilities"]),
 		.library(
-			name: "ObjCSFBAudioUtilities",
-			targets: ["ObjCSFBAudioUtilities"]),
+			name: "ObjCAudioUtilities",
+			targets: ["ObjCAudioUtilities"]),
 		.library(
 			name: "SFBAudioUtilities",
 			targets: ["SFBAudioUtilities"]),
@@ -25,7 +25,7 @@ let package = Package(
             dependencies: [],
 			linkerSettings: [.linkedFramework("AudioToolbox")]),
 		.target(
-			name: "ObjCSFBAudioUtilities",
+			name: "ObjCAudioUtilities",
 			dependencies: []),
 		.target(
 			name: "SFBAudioUtilities",
@@ -35,8 +35,8 @@ let package = Package(
             dependencies: ["CXXAudioUtilities"],
 			swiftSettings: [.interoperabilityMode(.Cxx)]),
 		.testTarget(
-			name: "ObjCSFBAudioUtilitiesTests",
-			dependencies: ["ObjCSFBAudioUtilities"]),
+			name: "ObjCAudioUtilitiesTests",
+			dependencies: ["ObjCAudioUtilities"]),
 		.testTarget(
 			name: "SFBAudioUtilitiesTests",
 			dependencies: ["SFBAudioUtilities"]),
