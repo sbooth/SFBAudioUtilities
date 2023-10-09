@@ -2,15 +2,12 @@
 
 A collection of utility classes and extensions easing common operations in Core Audio, Audio Toolbox, and AVFoundation.
 
-The package is organized into three libraries:
+The package is organized into two libraries:
 
 | Module Name | Description |
 | --- | --- |
 | CXXAudioUtilities | C++ classes |
-| ObjCAudioUtilities | Objective-C class extensions |
-| SFBAudioUtilities | Swift class extensions |
-
-The per-language split is driven by Swift Package Manager's inability to process mixed language targets.
+| SFBAudioUtilities | Swift and Objective-C class extensions |
 
 ## Installation
 

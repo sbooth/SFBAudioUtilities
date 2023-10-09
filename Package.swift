@@ -11,11 +11,8 @@ let package = Package(
             name: "CXXAudioUtilities",
             targets: ["CXXAudioUtilities"]),
 		.library(
-			name: "ObjCAudioUtilities",
-			targets: ["ObjCAudioUtilities"]),
-		.library(
 			name: "SFBAudioUtilities",
-			targets: ["SFBAudioUtilities"]),
+			targets: ["SFBAudioUtilities", "ObjCAudioUtilities"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
