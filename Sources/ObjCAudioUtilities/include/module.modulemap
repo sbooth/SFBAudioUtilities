@@ -1,4 +1,6 @@
 module ObjCAudioUtilities {
+	requires objc
+
 	header "AVAudioChannelLayout+SFBChannelLabels.h"
 	header "AVAudioFormat+SFBFormatTransformation.h"
 	header "AVAudioPCMBuffer+SFBBufferUtilities.h"
