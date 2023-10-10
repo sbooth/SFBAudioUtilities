@@ -78,17 +78,13 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 
 ## AVFAudioUtilities
 
-### AVFAudio Class Extensions
-
 | Extended Class | Description |
 | --- | --- |
 | [AVAudioChannelLayout](AVAudioChannelLayout+SFBChannelLabels.h) | Functions for building channel layouts from channel labels |
 | [AVAudioFormat](AVAudioFormat+SFBFormatTransformation.h) | Format transformations |
 | [AVAudioPCMBuffer](AVAudioPCMBuffer+SFBBufferUtilities.h) | Functions for buffer manipulation |
 
-## SFBAudioUtilities
-
-### Core Audio Type Extensions
+## CoreAudioUtilities
 
 | Extended Entity | Description |
 | --- | --- |
