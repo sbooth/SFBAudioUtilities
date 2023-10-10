@@ -1,6 +1,6 @@
 # SFBAudioUtilities
 
-A collection of utility classes and extensions easing common operations in Core Audio, Audio Toolbox, and AVFAudio.
+A Swift package containing utility classes and extensions simplifying common operations in Core Audio, Audio Toolbox, and AVFAudio.
 
 The package is organized into three libraries:
 
