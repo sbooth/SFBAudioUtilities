@@ -1,8 +1,8 @@
 import XCTest
 import AVFAudio
-@testable import ObjCAudioUtilities
+@testable import AVFAudioUtilities
 
-final class ObjCAudioUtilitiesTests: XCTestCase {
+final class AVFAudioUtilitiesTests: XCTestCase {
 	func testChannelLabels() {
 		let labels: [AudioChannelLabel] = [kAudioChannelLabel_Left, kAudioChannelLabel_Right]
 		labels.withUnsafeBufferPointer {

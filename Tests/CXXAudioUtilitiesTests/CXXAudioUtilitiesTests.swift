@@ -2,9 +2,10 @@ import XCTest
 @testable import CXXAudioUtilities
 
 final class CXXAudioUtilitiesTests: XCTestCase {
-	func testCxx() {
-		let sysobj = SFB.HALAudioSystemObject()
-		let defaultOutput = sysobj.DefaultOutputDevice()
-		_ = defaultOutput.Name()
+	func testByteStream() {
+		let bs = SFB.ByteStream()
+		XCTAssert(bs.Length() == 0)
+		XCTAssert(bs.Remaining() == 0)
+		XCTAssert(bs.Position() == 0)
 	}
 }

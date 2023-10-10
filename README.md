@@ -2,12 +2,15 @@
 
 A collection of utility classes and extensions easing common operations in Core Audio, Audio Toolbox, and AVFoundation.
 
-The package is organized into two libraries:
+The package is organized into three libraries:
 
 | Module Name | Description |
 | --- | --- |
-| [CXXAudioUtilities](#cxxaudioutilities) | C++ classes |
-| [SFBAudioUtilities](#sfbaudioutilities) | Swift and Objective-C class extensions |
+| [CXXAudioUtilities](#cxxaudioutilities) | Assorted C++ classes |
+| [AVFAudioUtilities](#avfaudioutilities) | AVFAudio class extensions |
+| [CoreAudioUtilities](#coreaudioutilities) | Swift class extensions for Core Audio types |
+
+The per-language split is necessitated by Swift Package Manager's lack of support for mixed-language targets.
 
 ## Installation
 
@@ -75,9 +78,9 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | --- | --- |
 | [SFB::AudioUnitRecorder](SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
 
-## SFBAudioUtilities
+## AVFAudioUtilities
 
-### AVFoundation Extensions
+### AVFAudio Class Extensions
 
 | Extended Class | Description |
 | --- | --- |
@@ -85,7 +88,9 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | [AVAudioFormat](AVAudioFormat+SFBFormatTransformation.h) | Format transformations |
 | [AVAudioPCMBuffer](AVAudioPCMBuffer+SFBBufferUtilities.h) | Functions for buffer manipulation |
 
-### Swift Extensions
+## SFBAudioUtilities
+
+### Core Audio Type Extensions
 
 | Extended Entity | Description |
 | --- | --- |

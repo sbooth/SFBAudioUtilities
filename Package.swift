@@ -11,8 +11,11 @@ let package = Package(
             name: "CXXAudioUtilities",
             targets: ["CXXAudioUtilities"]),
 		.library(
-			name: "SFBAudioUtilities",
-			targets: ["SFBAudioUtilities", "ObjCAudioUtilities"]),
+			name: "AVFAudioUtilities",
+			targets: ["AVFAudioUtilities"]),
+		.library(
+			name: "CoreAudioUtilities",
+			targets: ["CoreAudioUtilities"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -22,21 +25,21 @@ let package = Package(
             dependencies: [],
 			linkerSettings: [.linkedFramework("AudioToolbox")]),
 		.target(
-			name: "ObjCAudioUtilities",
+			name: "AVFAudioUtilities",
 			dependencies: []),
 		.target(
-			name: "SFBAudioUtilities",
+			name: "CoreAudioUtilities",
 			dependencies: []),
         .testTarget(
             name: "CXXAudioUtilitiesTests",
             dependencies: ["CXXAudioUtilities"],
 			swiftSettings: [.interoperabilityMode(.Cxx)]),
 		.testTarget(
-			name: "ObjCAudioUtilitiesTests",
-			dependencies: ["ObjCAudioUtilities"]),
+			name: "AVFAudioUtilitiesTests",
+			dependencies: ["AVFAudioUtilities"]),
 		.testTarget(
-			name: "SFBAudioUtilitiesTests",
-			dependencies: ["SFBAudioUtilities"]),
+			name: "CoreAudioUtilitiesTests",
+			dependencies: ["CoreAudioUtilities"]),
     ],
     cxxLanguageStandard: .cxx17
 )
