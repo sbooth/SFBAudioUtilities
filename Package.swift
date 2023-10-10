@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -30,10 +30,11 @@ let package = Package(
 		.target(
 			name: "CoreAudioUtilities",
 			dependencies: []),
-        .testTarget(
-            name: "CXXAudioUtilitiesTests",
-            dependencies: ["CXXAudioUtilities"],
-			swiftSettings: [.interoperabilityMode(.Cxx)]),
+		// C++ interop requires Swift 5.9
+//        .testTarget(
+//            name: "CXXAudioUtilitiesTests",
+//            dependencies: ["CXXAudioUtilities"],
+//			swiftSettings: [.interoperabilityMode(.Cxx)]),
 		.testTarget(
 			name: "AVFAudioUtilitiesTests",
 			dependencies: ["AVFAudioUtilities"]),
