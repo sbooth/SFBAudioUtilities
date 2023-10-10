@@ -7,10 +7,8 @@ The package is organized into three libraries:
 | Module Name | Description |
 | --- | --- |
 | [CXXAudioUtilities](#cxxaudioutilities) | Assorted C++ classes |
-| [AVFAudioUtilities](#avfaudioutilities) | AVFAudio class extensions |
-| [CoreAudioUtilities](#coreaudioutilities) | Swift class extensions for Core Audio types |
-
-The per-language split is necessitated by Swift Package Manager's lack of support for mixed-language targets.
+| [AVFAudioUtilities](#avfaudioutilities) | AVFAudio class extensions in Objective-C |
+| [CoreAudioUtilities](#coreaudioutilities) | Swift extensions for Core Audio types |
 
 ## Installation
 
