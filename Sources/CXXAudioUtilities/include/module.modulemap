@@ -1,5 +1,5 @@
 module CXXAudioUtilities {
-	requires cplusplus17
+	requires cplusplus14
 
 	header "SFBAudioFileWrapper.hpp"
 	header "SFBAudioRingBuffer.hpp"

@@ -42,5 +42,5 @@ let package = Package(
 			name: "CoreAudioUtilitiesTests",
 			dependencies: ["CoreAudioUtilities"]),
     ],
-    cxxLanguageStandard: .cxx17
+    cxxLanguageStandard: .cxx14
 )
