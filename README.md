@@ -7,7 +7,7 @@ The package is organized into three libraries:
 | Module Name | Description |
 | --- | --- |
 | [CXXAudioUtilities](#cxxaudioutilities) | Assorted C++ classes |
-| [AVFAudioUtilities](#avfaudioutilities) | AVFAudio class extensions in Objective-C |
+| [AVFAudioUtilities](#avfaudioutilities) | `AVFAudio` class extensions in Objective-C |
 | [CoreAudioUtilities](#coreaudioutilities) | Swift extensions for Core Audio types |
 
 ## Installation
@@ -21,7 +21,7 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 1. Clone the [SFBAudioUtilities](https://github.com/sbooth/SFBAudioUtilities) repository.
 2. `swift build`.
 
-## CXXAudioUtilities
+## CXXAudioUtilities Library
 
 ### CoreAudio Wrappers
 
@@ -76,7 +76,7 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | --- | --- |
 | [SFB::AudioUnitRecorder](SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
 
-## AVFAudioUtilities
+## AVFAudioUtilities Library
 
 | Extended Class | Description |
 | --- | --- |
@@ -84,7 +84,7 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | [AVAudioFormat](AVAudioFormat+SFBFormatTransformation.h) | Format transformations |
 | [AVAudioPCMBuffer](AVAudioPCMBuffer+SFBBufferUtilities.h) | Functions for buffer manipulation |
 
-## CoreAudioUtilities
+## CoreAudioUtilities Library
 
 | Extended Entity | Description |
 | --- | --- |
