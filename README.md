@@ -88,8 +88,8 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 
 | Extended Entity | Description |
 | --- | --- |
-| [AudioChannelLayout](Sources/CoreAudioUtilities/include/AudioChannelLayout+SFBExtensions.swift) | |
-| [AudioStreamBasicDescription](Sources/CoreAudioUtilities/include/AudioStreamBasicDescription+SFBExtensions.swift) | Common format support |
+| [AudioChannelLayout](Sources/CoreAudioUtilities/AudioChannelLayout+SFBExtensions.swift) | |
+| [AudioStreamBasicDescription](Sources/CoreAudioUtilities/AudioStreamBasicDescription+SFBExtensions.swift) | Common format support |
 
 ## License
 
