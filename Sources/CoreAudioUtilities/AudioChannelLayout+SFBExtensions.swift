@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import CoreAudio
+import CoreAudioTypes
 
 extension AudioChannelLayout {
 	/// Returns the number of channels in this channel layout

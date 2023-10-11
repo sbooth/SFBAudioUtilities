@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import CoreAudio
+import CoreAudioTypes
 
 extension AudioStreamBasicDescription {
 
