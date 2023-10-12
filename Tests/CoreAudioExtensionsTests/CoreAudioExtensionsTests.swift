@@ -1,8 +1,8 @@
 import XCTest
 import CoreAudio
-@testable import CoreAudioUtilities
+@testable import CoreAudioExtensions
 
-final class CoreAudioUtilitiesTests: XCTestCase {
+final class CoreAudioExtensionsTests: XCTestCase {
 	func testAudioStreamBasicDescription() {
 		let asbd = AudioStreamBasicDescription(commonFormat: .float32, sampleRate: 44100, channelsPerFrame: 2, isInterleaved: false)
 		XCTAssertTrue(asbd.isFloat)

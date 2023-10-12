@@ -1,4 +1,4 @@
-module AVFAudioUtilities {
+module AVFAudioExtensions {
 	requires objc
 
 	header "AVAudioChannelLayout+SFBChannelLabels.h"

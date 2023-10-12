@@ -7,8 +7,8 @@ The package is organized into three libraries:
 | Module Name | Description |
 | --- | --- |
 | [CXXAudioUtilities](#cxxaudioutilities) | Assorted C++ classes |
-| [AVFAudioUtilities](#avfaudioutilities) | AVFAudio class extensions in Objective-C |
-| [CoreAudioUtilities](#coreaudioutilities) | Swift extensions for Core Audio types |
+| [AVFAudioExtensions](#avfaudioextensions) | AVFAudio class extensions in Objective-C |
+| [CoreAudioExtensions](#coreaudioextensions) | Swift extensions for Core Audio types |
 
 ## Installation
 
@@ -76,20 +76,20 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 | --- | --- |
 | [SFB::AudioUnitRecorder](Sources/CXXAudioUtilities/include/SFBAudioUnitRecorder.hpp) | A class that asynchronously writes the output from an `AudioUnit` to a file |
 
-## AVFAudioUtilities
+## AVFAudioExtensions
 
 | Extended Class | Description |
 | --- | --- |
-| [AVAudioChannelLayout](Sources/AVFAudioUtilities/include/AVAudioChannelLayout+SFBChannelLabels.h) | Functions for building channel layouts from channel labels |
-| [AVAudioFormat](Sources/AVFAudioUtilities/include/AVAudioFormat+SFBFormatTransformation.h) | Format transformations |
-| [AVAudioPCMBuffer](Sources/AVFAudioUtilities/include/AVAudioPCMBuffer+SFBBufferUtilities.h) | Functions for buffer manipulation |
+| [AVAudioChannelLayout](Sources/AVFAudioExtensions/include/AVAudioChannelLayout+SFBChannelLabels.h) | Functions for building channel layouts from channel labels |
+| [AVAudioFormat](Sources/AVFAudioExtensions/include/AVAudioFormat+SFBFormatTransformation.h) | Format transformations |
+| [AVAudioPCMBuffer](Sources/AVFAudioExtensions/include/AVAudioPCMBuffer+SFBBufferUtilities.h) | Functions for buffer manipulation |
 
-## CoreAudioUtilities
+## CoreAudioExtensions
 
 | Extended Entity | Description |
 | --- | --- |
-| [AudioChannelLayout](Sources/CoreAudioUtilities/AudioChannelLayout+SFBExtensions.swift) | |
-| [AudioStreamBasicDescription](Sources/CoreAudioUtilities/AudioStreamBasicDescription+SFBExtensions.swift) | Common format support |
+| [AudioChannelLayout](Sources/CoreAudioExtensions/AudioChannelLayout+SFBExtensions.swift) | |
+| [AudioStreamBasicDescription](Sources/CoreAudioExtensions/AudioStreamBasicDescription+SFBExtensions.swift) | Common format support |
 
 ## License
 
