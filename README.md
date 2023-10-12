@@ -4,11 +4,11 @@ A Swift package containing utility classes and extensions simplifying common ope
 
 The package is organized into three libraries:
 
-| Module Name | Description |
-| --- | --- |
-| [CXXAudioUtilities](#cxxaudioutilities) | Assorted C++ classes |
-| [AVFAudioExtensions](#avfaudioextensions) | AVFAudio class extensions in Objective-C |
-| [CoreAudioExtensions](#coreaudioextensions) | Swift extensions for Core Audio types |
+| Module Name | Language | Description |
+| --- | --- | --- |
+| [CXXAudioUtilities](#cxxaudioutilities) | C++14 | Assorted C++ classes |
+| [AVFAudioExtensions](#avfaudioextensions) | Objective-C | AVFAudio class extensions |
+| [CoreAudioExtensions](#coreaudioextensions) | Swift | Extensions for Core Audio types |
 
 ## Installation
 
