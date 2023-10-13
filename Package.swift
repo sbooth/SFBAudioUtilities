@@ -29,7 +29,10 @@ let package = Package(
 			]),
 		.target(
 			name: "AVFAudioExtensions",
-			dependencies: []),
+			dependencies: [],
+			linkerSettings: [
+				.linkedFramework("AVFAudio"),
+			]),
 		.target(
 			name: "CoreAudioExtensions",
 			dependencies: []),
