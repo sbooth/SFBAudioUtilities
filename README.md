@@ -23,25 +23,25 @@ Add a package dependency to https://github.com/sbooth/SFBAudioUtilities in Xcode
 
 ## CXXAudioUtilities
 
-### CoreAudio Wrappers
+### CoreAudioTypes Wrappers
 
 | C++ Class | Description |
 | --- | --- |
 | [SFB::CABufferList](Sources/CXXAudioUtilities/include/SFBCABufferList.hpp) | A class wrapping a Core Audio `AudioBufferList` with a specific format, frame capacity, and frame length |
 | [SFB::CAChannelLayout](Sources/CXXAudioUtilities/include/SFBCAChannelLayout.hpp) | A class wrapping a Core Audio `AudioChannelLayout` |
-| [SFB::CAPropertyAddress](Sources/CXXAudioUtilities/include/SFBCAPropertyAddress.hpp) | A class extending the functionality of a Core Audio `AudioObjectPropertyAddress` |
 | [SFB::CAStreamBasicDescription](Sources/CXXAudioUtilities/include/SFBCAStreamBasicDescription.hpp) | A class extending the functionality of a Core Audio `AudioStreamBasicDescription` |
 | [SFB::CATimeStamp](Sources/CXXAudioUtilities/include/SFBCATimeStamp.hpp) | A class extending the functionality of a Core Audio `AudioTimeStamp` |
 | [SFB::CAException](Sources/CXXAudioUtilities/include/SFBCAException.hpp) | `std::error_category` for handling Core Audio errors as exceptions |
 
-#### HAL
+#### AudioHardware Wrappers
 
 | C++ Class | Description |
 | --- | --- |
-| [SFB::HALAudioObject](Sources/CXXAudioUtilities/include/SFBHALAudioObject.hpp) | A wrapper around a HAL audio object |
-| [SFB::HALAudioDevice](Sources/CXXAudioUtilities/include/SFBHALAudioDevice.hpp) | A wrapper around a HAL audio device |
-| [SFB::HALAudioStream](Sources/CXXAudioUtilities/include/SFBHALAudioStream.hpp) | A wrapper around a HAL audio stream |
-| [SFB::HALAudioSystemObject](Sources/CXXAudioUtilities/include/SFBHALAudioSystemObject.hpp) | A wrapper around `kAudioObjectSystemObject` |
+| [SFB::CAPropertyAddress](Sources/CXXAudioUtilities/include/SFBCAPropertyAddress.hpp) | A class extending the functionality of a Core Audio `AudioObjectPropertyAddress` |
+| [SFB::CAAudioObject](Sources/CXXAudioUtilities/include/SFBCAAudioObject.hpp) | A wrapper around a HAL audio object |
+| [SFB::CAAudioDevice](Sources/CXXAudioUtilities/include/SFBCAAudioDevice.hpp) | A wrapper around a HAL audio device |
+| [SFB::CAAudioStream](Sources/CXXAudioUtilities/include/SFBCAAudioStream.hpp) | A wrapper around a HAL audio stream |
+| [SFB::CAAudioSystemObject](Sources/CXXAudioUtilities/include/SFBCAAudioSystemObject.hpp) | A wrapper around `kAudioObjectSystemObject` |
 
 ### AudioToolbox Wrappers
 
