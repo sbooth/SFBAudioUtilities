@@ -4,7 +4,7 @@
 // MIT license
 //
 
-#import <AVFoundation/AVFoundation.h>
+#import <AVFAudio/AVFAudio.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
