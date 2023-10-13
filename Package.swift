@@ -23,7 +23,10 @@ let package = Package(
         .target(
             name: "CXXAudioUtilities",
             dependencies: [],
-			linkerSettings: [.linkedFramework("AudioToolbox")]),
+			linkerSettings: [
+				.linkedFramework("CoreAudio"),
+				.linkedFramework("AudioToolbox"),
+			]),
 		.target(
 			name: "AVFAudioExtensions",
 			dependencies: []),
