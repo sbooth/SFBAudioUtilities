@@ -41,9 +41,9 @@ let package = Package(
 //			name: "CXXAudioUtilitiesTests",
 //			dependencies: ["CXXAudioUtilities"],
 //			swiftSettings: [.interoperabilityMode(.Cxx)]),
-			.testTarget(
-				name: "AVFAudioExtensionsTests",
-				dependencies: ["AVFAudioExtensions"]),
+		.testTarget(
+			name: "AVFAudioExtensionsTests",
+			dependencies: ["AVFAudioExtensions"]),
 		.testTarget(
 			name: "CoreAudioExtensionsTests",
 			dependencies: ["CoreAudioExtensions"]),
