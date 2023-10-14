@@ -4,25 +4,25 @@
 import PackageDescription
 
 let package = Package(
-    name: "SFBAudioUtilities",
-    products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
-            name: "CXXAudioUtilities",
-            targets: ["CXXAudioUtilities"]),
+	name: "SFBAudioUtilities",
+	products: [
+		// Products define the executables and libraries a package produces, and make them visible to other packages.
+		.library(
+			name: "CXXAudioUtilities",
+			targets: ["CXXAudioUtilities"]),
 		.library(
 			name: "AVFAudioExtensions",
 			targets: ["AVFAudioExtensions"]),
 		.library(
 			name: "CoreAudioExtensions",
 			targets: ["CoreAudioExtensions"]),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(
-            name: "CXXAudioUtilities",
-            dependencies: [],
+	],
+	targets: [
+		// Targets are the basic building blocks of a package. A target can define a module or a test suite.
+		// Targets can depend on other targets in this package, and on products in packages this package depends on.
+		.target(
+			name: "CXXAudioUtilities",
+			dependencies: [],
 			linkerSettings: [
 				.linkedFramework("CoreAudio"),
 				.linkedFramework("AudioToolbox"),
@@ -41,12 +41,12 @@ let package = Package(
 //			name: "CXXAudioUtilitiesTests",
 //			dependencies: ["CXXAudioUtilities"],
 //			swiftSettings: [.interoperabilityMode(.Cxx)]),
-		.testTarget(
-			name: "AVFAudioExtensionsTests",
-			dependencies: ["AVFAudioExtensions"]),
+			.testTarget(
+				name: "AVFAudioExtensionsTests",
+				dependencies: ["AVFAudioExtensions"]),
 		.testTarget(
 			name: "CoreAudioExtensionsTests",
 			dependencies: ["CoreAudioExtensions"]),
-    ],
-    cxxLanguageStandard: .cxx14
+	],
+	cxxLanguageStandard: .cxx14
 )
