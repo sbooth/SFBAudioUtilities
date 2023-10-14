@@ -23,6 +23,9 @@ let package = Package(
 		.target(
 			name: "CXXAudioUtilities",
 			dependencies: [],
+			// TODO: Investigate using Swift 5.9 C++ interoperability
+			// https://www.swift.org/documentation/cxx-interop/
+//			swiftSettings: [.interoperabilityMode(.Cxx)],
 			linkerSettings: [
 				.linkedFramework("CoreAudio"),
 				.linkedFramework("AudioToolbox"),
@@ -36,7 +39,7 @@ let package = Package(
 		.target(
 			name: "CoreAudioExtensions",
 			dependencies: []),
-		// C++ interop requires Swift 5.9
+		// TODO: Add this test if C++ interoperability is enabled
 //		.testTarget(
 //			name: "CXXAudioUtilitiesTests",
 //			dependencies: ["CXXAudioUtilities"],
