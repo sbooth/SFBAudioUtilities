@@ -6,38 +6,38 @@
 
 #pragma once
 
-#import "SFBHALAudioObject.hpp"
+#import "SFBCAAudioObject.hpp"
 #import "SFBCAStreamBasicDescription.hpp"
 
 namespace SFB {
 
-class HALAudioStream : public HALAudioObject
+class CAAudioStream : public CAAudioObject
 {
 
 public:
 
-	/// Creates an unknown @c HALAudioStream
-	constexpr HALAudioStream() noexcept = default;
+	/// Creates an unknown @c CAAudioStream
+	constexpr CAAudioStream() noexcept = default;
 
 	/// Copy constructor
-	constexpr HALAudioStream(const HALAudioStream& rhs) noexcept = default;
+	constexpr CAAudioStream(const CAAudioStream& rhs) noexcept = default;
 
 	/// Assignment operator
-	HALAudioStream& operator=(const HALAudioStream& rhs) noexcept = default;
+	CAAudioStream& operator=(const CAAudioStream& rhs) noexcept = default;
 
 	/// Destructor
-	virtual ~HALAudioStream() = default;
+	virtual ~CAAudioStream() = default;
 
 	/// Move constructor
-	HALAudioStream(HALAudioStream&& rhs) = default;
+	CAAudioStream(CAAudioStream&& rhs) = default;
 
 	/// Move assignment operator
-	HALAudioStream& operator=(HALAudioStream&& rhs) = default;
+	CAAudioStream& operator=(CAAudioStream&& rhs) = default;
 
 
-	/// Creates a @c HALAudioStream with the specified objectID
-	inline constexpr HALAudioStream(AudioObjectID objectID) noexcept
-	: HALAudioObject(objectID)
+	/// Creates a @c CAAudioStream with the specified objectID
+	inline constexpr CAAudioStream(AudioObjectID objectID) noexcept
+	: CAAudioObject(objectID)
 	{}
 
 	inline bool IsActive() const

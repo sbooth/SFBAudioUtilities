@@ -16,41 +16,41 @@
 
 namespace SFB {
 
-enum class HALAudioObjectDirectionalScope {
+enum class CAAudioObjectDirectionalScope {
 	input,
 	output,
 };
 
-class HALAudioObject
+class CAAudioObject
 {
 
 public:
 
 #pragma mark Creation and Destruction
 
-	/// Creates an unknown @c HALAudioObject
-	inline constexpr HALAudioObject() noexcept
+	/// Creates an unknown @c CAAudioObject
+	inline constexpr CAAudioObject() noexcept
 	: mObjectID(kAudioObjectUnknown)
 	{}
 
 	/// Copy constructor
-	inline constexpr HALAudioObject(const HALAudioObject& rhs) noexcept = default;
+	inline constexpr CAAudioObject(const CAAudioObject& rhs) noexcept = default;
 
 	/// Assignment operator
-	inline HALAudioObject& operator=(const HALAudioObject& rhs) noexcept = default;
+	inline CAAudioObject& operator=(const CAAudioObject& rhs) noexcept = default;
 
 	/// Destructor
-	virtual ~HALAudioObject() = default;
+	virtual ~CAAudioObject() = default;
 
 	// Move constructor
-	HALAudioObject(HALAudioObject&& rhs) noexcept = default;
+	CAAudioObject(CAAudioObject&& rhs) noexcept = default;
 
 	/// Move assignment operator
-	HALAudioObject& operator=(HALAudioObject&& rhs) noexcept = default;
+	CAAudioObject& operator=(CAAudioObject&& rhs) noexcept = default;
 
 
-	/// Creates a @c HALAudioObject with the specified objectID
-	inline constexpr HALAudioObject(AudioObjectID objectID) noexcept
+	/// Creates a @c CAAudioObject with the specified objectID
+	inline constexpr CAAudioObject(AudioObjectID objectID) noexcept
 	: mObjectID(objectID)
 	{}
 
@@ -206,9 +206,9 @@ public:
 		return ArithmeticProperty<AudioObjectID>(CAPropertyAddress(kAudioObjectPropertyOwner));
 	}
 
-	inline HALAudioObject Owner() const
+	inline CAAudioObject Owner() const
 	{
-		return HALAudioObject(OwnerID());
+		return CAAudioObject(OwnerID());
 	}
 
 	inline CFString Name() const
@@ -246,11 +246,11 @@ public:
 		return ArrayProperty<AudioObjectID>(CAPropertyAddress(kAudioObjectPropertyOwnedObjects));
 	}
 
-	std::vector<HALAudioObject> OwnedObjects() const
+	std::vector<CAAudioObject> OwnedObjects() const
 	{
 		auto vec = OwnedObjectIDs();
-		std::vector<HALAudioObject> result(vec.size());
-		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return HALAudioObject(objectID); });
+		std::vector<CAAudioObject> result(vec.size());
+		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return CAAudioObject(objectID); });
 		return result;
 	}
 

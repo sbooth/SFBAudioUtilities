@@ -87,7 +87,7 @@ public:
 
 	/// Write data to the @c RingBuffer, advancing the write pointer.
 	/// @param sourceBuffer An address containing the data to copy
-	/// @param byteCount The desired number of frames to write
+	/// @param byteCount The desired number of bytes to write
 	/// @return The number of bytes actually written
 	uint32_t Write(const void * const _Nonnull sourceBuffer, uint32_t byteCount) noexcept;
 

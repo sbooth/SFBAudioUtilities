@@ -1,0 +1,31 @@
+module CXXAudioUtilities {
+	requires cplusplus14
+
+	header "SFBAudioFileWrapper.hpp"
+	header "SFBAudioRingBuffer.hpp"
+	header "SFBAudioUnitRecorder.hpp"
+	header "SFBByteStream.hpp"
+	header "SFBCAAUGraph.hpp"
+	header "SFBCAAudioDevice.hpp"
+	header "SFBCAAudioFile.hpp"
+	header "SFBCAAudioFormat.hpp"
+	header "SFBCAAudioObject.hpp"
+	header "SFBCAAudioStream.hpp"
+	header "SFBCAAudioSystemObject.hpp"
+	header "SFBCABufferList.hpp"
+	header "SFBCAChannelLayout.hpp"
+	header "SFBCAException.hpp"
+	header "SFBCAExtAudioFile.hpp"
+	header "SFBCAPropertyAddress.hpp"
+	header "SFBCARingBuffer.hpp"
+	header "SFBCAStreamBasicDescription.hpp"
+	header "SFBCATimeStamp.hpp"
+	header "SFBCFWrapper.hpp"
+	header "SFBDeferredClosure.hpp"
+	header "SFBDispatchSemaphore.hpp"
+	header "SFBExtAudioFileWrapper.hpp"
+	header "SFBRingBuffer.hpp"
+	header "SFBUnfairLock.hpp"
+
+	export *
+}

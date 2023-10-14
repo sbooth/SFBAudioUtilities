@@ -151,8 +151,8 @@ constexpr const char * GetChannelLayoutTagName(AudioChannelLayoutTag layoutTag) 
 		case kAudioChannelLayoutTag_WAVE_6_1:				return "kAudioChannelLayoutTag_WAVE_6_1";
 		case kAudioChannelLayoutTag_WAVE_7_1:				return "kAudioChannelLayoutTag_WAVE_7_1";
 		case kAudioChannelLayoutTag_Atmos_5_1_2:			return "kAudioChannelLayoutTag_Atmos_5_1_2";
-			//			case kAudioChannelLayoutTag_Atmos_5_1_4:			return "kAudioChannelLayoutTag_Atmos_5_1_4";
-			//			case kAudioChannelLayoutTag_Atmos_7_1_2:			return "kAudioChannelLayoutTag_Atmos_7_1_2";
+		case kAudioChannelLayoutTag_Atmos_5_1_4:			return "kAudioChannelLayoutTag_Atmos_5_1_4";
+		case kAudioChannelLayoutTag_Atmos_7_1_2:			return "kAudioChannelLayoutTag_Atmos_7_1_2";
 		case kAudioChannelLayoutTag_Atmos_7_1_4:			return "kAudioChannelLayoutTag_Atmos_7_1_4";
 		case kAudioChannelLayoutTag_Atmos_9_1_6:			return "kAudioChannelLayoutTag_Atmos_9_1_6";
 	}

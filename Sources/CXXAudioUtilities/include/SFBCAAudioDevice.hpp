@@ -6,38 +6,38 @@
 
 #pragma once
 
-#import "SFBHALAudioObject.hpp"
-#import "SFBHALAudioStream.hpp"
+#import "SFBCAAudioObject.hpp"
+#import "SFBCAAudioStream.hpp"
 
 namespace SFB {
 
-class HALAudioDevice : public HALAudioObject
+class CAAudioDevice : public CAAudioObject
 {
 
 public:
 
-	/// Creates an unknown @c SFBHALAudioObject
-	constexpr HALAudioDevice() noexcept = default;
+	/// Creates an unknown @c SFBCAAudioObject
+	constexpr CAAudioDevice() noexcept = default;
 
 	/// Copy constructor
-	constexpr HALAudioDevice(const HALAudioDevice& rhs) noexcept = default;
+	constexpr CAAudioDevice(const CAAudioDevice& rhs) noexcept = default;
 
 	/// Assignment operator
-	HALAudioDevice& operator=(const HALAudioDevice& rhs) noexcept = default;
+	CAAudioDevice& operator=(const CAAudioDevice& rhs) noexcept = default;
 
 	/// Destructor
-	virtual ~HALAudioDevice() = default;
+	virtual ~CAAudioDevice() = default;
 
 	/// Move constructor
-	HALAudioDevice(HALAudioDevice&& rhs) = default;
+	CAAudioDevice(CAAudioDevice&& rhs) = default;
 
 	/// Move assignment operator
-	HALAudioDevice& operator=(HALAudioDevice&& rhs) = default;
+	CAAudioDevice& operator=(CAAudioDevice&& rhs) = default;
 
 
-	/// Creates a @c HALAudioDevice with the specified objectID
-	inline constexpr HALAudioDevice(AudioObjectID objectID) noexcept
-	: HALAudioObject(objectID)
+	/// Creates a @c CAAudioDevice with the specified objectID
+	inline constexpr CAAudioDevice(AudioObjectID objectID) noexcept
+	: CAAudioObject(objectID)
 	{}
 
 
@@ -61,29 +61,29 @@ public:
 	//	kAudioDevicePropertyDeviceCanBeDefaultDevice        = 'dflt',
 	//	kAudioDevicePropertyDeviceCanBeDefaultSystemDevice  = 'sflt',
 
-	inline UInt32 Latency(HALAudioObjectDirectionalScope scope) const
+	inline UInt32 Latency(CAAudioObjectDirectionalScope scope) const
 	{
-		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioDevicePropertyLatency, scope == HALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioDevicePropertyLatency, scope == CAAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
 	}
 
-	inline std::vector<AudioObjectID> StreamIDs(HALAudioObjectDirectionalScope scope) const
+	inline std::vector<AudioObjectID> StreamIDs(CAAudioObjectDirectionalScope scope) const
 	{
-		return ArrayProperty<AudioObjectID>(CAPropertyAddress(kAudioDevicePropertyStreams, scope == HALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
+		return ArrayProperty<AudioObjectID>(CAPropertyAddress(kAudioDevicePropertyStreams, scope == CAAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
 	}
 
-	std::vector<HALAudioStream> Streams(HALAudioObjectDirectionalScope scope) const
+	std::vector<CAAudioStream> Streams(CAAudioObjectDirectionalScope scope) const
 	{
 		auto vec = StreamIDs(scope);
-		std::vector<HALAudioStream> result(vec.size());
-		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return HALAudioStream(objectID); });
+		std::vector<CAAudioStream> result(vec.size());
+		std::transform(vec.cbegin(), vec.cend(), result.begin(), [](AudioObjectID objectID) { return CAAudioStream(objectID); });
 		return result;
 	}
 
 	//	kAudioObjectPropertyControlList                     = 'ctrl',
 
-	inline UInt32 SafetyOffset(HALAudioObjectDirectionalScope scope) const
+	inline UInt32 SafetyOffset(CAAudioObjectDirectionalScope scope) const
 	{
-		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioDevicePropertySafetyOffset, scope == HALAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
+		return ArithmeticProperty<UInt32>(CAPropertyAddress(kAudioDevicePropertySafetyOffset, scope == CAAudioObjectDirectionalScope::input ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput));
 	}
 
 	inline Float64 NominalSampleRate() const

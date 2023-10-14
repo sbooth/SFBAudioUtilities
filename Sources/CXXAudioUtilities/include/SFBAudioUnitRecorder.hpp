@@ -86,6 +86,7 @@ private:
 	/// Asynchronously writes rendered audio to the file
 	static OSStatus RenderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 	{
+#pragma unused(inTimeStamp)
 		AudioUnitRecorder *THIS = static_cast<AudioUnitRecorder *>(inRefCon);
 		if(*ioActionFlags & kAudioUnitRenderAction_PostRender) {
 			if(THIS->mBusNumber == inBusNumber && !(*ioActionFlags & kAudioUnitRenderAction_PostRenderError)) {

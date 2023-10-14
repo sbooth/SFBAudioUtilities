@@ -35,7 +35,7 @@ public:
 	CAPropertyAddress& operator=(CAPropertyAddress&& rhs) noexcept = default;
 
 
-	/// Creates an @c CAPropertyAddress
+	/// Creates a @c CAPropertyAddress
 	/// @param selector The property selector
 	/// @param scope The property element
 	/// @param element The property scope
