@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -38,9 +38,7 @@ AudioBufferList * SFB::AllocateAudioBufferList(const CAStreamBasicDescription& f
 	return abl;
 }
 
-SFB::CABufferList::CABufferList() noexcept
-: mBufferList(nullptr), mFrameCapacity(0), mFrameLength(0)
-{}
+// Constructor is defaulted
 
 SFB::CABufferList::~CABufferList()
 {

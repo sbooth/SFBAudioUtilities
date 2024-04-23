@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -58,11 +58,7 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 
 #pragma mark Creation and Destruction
 
-SFB::AudioRingBuffer::AudioRingBuffer() noexcept
-: mBuffers(nullptr), mCapacityFrames(0), mCapacityFramesMask(0), mWritePointer(0), mReadPointer(0)
-{
-	assert(mWritePointer.is_lock_free());
-}
+// Constructor is defaulted
 
 SFB::AudioRingBuffer::~AudioRingBuffer()
 {

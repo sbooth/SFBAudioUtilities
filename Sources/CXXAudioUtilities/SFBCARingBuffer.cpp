@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -81,11 +81,7 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 
 #pragma mark Creation and Destruction
 
-SFB::CARingBuffer::CARingBuffer() noexcept
-: mBuffers(nullptr), mCapacityFrames(0), mCapacityFramesMask(0)
-{
-	assert(mTimeBoundsQueueCounter.is_lock_free());
-}
+// Constructor is defaulted
 
 SFB::CARingBuffer::~CARingBuffer()
 {

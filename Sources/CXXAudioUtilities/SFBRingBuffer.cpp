@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -28,11 +28,7 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 
 #pragma mark Creation and Destruction
 
-SFB::RingBuffer::RingBuffer() noexcept
-: mBuffer(nullptr), mCapacityBytes(0), mCapacityBytesMask(0), mWritePosition(0), mReadPosition(0)
-{
-	assert(mWritePosition.is_lock_free());
-}
+// Constructor is defaulted
 
 SFB::RingBuffer::~RingBuffer()
 {

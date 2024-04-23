@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -26,7 +26,7 @@ public:
 
 	/// Creates a new @c AudioRingBuffer
 	/// @note @c Allocate() must be called before the object may be used.
-	AudioRingBuffer() noexcept;
+	AudioRingBuffer() noexcept = default;
 
 	// This class is non-copyable
 	AudioRingBuffer(const AudioRingBuffer& rhs) = delete;
@@ -99,21 +99,23 @@ public:
 private:
 
 	/// The format of the audio
-	CAStreamBasicDescription mFormat;
+	CAStreamBasicDescription mFormat = {};
 
 	/// The channel pointers and buffers allocated in one chunk of memory
-	uint8_t * _Nonnull * _Nullable mBuffers;
+	uint8_t * _Nonnull * _Nullable mBuffers = nullptr;
 
 	/// The frame capacity per channel
-	uint32_t mCapacityFrames;
+	uint32_t mCapacityFrames = 0;
 	/// Mask used to wrap read and write locations
 	/// @note Equal to @c mCapacityFrames-1
-	uint32_t mCapacityFramesMask;
+	uint32_t mCapacityFramesMask = 0;
 
 	/// The offset in frames of the write location
-	std::atomic_uint32_t mWritePointer;
+	std::atomic_uint32_t mWritePointer = 0;
 	/// The offset in frames of the read location
-	std::atomic_uint32_t mReadPointer;
+	std::atomic_uint32_t mReadPointer = 0;
+
+	static_assert(std::atomic_uint32_t::is_always_lock_free, "Lock-free std::atomic_uint32_t required");
 
 };
 

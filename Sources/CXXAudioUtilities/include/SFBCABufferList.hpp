@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -31,7 +31,7 @@ public:
 
 	/// Creates an empty @c CABufferList
 	/// @note @c Allocate() must be called before the object may be used.
-	CABufferList() noexcept;
+	CABufferList() noexcept = default;
 
 	// This class is non-copyable
 	CABufferList(const CABufferList& rhs) = delete;
@@ -323,13 +323,13 @@ public:
 private:
 
 	/// The underlying @c AudioChannelLayout struct
-	AudioBufferList * _Nullable mBufferList;
+	AudioBufferList * _Nullable mBufferList = nullptr;
 	/// The format of @c mBufferList
-	CAStreamBasicDescription mFormat;
+	CAStreamBasicDescription mFormat = {};
 	/// The capacity of @c mBufferList in frames
-	UInt32 mFrameCapacity;
+	UInt32 mFrameCapacity = 0;
 	/// The number of valid frames in @c mBufferList
-	UInt32 mFrameLength;
+	UInt32 mFrameLength = 0;
 
 };
 

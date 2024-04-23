@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -23,7 +23,7 @@ public:
 
 	/// Creates a new @c RingBuffer
 	/// @note @c Allocate() must be called before the object may be used.
-	RingBuffer() noexcept;
+	RingBuffer() noexcept = default;
 
 	// This class is non-copyable
 	RingBuffer(const RingBuffer& rhs) = delete;
@@ -129,14 +129,12 @@ public:
 	/// A write-only memory buffer
 	struct WriteBuffer {
 		/// The memory buffer location
-		uint8_t * const _Nullable mBuffer;
+		uint8_t * const _Nullable mBuffer = nullptr;
 		/// The capacity of @c mBuffer in bytes
-		const uint32_t mBufferCapacity;
+		const uint32_t mBufferCapacity = 0;
 
 		/// Construct an empty @c WriteBuffer
-		WriteBuffer() noexcept
-		: WriteBuffer(nullptr, 0)
-		{}
+		WriteBuffer() noexcept = default;
 
 		/// Construct a @c WriteBuffer for the specified location and capacity
 		/// @param buffer The memory buffer location
@@ -155,17 +153,19 @@ public:
 private:
 
 	/// The memory buffer holding the data
-	uint8_t * _Nullable mBuffer;
+	uint8_t * _Nullable mBuffer = nullptr;
 
 	/// The capacity of @c mBuffer in bytes
-	uint32_t mCapacityBytes;
+	uint32_t mCapacityBytes = 0;
 	/// The capacity of @c mBuffer in bytes minus one
-	uint32_t mCapacityBytesMask;
+	uint32_t mCapacityBytesMask = 0;
 
 	/// The offset into @c mBuffer of the read location
-	std::atomic_uint32_t mWritePosition;
+	std::atomic_uint32_t mWritePosition = 0;
 	/// The offset into @c mBuffer of the write location
-	std::atomic_uint32_t mReadPosition;
+	std::atomic_uint32_t mReadPosition = 0;
+
+	static_assert(std::atomic_uint32_t::is_always_lock_free, "Lock-free std::atomic_uint32_t required");
 
 };
 
