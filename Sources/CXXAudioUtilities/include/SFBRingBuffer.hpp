@@ -104,28 +104,52 @@ public:
 
 	/// Read a type from the @c RingBuffer, advancing the read pointer.
 	/// @tparam T A trivially copyable type to read
-	/// @return A @c std::optional containing an instance of @c T if sufficient bytes were available for reading
+	/// @param value The destination value
+	/// @return @c true on success, @c false otherwise
 	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T>>>
-	std::optional<T> ReadValue() noexcept
+	bool ReadValue(T& value) noexcept
 	{
-		T value;
 		auto size = sizeof(T);
 		auto bytesRead = Read(static_cast<void *>(&value), size, false);
 		if(bytesRead != size)
+			return false;
+		return true;
+	}
+
+	/// Read a type from the @c RingBuffer, advancing the read pointer.
+	/// @tparam T A trivially copyable and trivially default constructible type to read
+	/// @return A @c std::optional containing an instance of @c T if sufficient bytes were available for reading
+	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T> && std::is_trivially_default_constructible_v<T>>>
+	std::optional<T> ReadValue() noexcept
+	{
+		T value{};
+		if(!ReadValue(value))
 			return std::nullopt;
 		return value;
 	}
 
 	/// Read a type from the @c RingBuffer without advancing the read pointer.
 	/// @tparam T A trivially copyable type to read
-	/// @return A @c std::optional containing an instance of @c T if sufficient bytes were available for reading
+	/// @param value The destination value
+	/// @return @c true on success, @c false otherwise
 	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T>>>
-	std::optional<T> PeekValue() noexcept
+	bool PeekValue(T& value) noexcept
 	{
-		T value;
 		auto size = sizeof(T);
 		auto bytesRead = Peek(static_cast<void *>(&value), size, false);
 		if(bytesRead != size)
+			return false;
+		return true;
+	}
+
+	/// Read a type from the @c RingBuffer without advancing the read pointer.
+	/// @tparam T A trivially copyable and trivially default constructible type to read
+	/// @return A @c std::optional containing an instance of @c T if sufficient bytes were available for reading
+	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T> && std::is_trivially_default_constructible_v<T>>>
+	std::optional<T> PeekValue() noexcept
+	{
+		T value{};
+		if(!PeekValue(value))
 			return std::nullopt;
 		return value;
 	}
