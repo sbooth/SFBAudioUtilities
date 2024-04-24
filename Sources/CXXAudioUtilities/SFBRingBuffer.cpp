@@ -127,7 +127,7 @@ uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCoun
 	return bytesToRead;
 }
 
-uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCount) const noexcept
+uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCount, bool allowPartial) const noexcept
 {
 	if(!destinationBuffer || byteCount == 0)
 		return 0;
@@ -141,7 +141,7 @@ uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCoun
 	else
 		bytesAvailable = (writePosition - readPosition + mCapacityBytes) & mCapacityBytesMask;
 
-	if(bytesAvailable == 0)
+	if(bytesAvailable == 0 || (bytesAvailable < byteCount && !allowPartial))
 		return 0;
 
 	auto bytesToRead = std::min(bytesAvailable, byteCount);

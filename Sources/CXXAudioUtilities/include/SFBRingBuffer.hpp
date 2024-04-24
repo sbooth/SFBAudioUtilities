@@ -89,8 +89,9 @@ public:
 	/// Read data from the @c RingBuffer without advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
+	/// @param allowPartial Whether any bytes should be read if the number of bytes available for reading is less than @c byteCount
 	/// @return The number of bytes actually read
-	uint32_t Peek(void * const _Nonnull destinationBuffer, uint32_t byteCount) const noexcept;
+	uint32_t Peek(void * const _Nonnull destinationBuffer, uint32_t byteCount, bool allowPartial = true) const noexcept;
 
 	/// Write data to the @c RingBuffer, advancing the write pointer.
 	/// @param sourceBuffer An address containing the data to copy
