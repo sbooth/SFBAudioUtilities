@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2010 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2010 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -37,7 +37,7 @@ public:
 	DispatchSemaphore& operator=(const DispatchSemaphore& rhs) = delete;
 
 	// Destructor
-	~DispatchSemaphore()
+	inline ~DispatchSemaphore()
 	{
 #if !__has_feature(objc_arc)
 		dispatch_release(mSemaphore);
