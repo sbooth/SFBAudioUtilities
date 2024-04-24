@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -41,9 +41,7 @@ public:
 #pragma mark Creation and Destruction
 
 	/// Creates an empty @c CAChannelLayout
-	inline CAChannelLayout() noexcept
-	: mChannelLayout(nullptr)
-	{}
+	CAChannelLayout() noexcept = default;
 
 	/// Copy constructor
 	CAChannelLayout(const CAChannelLayout& rhs);
@@ -164,7 +162,7 @@ public:
 private:
 
 	/// The underlying @c AudioChannelLayout struct
-	AudioChannelLayout * _Nullable mChannelLayout;
+	AudioChannelLayout * _Nullable mChannelLayout = nullptr;
 
 };
 

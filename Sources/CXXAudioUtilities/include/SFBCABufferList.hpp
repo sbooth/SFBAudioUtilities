@@ -40,7 +40,10 @@ public:
 	CABufferList& operator=(const CABufferList& rhs) = delete;
 
 	/// Destroys the @c CABufferList and release all associated resources.
-	~CABufferList();
+	inline ~CABufferList()
+	{
+		std::free(mBufferList);
+	}
 
 	/// Creates a new @c CABufferList
 	CABufferList(CABufferList&& rhs) noexcept;

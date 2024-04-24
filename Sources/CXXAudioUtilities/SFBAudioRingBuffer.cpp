@@ -56,15 +56,6 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 
 }
 
-#pragma mark Creation and Destruction
-
-// Constructor is defaulted
-
-SFB::AudioRingBuffer::~AudioRingBuffer()
-{
-	std::free(mBuffers);
-}
-
 #pragma mark Buffer Management
 
 bool SFB::AudioRingBuffer::Allocate(const CAStreamBasicDescription& format, uint32_t capacityFrames) noexcept

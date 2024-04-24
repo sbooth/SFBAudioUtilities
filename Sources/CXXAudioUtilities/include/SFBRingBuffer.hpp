@@ -32,7 +32,10 @@ public:
 	RingBuffer& operator=(const RingBuffer& rhs) = delete;
 
 	/// Destroys the @c RingBuffer and releases all associated resources.
-	~RingBuffer();
+	inline ~RingBuffer()
+	{
+		std::free(mBuffer);
+	}
 
 	// This class is non-movable
 	RingBuffer(RingBuffer&& rhs) = delete;
@@ -102,14 +105,12 @@ public:
 	/// A read-only memory buffer
 	struct ReadBuffer {
 		/// The memory buffer location
-		const uint8_t * const _Nullable mBuffer;
+		const uint8_t * const _Nullable mBuffer = nullptr;
 		/// The number of bytes of valid data in @c mBuffer
-		const uint32_t mBufferSize;
+		const uint32_t mBufferSize = 0;
 
 		/// Construct an empty @c ReadBuffer
-		ReadBuffer() noexcept
-		: ReadBuffer(nullptr, 0)
-		{}
+		ReadBuffer() noexcept = default;
 
 		/// Construct a @c ReadBuffer for the specified location and size
 		/// @param buffer The memory buffer location

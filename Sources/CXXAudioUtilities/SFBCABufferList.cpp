@@ -38,13 +38,6 @@ AudioBufferList * SFB::AllocateAudioBufferList(const CAStreamBasicDescription& f
 	return abl;
 }
 
-// Constructor is defaulted
-
-SFB::CABufferList::~CABufferList()
-{
-	std::free(mBufferList);
-}
-
 SFB::CABufferList::CABufferList(CABufferList&& rhs) noexcept
 : mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity), mFrameLength(rhs.mFrameLength)
 {

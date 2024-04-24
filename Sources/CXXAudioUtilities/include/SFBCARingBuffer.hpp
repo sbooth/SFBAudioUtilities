@@ -35,7 +35,10 @@ public:
 	CARingBuffer& operator=(const CARingBuffer& rhs) = delete;
 
 	/// Destroys the @c CARingBuffer and release all associated resources.
-	~CARingBuffer();
+	inline ~CARingBuffer()
+	{
+		std::free(mBuffers);
+	}
 
 	// This class is non-movable
 	CARingBuffer(CARingBuffer&& rhs) = delete;

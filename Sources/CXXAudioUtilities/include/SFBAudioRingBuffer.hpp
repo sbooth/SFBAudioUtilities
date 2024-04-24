@@ -35,7 +35,10 @@ public:
 	AudioRingBuffer& operator=(const AudioRingBuffer& rhs) = delete;
 
 	/// Destroys the @c AudioRingBuffer and releases all associated resources.
-	~AudioRingBuffer();
+	inline ~AudioRingBuffer()
+	{
+		std::free(mBuffers);
+	}
 
 	// This class is non-movable
 	AudioRingBuffer(AudioRingBuffer&& rhs) = delete;

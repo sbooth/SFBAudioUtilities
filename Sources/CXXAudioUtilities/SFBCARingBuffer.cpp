@@ -79,15 +79,6 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 
 }
 
-#pragma mark Creation and Destruction
-
-// Constructor is defaulted
-
-SFB::CARingBuffer::~CARingBuffer()
-{
-	std::free(mBuffers);
-}
-
 #pragma mark Buffer Management
 
 bool SFB::CARingBuffer::Allocate(const CAStreamBasicDescription& format, uint32_t capacityFrames) noexcept

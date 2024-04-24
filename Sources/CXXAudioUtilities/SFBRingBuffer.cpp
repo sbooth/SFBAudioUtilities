@@ -26,15 +26,6 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 
 }
 
-#pragma mark Creation and Destruction
-
-// Constructor is defaulted
-
-SFB::RingBuffer::~RingBuffer()
-{
-	std::free(mBuffer);
-}
-
 #pragma mark Buffer Management
 
 bool SFB::RingBuffer::Allocate(uint32_t capacityBytes) noexcept
