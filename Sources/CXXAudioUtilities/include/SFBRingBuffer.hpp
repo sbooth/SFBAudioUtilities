@@ -191,7 +191,7 @@ public:
 		/// @param buffer The memory buffer location
 		/// @param bufferSize The number of bytes of valid data in @c buffer
 		ReadBuffer(const uint8_t * const _Nullable buffer, uint32_t bufferSize) noexcept
-		: mBuffer(buffer), mBufferSize(bufferSize)
+		: mBuffer{buffer}, mBufferSize{bufferSize}
 		{}
 	};
 
@@ -216,7 +216,7 @@ public:
 		/// @param buffer The memory buffer location
 		/// @param bufferCapacity The capacity of @c buffer in bytes
 		WriteBuffer(uint8_t * const _Nullable buffer, uint32_t bufferCapacity) noexcept
-		: mBuffer(buffer), mBufferCapacity(bufferCapacity)
+		: mBuffer{buffer}, mBufferCapacity{bufferCapacity}
 		{}
 	};
 
