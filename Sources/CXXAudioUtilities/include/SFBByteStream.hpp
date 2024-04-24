@@ -103,8 +103,8 @@ public:
 	/// @tparam T The integral type to read
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
-	template <typename T>
-	typename std::enable_if_t<std::is_integral_v<T>, bool> Read(T& value) noexcept
+	template <typename T, std::enable_if_t<std::is_integral_v<T>>>
+	bool Read(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
