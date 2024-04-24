@@ -116,6 +116,20 @@ public:
 		return value;
 	}
 
+	/// Read a type from the @c RingBuffer without advancing the read pointer.
+	/// @tparam T A trivially copyable type to read
+	/// @return A @c std::optional containing an instance of @c T if sufficient bytes were available for reading
+	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T>>>
+	std::optional<T> PeekValue() noexcept
+	{
+		T value;
+		auto size = sizeof(T);
+		auto bytesRead = Peek(static_cast<void *>(&value), size, false);
+		if(bytesRead != size)
+			return std::nullopt;
+		return value;
+	}
+
 	/// Write a type to the @c RingBuffer, advancing the write pointer.
 	/// @tparam T A trivially copyable type to write
 	/// @param value The value to write
