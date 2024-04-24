@@ -45,24 +45,25 @@ public:
 	// This class is non-move assignable
 	RingBuffer& operator=(RingBuffer&& rhs) = delete;
 
-#pragma mark Buffer management
+#pragma mark Buffer Management
 
 	/// Allocates space for data.
-	/// @note This method is not thread safe.
+	/// @attention This method is not thread safe.
 	/// @note Capacities from 2 to 2,147,483,648 (0x80000000) bytes are supported
 	/// @param byteCount The desired capacity, in bytes
 	/// @return @c true on success, @c false on error
 	bool Allocate(uint32_t byteCount) noexcept;
 
 	/// Frees the resources used by this @c RingBuffer
-	/// @note This method is not thread safe.
+	/// @attention This method is not thread safe.
 	void Deallocate() noexcept;
 
 
 	/// Resets this @c RingBuffer to its default state.
-	/// @note This method is not thread safe.
+	/// @attention This method is not thread safe.
 	void Reset() noexcept;
 
+#pragma mark Buffer Information
 
 	/// Returns the capacity of this RingBuffer in bytes
 	inline uint32_t CapacityBytes() const noexcept
@@ -76,7 +77,7 @@ public:
 	/// Returns the free space available for writing in bytes
 	uint32_t BytesAvailableToWrite() const noexcept;
 
-#pragma mark Reading and writing data
+#pragma mark Reading and Writing Data
 
 	/// Read data from the @c RingBuffer, advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
@@ -98,7 +99,7 @@ public:
 	/// @return The number of bytes actually written
 	uint32_t Write(const void * const _Nonnull sourceBuffer, uint32_t byteCount, bool allowPartial = true) noexcept;
 
-#pragma mark Reading and writing types
+#pragma mark Reading and Writing Types
 
 	/// Read a type from the @c RingBuffer, advancing the read pointer.
 	/// @tparam T A trivially copyable type to read
@@ -128,7 +129,7 @@ public:
 		return true;
 	}
 
-#pragma mark Advanced reading and writing
+#pragma mark Advanced Reading and Writing
 
 	/// Advance the read position by the specified number of bytes
 	void AdvanceReadPosition(uint32_t byteCount) noexcept;

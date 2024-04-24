@@ -68,6 +68,8 @@ void SFB::RingBuffer::Reset() noexcept
 	mWritePosition = 0;
 }
 
+#pragma mark Buffer Information
+
 uint32_t SFB::RingBuffer::BytesAvailableToRead() const noexcept
 {
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
@@ -185,4 +187,56 @@ uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCo
 	mWritePosition.store((writePosition + bytesToWrite) & mCapacityBytesMask, std::memory_order_release);
 
 	return bytesToWrite;
+}
+
+#pragma mark Advanced Reading and Writing
+
+void SFB::RingBuffer::AdvanceReadPosition(uint32_t byteCount) noexcept
+{
+	mReadPosition.store((mReadPosition.load(std::memory_order_acquire) + byteCount) & mCapacityBytesMask, std::memory_order_release);
+}
+
+void SFB::RingBuffer::AdvanceWritePosition(uint32_t byteCount) noexcept
+{
+	mWritePosition.store((mWritePosition.load(std::memory_order_acquire) + byteCount) & mCapacityBytesMask, std::memory_order_release);
+}
+
+const SFB::RingBuffer::ReadBufferPair SFB::RingBuffer::ReadVector() const noexcept
+{
+	auto writePosition = mWritePosition.load(std::memory_order_acquire);
+	auto readPosition = mReadPosition.load(std::memory_order_acquire);
+
+	uint32_t bytesAvailable;
+	if(writePosition > readPosition)
+		bytesAvailable = writePosition - readPosition;
+	else
+		bytesAvailable = (writePosition - readPosition + mCapacityBytes) & mCapacityBytesMask;
+
+	auto endOfRead = readPosition + bytesAvailable;
+
+	if(endOfRead > mCapacityBytes)
+		return { { mBuffer + readPosition, mCapacityBytes - readPosition }, { mBuffer, endOfRead & mCapacityBytes } };
+	else
+		return { { mBuffer + readPosition, bytesAvailable }, {} };
+}
+
+const SFB::RingBuffer::WriteBufferPair SFB::RingBuffer::WriteVector() const noexcept
+{
+	auto writePosition = mWritePosition.load(std::memory_order_acquire);
+	auto readPosition = mReadPosition.load(std::memory_order_acquire);
+
+	uint32_t bytesAvailable;
+	if(writePosition > readPosition)
+		bytesAvailable = ((readPosition - writePosition + mCapacityBytes) & mCapacityBytesMask) - 1;
+	else if(writePosition < readPosition)
+		bytesAvailable = (readPosition - writePosition) - 1;
+	else
+		bytesAvailable = mCapacityBytes - 1;
+
+	auto endOfWrite = writePosition + bytesAvailable;
+
+	if(endOfWrite > mCapacityBytes)
+		return { { mBuffer + writePosition, mCapacityBytes - writePosition }, { mBuffer, endOfWrite & mCapacityBytes } };
+	else
+		return { { mBuffer + writePosition, bytesAvailable }, {} };
 }
