@@ -104,7 +104,7 @@ public:
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
 	template <typename T>
-	typename std::enable_if<std::is_integral<T>::value, bool>::type Read(T& value) noexcept
+	typename std::enable_if_t<std::is_integral_v<T>, bool> Read(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
@@ -118,7 +118,7 @@ public:
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
 	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, bool>::type ReadLE(T& value) noexcept
+	typename std::enable_if_t<std::is_unsigned_v<T>, bool> ReadLE(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
@@ -141,7 +141,7 @@ public:
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
 	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, bool>::type ReadBE(T& value) noexcept
+	typename std::enable_if_t<std::is_unsigned_v<T>, bool> ReadBE(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
@@ -164,7 +164,7 @@ public:
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
 	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, bool>::type ReadSwapped(T& value) noexcept
+	typename std::enable_if_t<std::is_unsigned_v<T>, bool> ReadSwapped(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
@@ -186,7 +186,7 @@ public:
 	/// @tparam T The integral type to read
 	/// @return The value read or @c 0 on failure
 	template <typename T>
-	typename std::enable_if<std::is_integral<T>::value, T>::type Read() noexcept
+	typename std::enable_if_t<std::is_integral_v<T>, T> Read() noexcept
 	{
 		T value;
 		return Read(value) ? value : 0;
@@ -196,7 +196,7 @@ public:
 	/// @tparam T The unsigned integral type to read
 	/// @return The value read or @c 0 on failure
 	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, T>::type ReadLE() noexcept
+	typename std::enable_if_t<std::is_unsigned_v<T>, T> ReadLE() noexcept
 	{
 		T value;
 		return ReadLE(value) ? value : 0;
@@ -206,7 +206,7 @@ public:
 	/// @tparam T The unsigned integral type to read
 	/// @return The value read or @c 0 on failure
 	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, T>::type ReadBE() noexcept
+	typename std::enable_if_t<std::is_unsigned_v<T>, T> ReadBE() noexcept
 	{
 		T value;
 		return ReadBE(value) ? value : 0;
@@ -216,7 +216,7 @@ public:
 	/// @tparam T The unsigned integral type to read
 	/// @return The value read or @c 0 on failure
 	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, T>::type ReadSwapped() noexcept
+	typename std::enable_if_t<std::is_unsigned_v<T>, T> ReadSwapped() noexcept
 	{
 		T value;
 		return ReadSwapped(value) ? value : 0;

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#import <type_traits>
+
 #import <CFNetwork/CFNetwork.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import <ImageIO/ImageIO.h>
@@ -198,13 +200,13 @@ public:
 #pragma mark Core Foundation object creation
 
 	/// Creates a new wrapped @c CFStringRef using @c CFStringCreateWithCString with the default allocator
-	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFStringRef>>>
 	CFWrapper(const char * _Nonnull cStr, CFStringEncoding encoding)
 	: CFWrapper{CFStringCreateWithCString(kCFAllocatorDefault, cStr, encoding)}
 	{}
 
 	/// Creates a new wrapped @c CFStringRef using @c CFStringCreateWithFormatAndArguments with the default allocator
-	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFStringRef>>>
 	CFWrapper(CFDictionaryRef _Nullable formatOptions, CFStringRef _Nonnull format, ...) CF_FORMAT_FUNCTION(3,4)
 	: CFWrapper{}
 	{
@@ -215,37 +217,37 @@ public:
 	}
 
 	/// Creates a new wrapped @c CFNumberRef using @c CFNumberCreate with the default allocator
-	template <typename = std::enable_if<std::is_same<T, CFNumberRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFNumberRef>>>
 	CFWrapper(CFNumberType theType, const void * _Nonnull valuePtr)
 	: CFWrapper{CFNumberCreate(kCFAllocatorDefault, theType, valuePtr)}
 	{}
 
 	/// Creates a new wrapped @c CFArrayRef using @c CFArrayCreate with the default allocator
-	template <typename = std::enable_if<std::is_same<T, CFArrayRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFArrayRef>>>
 	CFWrapper(const void * _Nonnull * _Nullable values, CFIndex numValues, const CFArrayCallBacks * _Nonnull callBacks)
 	: CFWrapper{CFArrayCreate(kCFAllocatorDefault, values, numValues, callBacks)}
 	{}
 
 	/// Creates a new wrapped @c CFMutableArrayRef using @c CFArrayCreateMutable with the default allocator
-	template <typename = std::enable_if<std::is_same<T, CFMutableArrayRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFMutableArrayRef>>>
 	CFWrapper(CFIndex capacity, const CFArrayCallBacks * _Nonnull callBacks)
 	: CFWrapper{CFArrayCreateMutable(kCFAllocatorDefault, capacity, callBacks)}
 	{}
 
 	/// Creates a new wrapped @c CFDictionaryRef using @c CFDictionaryCreate with the default allocator
-	template <typename = std::enable_if<std::is_same<T, CFDictionaryRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFDictionaryRef>>>
 	CFWrapper(const void * _Nonnull * _Nullable keys, const void * _Nonnull * _Nullable values, CFIndex numValues, const CFDictionaryKeyCallBacks * _Nonnull keyCallBacks, const CFDictionaryValueCallBacks * _Nonnull valueCallBacks)
 	: CFWrapper{CFDictionaryCreate(kCFAllocatorDefault, keys, values, numValues, keyCallBacks, valueCallBacks)}
 	{}
 
 	/// Creates a new wrapped @c CFMutableDictionaryRef using @c CFDictionaryCreateMutable with the default allocator
-	template <typename = std::enable_if<std::is_same<T, CFMutableDictionaryRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFMutableDictionaryRef>>>
 	CFWrapper(CFIndex capacity, const CFDictionaryKeyCallBacks * _Nonnull keyCallBacks, const CFDictionaryValueCallBacks * _Nonnull valueCallBacks)
 	: CFWrapper{CFDictionaryCreateMutable(kCFAllocatorDefault, capacity, keyCallBacks, valueCallBacks)}
 	{}
 
 	/// Creates a new wrapped @c CFDataRef using @c CFDataCreate with the default allocator
-	template <typename = std::enable_if<std::is_same<T, CFDataRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFDataRef>>>
 	CFWrapper(const UInt8 * _Nullable bytes, CFIndex length)
 	: CFWrapper{CFDataCreate(kCFAllocatorDefault, bytes, length)}
 	{}
@@ -253,42 +255,42 @@ public:
 #ifdef __OBJC__
 
 	/// Returns the wrapped string
-	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFStringRef>>>
 	inline NSString * _Nullable NSString() const noexcept
 	{
 		return (__bridge ::NSString *)mObject;
 	}
 
 	/// Returns the wrapped string
-	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFStringRef>>>
 	inline operator ::NSString * _Nullable () const noexcept
 	{
 		return (__bridge ::NSString *)mObject;
 	}
 
 	/// Returns the wrapped array
-	template <typename = std::enable_if<std::is_same<T, CFArrayRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFArrayRef>>>
 	inline NSArray * _Nullable NSArray() const noexcept
 	{
 		return (__bridge ::NSArray *)mObject;
 	}
 
 	/// Returns the wrapped array
-	template <typename = std::enable_if<std::is_same<T, CFArrayRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFArrayRef>>>
 	inline operator ::NSArray * _Nullable () const noexcept
 	{
 		return (__bridge ::NSArray *)mObject;
 	}
 
 	/// Returns the wrapped dictionary
-	template <typename = std::enable_if<std::is_same<T, CFDictionaryRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFDictionaryRef>>>
 	inline NSDictionary * _Nullable NSDictionary() const noexcept
 	{
 		return (__bridge ::NSDictionary *)mObject;
 	}
 
 	/// Returns the wrapped dictionary
-	template <typename = std::enable_if<std::is_same<T, CFDictionaryRef>::value>>
+	template <typename = std::enable_if<std::is_same_v<T, CFDictionaryRef>>>
 	inline operator ::NSDictionary * _Nullable () const noexcept
 	{
 		return (__bridge ::NSDictionary *)mObject;
