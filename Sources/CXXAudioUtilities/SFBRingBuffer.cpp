@@ -187,7 +187,7 @@ uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCo
 	return bytesToWrite;
 }
 
-template <typename T, typename std::enable_if<std::is_trivially_copyable_v<T>>>
+template <typename T, typename std::enable_if_t<std::is_trivially_copyable_v<T>>>
 std::optional<T> SFB::RingBuffer::ReadValue() noexcept
 {
 	T value;
@@ -198,7 +198,7 @@ std::optional<T> SFB::RingBuffer::ReadValue() noexcept
 	return value;
 }
 
-template <typename T, typename std::enable_if<std::is_trivially_copyable_v<T>>>
+template <typename T, typename std::enable_if_t<std::is_trivially_copyable_v<T>>>
 bool SFB::RingBuffer::WriteValue(const T& value) noexcept
 {
 	auto size = sizeof(T);
