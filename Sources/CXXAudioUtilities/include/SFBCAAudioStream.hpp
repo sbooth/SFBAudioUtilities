@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -37,7 +37,7 @@ public:
 
 	/// Creates a @c CAAudioStream with the specified objectID
 	inline constexpr CAAudioStream(AudioObjectID objectID) noexcept
-	: CAAudioObject(objectID)
+	: CAAudioObject{objectID}
 	{}
 
 	inline bool IsActive() const

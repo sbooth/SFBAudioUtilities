@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2020 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -19,14 +19,12 @@ class ByteStream
 public:
 
 	/// Creates an empty @c ByteStream
-	ByteStream() noexcept
-	: mBuffer(nullptr), mBufferLength(0), mReadPosition(0)
-	{}
+	constexpr ByteStream() noexcept = default;
 
 	/// Initializes a @c ByteStream object with the same buffer, length, and read position as @c rhs
 	/// @param rhs The object to copy
 	ByteStream(const ByteStream& rhs) noexcept
-	: mBuffer(rhs.mBuffer), mBufferLength(rhs.mBufferLength), mReadPosition(rhs.mReadPosition)
+	: mBuffer{rhs.mBuffer}, mBufferLength{rhs.mBufferLength}, mReadPosition{rhs.mReadPosition}
 	{}
 
 	/// Sets the buffer, length, and read position to those of @c rhs
@@ -47,7 +45,7 @@ public:
 
 	/// Move constructor
 	ByteStream(ByteStream&& rhs) noexcept
-	: mBuffer(rhs.mBuffer), mBufferLength(rhs.mBufferLength), mReadPosition(rhs.mReadPosition)
+	: mBuffer{rhs.mBuffer}, mBufferLength{rhs.mBufferLength}, mReadPosition{rhs.mReadPosition}
 	{
 		rhs.mBuffer = nullptr;
 		rhs.mBufferLength = 0;
@@ -75,7 +73,7 @@ public:
 	/// @param len The length of @c buf in bytes
 	/// @throw @c std::invalid_argument if @c buf==nullptr and @c len>0
 	ByteStream(const void * const _Nullable buf, size_t len)
-	: mBuffer(buf), mBufferLength(len), mReadPosition(0)
+	: mBuffer{buf}, mBufferLength{len}
 	{
 		if(!mBuffer && len > 0)
 			throw std::invalid_argument("!mBuffer && len > 0");
@@ -289,11 +287,11 @@ public:
 private:
 
 	/// The wrapped buffer
-	const void * _Nullable mBuffer;
+	const void * _Nullable mBuffer = nullptr;
 	/// The number of bytes in @c mBuffer
-	size_t mBufferLength;
+	size_t mBufferLength = 0;
 	/// The current read position
-	size_t mReadPosition;
+	size_t mReadPosition = 0;
 
 };
 

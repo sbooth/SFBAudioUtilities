@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -9,7 +9,7 @@
 // Most of this is stolen from Apple's CAStreamBasicDescription::Print()
 SFB::CFString SFB::CAStreamBasicDescription::Description(const char * const prefix) const noexcept
 {
-	CFMutableString result{ CFStringCreateMutable(kCFAllocatorDefault, 0) };
+	CFMutableString result{CFStringCreateMutable(kCFAllocatorDefault, 0)};
 
 	if(prefix)
 		CFStringAppendCString(result, prefix, kCFStringEncodingUTF8);
@@ -75,5 +75,5 @@ SFB::CFString SFB::CAStreamBasicDescription::Description(const char * const pref
 	else
 		CFStringAppendFormat(result, NULL, CFSTR("%u bits/channel, %u bytes/packet, %u frames/packet, %u bytes/frame"), mBitsPerChannel, mBytesPerPacket, mFramesPerPacket, mBytesPerFrame);
 
-	return CFString(static_cast<CFStringRef>(result.Relinquish()));
+	return CFString{static_cast<CFStringRef>(result.Relinquish())};
 }

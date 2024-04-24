@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -303,13 +303,13 @@ SFB::CAChannelLayout& SFB::CAChannelLayout::operator=(const CAChannelLayout& rhs
 }
 
 SFB::CAChannelLayout::CAChannelLayout(AudioChannelLayoutTag layoutTag)
-: mChannelLayout(CreateChannelLayout(0))
+: mChannelLayout{CreateChannelLayout(0)}
 {
 	mChannelLayout->mChannelLayoutTag = layoutTag;
 }
 
 SFB::CAChannelLayout::CAChannelLayout(std::vector<AudioChannelLabel> channelLabels)
-: mChannelLayout(CreateChannelLayout(static_cast<UInt32>(channelLabels.size())))
+: mChannelLayout{CreateChannelLayout(static_cast<UInt32>(channelLabels.size()))}
 {
 	mChannelLayout->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
 	for(std::vector<AudioChannelLabel>::size_type i = 0; i != channelLabels.size(); ++i)
@@ -317,7 +317,7 @@ SFB::CAChannelLayout::CAChannelLayout(std::vector<AudioChannelLabel> channelLabe
 }
 
 SFB::CAChannelLayout::CAChannelLayout(const AudioChannelLayout *rhs)
-: mChannelLayout(CopyChannelLayout(rhs))
+: mChannelLayout{CopyChannelLayout(rhs)}
 {}
 
 SFB::CAChannelLayout& SFB::CAChannelLayout::operator=(const AudioChannelLayout *rhs)

@@ -39,7 +39,7 @@ AudioBufferList * SFB::AllocateAudioBufferList(const CAStreamBasicDescription& f
 }
 
 SFB::CABufferList::CABufferList(CABufferList&& rhs) noexcept
-: mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity), mFrameLength(rhs.mFrameLength)
+: mBufferList{rhs.mBufferList}, mFormat{rhs.mFormat}, mFrameCapacity{rhs.mFrameCapacity}, mFrameLength{rhs.mFrameLength}
 {
 	rhs.mBufferList = nullptr;
 	rhs.mFormat.Reset();

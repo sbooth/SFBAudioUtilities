@@ -1,11 +1,12 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
 
 #pragma once
 
+#import <type_traits>
 #import <vector>
 
 #import <CoreAudio/CoreAudio.h>
@@ -29,15 +30,13 @@ public:
 #pragma mark Creation and Destruction
 
 	/// Creates an unknown @c CAAudioObject
-	inline constexpr CAAudioObject() noexcept
-	: mObjectID(kAudioObjectUnknown)
-	{}
+	constexpr CAAudioObject() noexcept = default;
 
 	/// Copy constructor
-	inline constexpr CAAudioObject(const CAAudioObject& rhs) noexcept = default;
+	constexpr CAAudioObject(const CAAudioObject& rhs) noexcept = default;
 
 	/// Assignment operator
-	inline CAAudioObject& operator=(const CAAudioObject& rhs) noexcept = default;
+	constexpr CAAudioObject& operator=(const CAAudioObject& rhs) noexcept = default;
 
 	/// Destructor
 	virtual ~CAAudioObject() = default;
@@ -51,7 +50,7 @@ public:
 
 	/// Creates a @c CAAudioObject with the specified objectID
 	inline constexpr CAAudioObject(AudioObjectID objectID) noexcept
-	: mObjectID(objectID)
+	: mObjectID{objectID}
 	{}
 
 #pragma mark Comparison
@@ -269,7 +268,7 @@ public:
 protected:
 
 	// The underlying object ID
-	AudioObjectID mObjectID;
+	AudioObjectID mObjectID = kAudioObjectUnknown;
 
 };
 

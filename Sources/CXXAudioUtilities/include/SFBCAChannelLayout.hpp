@@ -57,7 +57,7 @@ public:
 
 	/// Move constructor
 	CAChannelLayout(CAChannelLayout&& rhs) noexcept
-	: mChannelLayout(rhs.mChannelLayout)
+	: mChannelLayout{rhs.mChannelLayout}
 	{
 		rhs.mChannelLayout = nullptr;
 	}

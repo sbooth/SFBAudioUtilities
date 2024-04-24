@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -17,9 +17,7 @@ class ExtAudioFileWrapper
 public:
 
 	/// Creates an empty @c ExtAudioFileWrapper
-	inline ExtAudioFileWrapper() noexcept
-	: mExtAudioFile(nullptr)
-	{}
+	ExtAudioFileWrapper() noexcept = default;
 
 	// This class is non-copyable
 	ExtAudioFileWrapper(const ExtAudioFileWrapper& rhs) = delete;
@@ -35,7 +33,7 @@ public:
 
 	/// Move constructor
 	inline ExtAudioFileWrapper(ExtAudioFileWrapper&& rhs) noexcept
-	: mExtAudioFile(rhs.release())
+	: mExtAudioFile{rhs.release()}
 	{}
 
 	// Move assignment operator
@@ -48,7 +46,7 @@ public:
 
 	/// Creates an @c ExtAudioFileWrapper managing @c extAudioFile
 	inline ExtAudioFileWrapper(ExtAudioFileRef extAudioFile) noexcept
-	: mExtAudioFile(extAudioFile)
+	: mExtAudioFile{extAudioFile}
 	{}
 
 	/// Returns @c true if the managed @c ExtAudioFile is not @c nullptr
@@ -97,7 +95,7 @@ public:
 private:
 
 	/// The managed @c ExtAudioFile
-	ExtAudioFileRef mExtAudioFile;
+	ExtAudioFileRef mExtAudioFile = nullptr;
 
 };
 

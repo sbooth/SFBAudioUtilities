@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -32,7 +32,7 @@ public:
 
 	/// Creates a new @c DeferredClosure executing @c closure when the destructor is called
 	inline DeferredClosure(const F& closure) noexcept
-	: mClosure(closure)
+	: mClosure{closure}
 	{}
 
 	// This class is non-copyable

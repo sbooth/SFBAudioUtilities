@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -18,7 +18,7 @@ public:
 
 	/// Creates a @c CAAudioSystemObject
 	inline constexpr CAAudioSystemObject() noexcept
-	: CAAudioObject(kAudioObjectSystemObject)
+	: CAAudioObject{kAudioObjectSystemObject}
 	{}
 
 	/// Copy constructor

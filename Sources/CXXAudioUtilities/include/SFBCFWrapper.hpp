@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2012 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -32,12 +32,12 @@ public:
 
 	/// Creates a new @c CFWrapper
 	inline CFWrapper() noexcept
-	: CFWrapper(nullptr, true)
+	: CFWrapper{nullptr, true}
 	{}
 
 	/// Creates a new @c CFWrapper
 	CFWrapper(const CFWrapper& rhs) noexcept
-	: mObject(rhs.mObject), mRelease(rhs.mRelease)
+	: mObject{rhs.mObject}, mRelease{rhs.mRelease}
 	{
 		if(mObject && mRelease)
 			CFRetain(mObject);
@@ -70,7 +70,7 @@ public:
 
 	/// Creates a new @c CFWrapper
 	CFWrapper(CFWrapper&& rhs) noexcept
-	: mObject(rhs.mObject), mRelease(rhs.mRelease)
+	: mObject{rhs.mObject}, mRelease{rhs.mRelease}
 	{
 		rhs.mObject = nullptr;
 	}
@@ -94,21 +94,21 @@ public:
 
 	/// Create a new @c CFWrapper
 	inline CFWrapper(std::nullptr_t) noexcept
-	: CFWrapper(nullptr, true)
+	: CFWrapper{nullptr, true}
 	{}
 
 	/// Create a new @c CFWrapper
 	/// @note The @c CFWrapper takes ownership of @c object
 	/// @param object The object to wrap
 	inline explicit CFWrapper(T object) noexcept
-	: CFWrapper(object, true)
+	: CFWrapper{object, true}
 	{}
 
 	/// Creates a new @c CFWrapper
 	/// @param object The object to wrap
 	/// @param release Whether this @c CFWrapper should take ownership of @c object
 	CFWrapper(T object, bool release) noexcept
-	: mObject(object), mRelease(release)
+	: mObject{object}, mRelease{release}
 	{}
 
 #pragma mark Assignment
@@ -200,13 +200,13 @@ public:
 	/// Creates a new wrapped @c CFStringRef using @c CFStringCreateWithCString with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
 	CFWrapper(const char * _Nonnull cStr, CFStringEncoding encoding)
-	: CFWrapper(CFStringCreateWithCString(kCFAllocatorDefault, cStr, encoding))
+	: CFWrapper{CFStringCreateWithCString(kCFAllocatorDefault, cStr, encoding)}
 	{}
 
 	/// Creates a new wrapped @c CFStringRef using @c CFStringCreateWithFormatAndArguments with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFStringRef>::value>>
 	CFWrapper(CFDictionaryRef _Nullable formatOptions, CFStringRef _Nonnull format, ...) CF_FORMAT_FUNCTION(3,4)
-	: CFWrapper()
+	: CFWrapper{}
 	{
 		va_list ap;
 		va_start(ap, format);
@@ -217,37 +217,37 @@ public:
 	/// Creates a new wrapped @c CFNumberRef using @c CFNumberCreate with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFNumberRef>::value>>
 	CFWrapper(CFNumberType theType, const void * _Nonnull valuePtr)
-	: CFWrapper(CFNumberCreate(kCFAllocatorDefault, theType, valuePtr))
+	: CFWrapper{CFNumberCreate(kCFAllocatorDefault, theType, valuePtr)}
 	{}
 
 	/// Creates a new wrapped @c CFArrayRef using @c CFArrayCreate with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFArrayRef>::value>>
 	CFWrapper(const void * _Nonnull * _Nullable values, CFIndex numValues, const CFArrayCallBacks * _Nonnull callBacks)
-	: CFWrapper(CFArrayCreate(kCFAllocatorDefault, values, numValues, callBacks))
+	: CFWrapper{CFArrayCreate(kCFAllocatorDefault, values, numValues, callBacks)}
 	{}
 
 	/// Creates a new wrapped @c CFMutableArrayRef using @c CFArrayCreateMutable with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFMutableArrayRef>::value>>
 	CFWrapper(CFIndex capacity, const CFArrayCallBacks * _Nonnull callBacks)
-	: CFWrapper(CFArrayCreateMutable(kCFAllocatorDefault, capacity, callBacks))
+	: CFWrapper{CFArrayCreateMutable(kCFAllocatorDefault, capacity, callBacks)}
 	{}
 
 	/// Creates a new wrapped @c CFDictionaryRef using @c CFDictionaryCreate with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFDictionaryRef>::value>>
 	CFWrapper(const void * _Nonnull * _Nullable keys, const void * _Nonnull * _Nullable values, CFIndex numValues, const CFDictionaryKeyCallBacks * _Nonnull keyCallBacks, const CFDictionaryValueCallBacks * _Nonnull valueCallBacks)
-	: CFWrapper(CFDictionaryCreate(kCFAllocatorDefault, keys, values, numValues, keyCallBacks, valueCallBacks))
+	: CFWrapper{CFDictionaryCreate(kCFAllocatorDefault, keys, values, numValues, keyCallBacks, valueCallBacks)}
 	{}
 
 	/// Creates a new wrapped @c CFMutableDictionaryRef using @c CFDictionaryCreateMutable with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFMutableDictionaryRef>::value>>
 	CFWrapper(CFIndex capacity, const CFDictionaryKeyCallBacks * _Nonnull keyCallBacks, const CFDictionaryValueCallBacks * _Nonnull valueCallBacks)
-	: CFWrapper(CFDictionaryCreateMutable(kCFAllocatorDefault, capacity, keyCallBacks, valueCallBacks))
+	: CFWrapper{CFDictionaryCreateMutable(kCFAllocatorDefault, capacity, keyCallBacks, valueCallBacks)}
 	{}
 
 	/// Creates a new wrapped @c CFDataRef using @c CFDataCreate with the default allocator
 	template <typename = std::enable_if<std::is_same<T, CFDataRef>::value>>
 	CFWrapper(const UInt8 * _Nullable bytes, CFIndex length)
-	: CFWrapper(CFDataCreate(kCFAllocatorDefault, bytes, length))
+	: CFWrapper{CFDataCreate(kCFAllocatorDefault, bytes, length)}
 	{}
 
 #ifdef __OBJC__

@@ -26,7 +26,7 @@ public:
 
 	/// Creates a new @c AudioRingBuffer
 	/// @note @c Allocate() must be called before the object may be used.
-	AudioRingBuffer() noexcept = default;
+	constexpr AudioRingBuffer() noexcept = default;
 
 	// This class is non-copyable
 	AudioRingBuffer(const AudioRingBuffer& rhs) = delete;
