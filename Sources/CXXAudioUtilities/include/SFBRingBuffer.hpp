@@ -7,6 +7,8 @@
 #pragma once
 
 #import <atomic>
+#import <optional>
+#import <type_traits>
 #import <utility>
 
 namespace SFB {
@@ -79,8 +81,9 @@ public:
 	/// Read data from the @c RingBuffer, advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
+	/// @param allowPartial Whether any bytes should be read If the number of bytes available for reading is less than @c byteCount
 	/// @return The number of bytes actually read
-	uint32_t Read(void * const _Nonnull destinationBuffer, uint32_t byteCount) noexcept;
+	uint32_t Read(void * const _Nonnull destinationBuffer, uint32_t byteCount, bool allowPartial = true) noexcept;
 
 	/// Read data from the @c RingBuffer without advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
@@ -91,9 +94,26 @@ public:
 	/// Write data to the @c RingBuffer, advancing the write pointer.
 	/// @param sourceBuffer An address containing the data to copy
 	/// @param byteCount The desired number of bytes to write
+	/// @param allowPartial Whether any bytes should be written If the free space available for writing is less than @c byteCount
 	/// @return The number of bytes actually written
-	uint32_t Write(const void * const _Nonnull sourceBuffer, uint32_t byteCount) noexcept;
+	uint32_t Write(const void * const _Nonnull sourceBuffer, uint32_t byteCount, bool allowPartial = true) noexcept;
 
+#pragma mark Reading and writing types
+
+	/// Read a type from the @c RingBuffer, advancing the read pointer.
+	/// @tparam T A trivially copyable type to read
+	/// @return A @c std::optional containing an instance of @c T if sufficient bytes were available for reading
+	template <typename T, typename std::enable_if<std::is_trivially_copyable_v<T>>>
+	std::optional<T> ReadValue() noexcept;
+
+	/// Write a type to the @c RingBuffer, advancing the write pointer.
+	/// @tparam T A trivially copyable type to write
+	/// @param value The value to write
+	/// @return @c true if @c value was successfully written
+	template <typename T, typename std::enable_if<std::is_trivially_copyable_v<T>>>
+	bool WriteValue(const T& value) noexcept;
+
+#pragma mark Advanced reading and writing
 
 	/// Advance the read position by the specified number of bytes
 	void AdvanceReadPosition(uint32_t byteCount) noexcept;

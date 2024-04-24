@@ -94,7 +94,7 @@ uint32_t SFB::RingBuffer::BytesAvailableToWrite() const noexcept
 
 #pragma mark Reading and Writing Data
 
-uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCount) noexcept
+uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCount, bool allowPartial) noexcept
 {
 	if(!destinationBuffer || byteCount == 0)
 		return 0;
@@ -108,7 +108,7 @@ uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCoun
 	else
 		bytesAvailable = (writePosition - readPosition + mCapacityBytes) & mCapacityBytesMask;
 
-	if(bytesAvailable == 0)
+	if(bytesAvailable == 0 || (bytesAvailable < byteCount && !allowPartial))
 		return 0;
 
 	auto bytesToRead = std::min(bytesAvailable, byteCount);
@@ -154,7 +154,7 @@ uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCoun
 	return bytesToRead;
 }
 
-uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCount) noexcept
+uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCount, bool allowPartial) noexcept
 {
 	if(!sourceBuffer || byteCount == 0)
 		return 0;
@@ -170,7 +170,7 @@ uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCo
 	else
 		bytesAvailable = mCapacityBytes - 1;
 
-	if(bytesAvailable == 0)
+	if(bytesAvailable == 0 || (bytesAvailable < byteCount && !allowPartial))
 		return 0;
 
 	auto bytesToWrite = std::min(bytesAvailable, byteCount);
@@ -185,6 +185,27 @@ uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCo
 	mWritePosition.store((writePosition + bytesToWrite) & mCapacityBytesMask, std::memory_order_release);
 
 	return bytesToWrite;
+}
+
+template <typename T, typename std::enable_if<std::is_trivially_copyable_v<T>>>
+std::optional<T> SFB::RingBuffer::ReadValue() noexcept
+{
+	T value;
+	auto size = sizeof(T);
+	auto bytesRead = Read(static_cast<void *>(&value), size, false);
+	if(bytesRead != size)
+		return std::nullopt;
+	return value;
+}
+
+template <typename T, typename std::enable_if<std::is_trivially_copyable_v<T>>>
+bool SFB::RingBuffer::WriteValue(const T& value) noexcept
+{
+	auto size = sizeof(T);
+	auto bytesWritten = Write(static_cast<const void *>(&value), size, false);
+	if(bytesWritten != size)
+		return false;
+	return true;
 }
 
 void SFB::RingBuffer::AdvanceReadPosition(uint32_t byteCount) noexcept
