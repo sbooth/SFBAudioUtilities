@@ -147,7 +147,7 @@ uint32_t SFB::AudioRingBuffer::FramesAvailableToWrite() const noexcept
 
 #pragma mark Reading and Writing Audio
 
-uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t frameCount) noexcept
+uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t frameCount, bool allowPartial) noexcept
 {
 	if(!bufferList || frameCount == 0)
 		return 0;
@@ -161,7 +161,7 @@ uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t
 	else
 		framesAvailable = (writePointer - readPointer + mCapacityFrames) & mCapacityFramesMask;
 
-	if(framesAvailable == 0)
+	if(framesAvailable == 0 || (framesAvailable < frameCount && !allowPartial))
 		return 0;
 
 	auto framesToRead = std::min(framesAvailable, frameCount);
@@ -184,7 +184,7 @@ uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t
 	return framesToRead;
 }
 
-uint32_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, uint32_t frameCount) noexcept
+uint32_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, uint32_t frameCount, bool allowPartial) noexcept
 {
 	if(!bufferList || frameCount == 0)
 		return 0;
@@ -200,7 +200,7 @@ uint32_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, u
 	else
 		framesAvailable = mCapacityFrames - 1;
 
-	if(framesAvailable == 0)
+	if(framesAvailable == 0 || (framesAvailable < frameCount && !allowPartial))
 		return 0;
 
 	auto framesToWrite = std::min(framesAvailable, frameCount);

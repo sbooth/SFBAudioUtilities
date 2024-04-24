@@ -90,14 +90,16 @@ public:
 	/// Reads audio from the @c AudioRingBuffer and advances the read pointer.
 	/// @param bufferList An @c AudioBufferList to receive the audio
 	/// @param frameCount The desired number of frames to read
+	/// @param allowPartial Whether any frames should be read if the number of frames available for reading is less than @c frameCount
 	/// @return The number of frames actually read
-	uint32_t Read(AudioBufferList * const _Nonnull bufferList, uint32_t frameCount) noexcept;
+	uint32_t Read(AudioBufferList * const _Nonnull bufferList, uint32_t frameCount, bool allowPartial = true) noexcept;
 
 	/// Writes audio to the @c AudioRingBuffer and advances the write pointer.
 	/// @param bufferList An @c AudioBufferList containing the audio to copy
 	/// @param frameCount The desired number of frames to write
+	/// @param allowPartial Whether any frames should be written if the free space available for writing is less than @c frameCount
 	/// @return The number of frames actually written
-	uint32_t Write(const AudioBufferList * const _Nonnull bufferList, uint32_t frameCount) noexcept;
+	uint32_t Write(const AudioBufferList * const _Nonnull bufferList, uint32_t frameCount, bool allowPartial = true) noexcept;
 
 private:
 
