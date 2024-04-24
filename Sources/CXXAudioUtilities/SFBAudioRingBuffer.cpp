@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -54,19 +54,6 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 	return static_cast<uint32_t>(1 << (32 - __builtin_clz(x - 1)));
 }
 
-}
-
-#pragma mark Creation and Destruction
-
-SFB::AudioRingBuffer::AudioRingBuffer() noexcept
-: mBuffers(nullptr), mCapacityFrames(0), mCapacityFramesMask(0), mWritePointer(0), mReadPointer(0)
-{
-	assert(mWritePointer.is_lock_free());
-}
-
-SFB::AudioRingBuffer::~AudioRingBuffer()
-{
-	std::free(mBuffers);
 }
 
 #pragma mark Buffer Management
@@ -160,7 +147,7 @@ uint32_t SFB::AudioRingBuffer::FramesAvailableToWrite() const noexcept
 
 #pragma mark Reading and Writing Audio
 
-uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t frameCount) noexcept
+uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t frameCount, bool allowPartial) noexcept
 {
 	if(!bufferList || frameCount == 0)
 		return 0;
@@ -174,7 +161,7 @@ uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t
 	else
 		framesAvailable = (writePointer - readPointer + mCapacityFrames) & mCapacityFramesMask;
 
-	if(framesAvailable == 0)
+	if(framesAvailable == 0 || (framesAvailable < frameCount && !allowPartial))
 		return 0;
 
 	auto framesToRead = std::min(framesAvailable, frameCount);
@@ -197,7 +184,7 @@ uint32_t SFB::AudioRingBuffer::Read(AudioBufferList * const bufferList, uint32_t
 	return framesToRead;
 }
 
-uint32_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, uint32_t frameCount) noexcept
+uint32_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, uint32_t frameCount, bool allowPartial) noexcept
 {
 	if(!bufferList || frameCount == 0)
 		return 0;
@@ -213,7 +200,7 @@ uint32_t SFB::AudioRingBuffer::Write(const AudioBufferList * const bufferList, u
 	else
 		framesAvailable = mCapacityFrames - 1;
 
-	if(framesAvailable == 0)
+	if(framesAvailable == 0 || (framesAvailable < frameCount && !allowPartial))
 		return 0;
 
 	auto framesToWrite = std::min(framesAvailable, frameCount);

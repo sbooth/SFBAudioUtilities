@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -77,19 +77,6 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 	return static_cast<uint32_t>(1 << (32 - __builtin_clz(x - 1)));
 }
 
-}
-
-#pragma mark Creation and Destruction
-
-SFB::CARingBuffer::CARingBuffer() noexcept
-: mBuffers(nullptr), mCapacityFrames(0), mCapacityFramesMask(0)
-{
-	assert(mTimeBoundsQueueCounter.is_lock_free());
-}
-
-SFB::CARingBuffer::~CARingBuffer()
-{
-	std::free(mBuffers);
 }
 
 #pragma mark Buffer Management

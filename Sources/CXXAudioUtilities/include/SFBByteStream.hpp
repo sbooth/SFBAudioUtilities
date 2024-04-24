@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2020 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -19,14 +19,12 @@ class ByteStream
 public:
 
 	/// Creates an empty @c ByteStream
-	ByteStream() noexcept
-	: mBuffer(nullptr), mBufferLength(0), mReadPosition(0)
-	{}
+	constexpr ByteStream() noexcept = default;
 
 	/// Initializes a @c ByteStream object with the same buffer, length, and read position as @c rhs
 	/// @param rhs The object to copy
 	ByteStream(const ByteStream& rhs) noexcept
-	: mBuffer(rhs.mBuffer), mBufferLength(rhs.mBufferLength), mReadPosition(rhs.mReadPosition)
+	: mBuffer{rhs.mBuffer}, mBufferLength{rhs.mBufferLength}, mReadPosition{rhs.mReadPosition}
 	{}
 
 	/// Sets the buffer, length, and read position to those of @c rhs
@@ -47,7 +45,7 @@ public:
 
 	/// Move constructor
 	ByteStream(ByteStream&& rhs) noexcept
-	: mBuffer(rhs.mBuffer), mBufferLength(rhs.mBufferLength), mReadPosition(rhs.mReadPosition)
+	: mBuffer{rhs.mBuffer}, mBufferLength{rhs.mBufferLength}, mReadPosition{rhs.mReadPosition}
 	{
 		rhs.mBuffer = nullptr;
 		rhs.mBufferLength = 0;
@@ -75,7 +73,7 @@ public:
 	/// @param len The length of @c buf in bytes
 	/// @throw @c std::invalid_argument if @c buf==nullptr and @c len>0
 	ByteStream(const void * const _Nullable buf, size_t len)
-	: mBuffer(buf), mBufferLength(len), mReadPosition(0)
+	: mBuffer{buf}, mBufferLength{len}
 	{
 		if(!mBuffer && len > 0)
 			throw std::invalid_argument("!mBuffer && len > 0");
@@ -105,8 +103,8 @@ public:
 	/// @tparam T The integral type to read
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
-	template <typename T>
-	typename std::enable_if<std::is_integral<T>::value, bool>::type Read(T& value) noexcept
+	template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+	bool Read(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
@@ -119,8 +117,8 @@ public:
 	/// @tparam T The unsigned integral type to read
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
-	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, bool>::type ReadLE(T& value) noexcept
+	template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>>>
+	bool ReadLE(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
@@ -142,8 +140,8 @@ public:
 	/// @tparam T The unsigned integral type to read
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
-	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, bool>::type ReadBE(T& value) noexcept
+	template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>>>
+	bool ReadBE(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
@@ -165,8 +163,8 @@ public:
 	/// @tparam T The unsigned integral type to read
 	/// @param value The destination value
 	/// @return @c true on success, @c false otherwise
-	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, bool>::type ReadSwapped(T& value) noexcept
+	template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>>>
+	bool ReadSwapped(T& value) noexcept
 	{
 		auto valueSize = sizeof(value);
 		if(valueSize > Remaining())
@@ -187,8 +185,8 @@ public:
 	/// Reads an integral type and advances the read position
 	/// @tparam T The integral type to read
 	/// @return The value read or @c 0 on failure
-	template <typename T>
-	typename std::enable_if<std::is_integral<T>::value, T>::type Read() noexcept
+	template <typename T, typename = std::enable_if_t<std::is_integral_v<T>, T>>
+	T Read() noexcept
 	{
 		T value;
 		return Read(value) ? value : 0;
@@ -197,8 +195,8 @@ public:
 	/// Reads an unsigned little endian integral type converted to host byte ordering and advances the read position
 	/// @tparam T The unsigned integral type to read
 	/// @return The value read or @c 0 on failure
-	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, T>::type ReadLE() noexcept
+	template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>, T>>
+	T ReadLE() noexcept
 	{
 		T value;
 		return ReadLE(value) ? value : 0;
@@ -207,8 +205,8 @@ public:
 	/// Reads an unsigned big endian integral type converted to host byte ordering and advances the read position
 	/// @tparam T The unsigned integral type to read
 	/// @return The value read or @c 0 on failure
-	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, T>::type ReadBE() noexcept
+	template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>, T>>
+	T ReadBE() noexcept
 	{
 		T value;
 		return ReadBE(value) ? value : 0;
@@ -217,8 +215,8 @@ public:
 	/// Reads an unsigned integral type, swaps its byte ordering, and advances the read position
 	/// @tparam T The unsigned integral type to read
 	/// @return The value read or @c 0 on failure
-	template <typename T>
-	typename std::enable_if<std::is_unsigned<T>::value, T>::type ReadSwapped() noexcept
+	template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>, T>>
+	T ReadSwapped() noexcept
 	{
 		T value;
 		return ReadSwapped(value) ? value : 0;
@@ -289,11 +287,11 @@ public:
 private:
 
 	/// The wrapped buffer
-	const void * _Nullable mBuffer;
+	const void * _Nullable mBuffer = nullptr;
 	/// The number of bytes in @c mBuffer
-	size_t mBufferLength;
+	size_t mBufferLength = 0;
 	/// The current read position
-	size_t mReadPosition;
+	size_t mReadPosition = 0;
 
 };
 

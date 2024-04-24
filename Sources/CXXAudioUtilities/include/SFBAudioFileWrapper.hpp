@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -17,9 +17,7 @@ class AudioFileWrapper
 public:
 
 	/// Creates an empty @c AudioFileWrapper
-	inline AudioFileWrapper() noexcept
-	: mAudioFile(nullptr)
-	{}
+	constexpr AudioFileWrapper() noexcept = default;
 
 	// This class is non-copyable
 	AudioFileWrapper(const AudioFileWrapper& rhs) = delete;
@@ -28,14 +26,14 @@ public:
 	AudioFileWrapper& operator=(const AudioFileWrapper& rhs) = delete;
 
 	/// Calls @c AudioFileClose on the managed @c AudioFile
-	inline ~AudioFileWrapper() noexcept
+	inline ~AudioFileWrapper()
 	{
 		reset();
 	}
 
 	/// Move constructor
 	inline AudioFileWrapper(AudioFileWrapper&& rhs) noexcept
-	: mAudioFile(rhs.release())
+	: mAudioFile{rhs.release()}
 	{}
 
 	// Move assignment operator
@@ -48,7 +46,7 @@ public:
 
 	/// Creates an @c AudioFileWrapper managing @c audioFile
 	inline AudioFileWrapper(AudioFileID audioFile) noexcept
-	: mAudioFile(audioFile)
+	: mAudioFile{audioFile}
 	{}
 
 	/// Returns @c true if the managed @c AudioFile is not @c nullptr
@@ -97,7 +95,7 @@ public:
 private:
 
 	/// The managed @c AudioFile
-	AudioFileID mAudioFile;
+	AudioFileID mAudioFile = nullptr;
 
 };
 

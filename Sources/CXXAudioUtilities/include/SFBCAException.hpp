@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -9,6 +9,7 @@
 #import <cctype>
 #import <cstring>
 #import <exception>
+#import <string>
 #import <system_error>
 
 #import <CoreAudio/CoreAudio.h>

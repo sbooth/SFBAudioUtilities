@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -26,7 +26,7 @@ public:
 
 	/// Creates a new @c CARingBuffer
 	/// @note @c Allocate() must be called before the object may be used.
-	CARingBuffer() noexcept;
+	CARingBuffer() noexcept = default;
 
 	// This class is non-copyable
 	CARingBuffer(const CARingBuffer& rhs) = delete;
@@ -35,7 +35,10 @@ public:
 	CARingBuffer& operator=(const CARingBuffer& rhs) = delete;
 
 	/// Destroys the @c CARingBuffer and release all associated resources.
-	~CARingBuffer();
+	inline ~CARingBuffer()
+	{
+		std::free(mBuffers);
+	}
 
 	// This class is non-movable
 	CARingBuffer(CARingBuffer&& rhs) = delete;
@@ -131,25 +134,27 @@ protected:
 private:
 
 	/// The format of the audio
-	CAStreamBasicDescription mFormat;
+	CAStreamBasicDescription mFormat = {};
 
 	/// The channel pointers and buffers allocated in one chunk of memory
-	uint8_t * _Nonnull * _Nullable mBuffers;
+	uint8_t * _Nonnull * _Nullable mBuffers = nullptr;
 
 	/// The frame capacity per channel
-	uint32_t mCapacityFrames;
+	uint32_t mCapacityFrames = 0;
 	/// Mask used to wrap read and write locations
 	/// @note Equal to @c mCapacityFrames-1
-	uint32_t mCapacityFramesMask;
+	uint32_t mCapacityFramesMask = 0;
 
 	/// A range of valid sample times in the buffer
 	struct TimeBounds {
 		/// The starting sample time
-		int64_t mStartTime;
+		int64_t mStartTime = 0;
 		/// The ending sample time
-		int64_t mEndTime;
+		int64_t mEndTime = 0;
 		/// The value of @c mTimeBoundsQueueCounter when the struct was modified
-		std::atomic_uint64_t mUpdateCounter;
+		std::atomic_uint64_t mUpdateCounter = 0;
+
+		static_assert(std::atomic_uint64_t::is_always_lock_free, "Lock-free std::atomic_uint64_t required");
 	};
 
 	/// The number of elements in @c mTimeBoundsQueue
@@ -161,7 +166,9 @@ private:
 	/// Array of @c TimeBounds structs
 	TimeBounds mTimeBoundsQueue[sTimeBoundsQueueSize];
 	/// Monotonically increasing counter incremented when the buffer's time bounds changes
-	std::atomic_uint64_t mTimeBoundsQueueCounter;
+	std::atomic_uint64_t mTimeBoundsQueueCounter = 0;
+
+	static_assert(std::atomic_uint64_t::is_always_lock_free, "Lock-free std::atomic_uint64_t required");
 
 };
 

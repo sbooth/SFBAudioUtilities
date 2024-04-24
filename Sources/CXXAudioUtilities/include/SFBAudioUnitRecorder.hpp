@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -49,7 +49,7 @@ public:
 	/// @param format The format of the audio data to be written to the file
 	/// @param busNumber The bus number of @c au to record
 	AudioUnitRecorder(AudioUnit au, CFURLRef outputFileURL, AudioFileTypeID fileType, const AudioStreamBasicDescription& format, UInt32 busNumber = 0)
-	: mClientFormatIsSet(false), mAudioUnit(au), mBusNumber(busNumber)
+	: mClientFormatIsSet{false}, mAudioUnit{au}, mBusNumber{busNumber}
 	{
 		if(!au)
 			throw std::invalid_argument("au == nullptr");

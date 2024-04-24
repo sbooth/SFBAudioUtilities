@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -38,17 +38,8 @@ AudioBufferList * SFB::AllocateAudioBufferList(const CAStreamBasicDescription& f
 	return abl;
 }
 
-SFB::CABufferList::CABufferList() noexcept
-: mBufferList(nullptr), mFrameCapacity(0), mFrameLength(0)
-{}
-
-SFB::CABufferList::~CABufferList()
-{
-	std::free(mBufferList);
-}
-
 SFB::CABufferList::CABufferList(CABufferList&& rhs) noexcept
-: mBufferList(rhs.mBufferList), mFormat(rhs.mFormat), mFrameCapacity(rhs.mFrameCapacity), mFrameLength(rhs.mFrameLength)
+: mBufferList{rhs.mBufferList}, mFormat{rhs.mFormat}, mFrameCapacity{rhs.mFrameCapacity}, mFrameLength{rhs.mFrameLength}
 {
 	rhs.mBufferList = nullptr;
 	rhs.mFormat.Reset();

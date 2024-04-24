@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2013 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -26,7 +26,7 @@ public:
 
 	/// Creates a new @c AudioRingBuffer
 	/// @note @c Allocate() must be called before the object may be used.
-	AudioRingBuffer() noexcept;
+	constexpr AudioRingBuffer() noexcept = default;
 
 	// This class is non-copyable
 	AudioRingBuffer(const AudioRingBuffer& rhs) = delete;
@@ -35,7 +35,10 @@ public:
 	AudioRingBuffer& operator=(const AudioRingBuffer& rhs) = delete;
 
 	/// Destroys the @c AudioRingBuffer and releases all associated resources.
-	~AudioRingBuffer();
+	inline ~AudioRingBuffer()
+	{
+		std::free(mBuffers);
+	}
 
 	// This class is non-movable
 	AudioRingBuffer(AudioRingBuffer&& rhs) = delete;
@@ -87,33 +90,37 @@ public:
 	/// Reads audio from the @c AudioRingBuffer and advances the read pointer.
 	/// @param bufferList An @c AudioBufferList to receive the audio
 	/// @param frameCount The desired number of frames to read
+	/// @param allowPartial Whether any frames should be read if the number of frames available for reading is less than @c frameCount
 	/// @return The number of frames actually read
-	uint32_t Read(AudioBufferList * const _Nonnull bufferList, uint32_t frameCount) noexcept;
+	uint32_t Read(AudioBufferList * const _Nonnull bufferList, uint32_t frameCount, bool allowPartial = true) noexcept;
 
 	/// Writes audio to the @c AudioRingBuffer and advances the write pointer.
 	/// @param bufferList An @c AudioBufferList containing the audio to copy
 	/// @param frameCount The desired number of frames to write
+	/// @param allowPartial Whether any frames should be written if the free space available for writing is less than @c frameCount
 	/// @return The number of frames actually written
-	uint32_t Write(const AudioBufferList * const _Nonnull bufferList, uint32_t frameCount) noexcept;
+	uint32_t Write(const AudioBufferList * const _Nonnull bufferList, uint32_t frameCount, bool allowPartial = true) noexcept;
 
 private:
 
 	/// The format of the audio
-	CAStreamBasicDescription mFormat;
+	CAStreamBasicDescription mFormat = {};
 
 	/// The channel pointers and buffers allocated in one chunk of memory
-	uint8_t * _Nonnull * _Nullable mBuffers;
+	uint8_t * _Nonnull * _Nullable mBuffers = nullptr;
 
 	/// The frame capacity per channel
-	uint32_t mCapacityFrames;
+	uint32_t mCapacityFrames = 0;
 	/// Mask used to wrap read and write locations
 	/// @note Equal to @c mCapacityFrames-1
-	uint32_t mCapacityFramesMask;
+	uint32_t mCapacityFramesMask = 0;
 
 	/// The offset in frames of the write location
-	std::atomic_uint32_t mWritePointer;
+	std::atomic_uint32_t mWritePointer = 0;
 	/// The offset in frames of the read location
-	std::atomic_uint32_t mReadPointer;
+	std::atomic_uint32_t mReadPointer = 0;
+
+	static_assert(std::atomic_uint32_t::is_always_lock_free, "Lock-free std::atomic_uint32_t required");
 
 };
 

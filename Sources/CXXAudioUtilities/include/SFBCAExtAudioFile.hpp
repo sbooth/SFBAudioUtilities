@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -32,9 +32,7 @@ private:
 
 public:
 	/// Creates a @c CAExtAudioFile
-	inline CAExtAudioFile() noexcept
-	: mExtAudioFile(nullptr)
-	{}
+	CAExtAudioFile() noexcept = default;
 
 	// This class is non-copyable
 	CAExtAudioFile(const CAExtAudioFile& rhs) = delete;
@@ -51,7 +49,7 @@ public:
 
 	/// Move constructor
 	CAExtAudioFile(CAExtAudioFile&& rhs) noexcept
-	: mExtAudioFile(rhs.mExtAudioFile)
+	: mExtAudioFile{rhs.mExtAudioFile}
 	{
 		rhs.mExtAudioFile = nullptr;
 	}
@@ -416,7 +414,7 @@ public:
 private:
 
 	/// The underlying @c ExtAudioFile object
-	ExtAudioFileRef _Nullable mExtAudioFile;
+	ExtAudioFileRef _Nullable mExtAudioFile = nullptr;
 
 };
 

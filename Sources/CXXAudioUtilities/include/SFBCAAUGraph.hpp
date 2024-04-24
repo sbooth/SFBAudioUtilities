@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -24,9 +24,7 @@ class CAAUGraph
 
 public:
 	/// Creates a @c CAAUGraph
-	inline CAAUGraph() noexcept
-	: mAUGraph(nullptr)
-	{}
+	CAAUGraph() noexcept = default;
 
 	// This class is non-copyable
 	CAAUGraph(const CAAUGraph& rhs) = delete;
@@ -43,7 +41,7 @@ public:
 
 	/// Move constructor
 	CAAUGraph(CAAUGraph&& rhs) noexcept
-	: mAUGraph(rhs.mAUGraph)
+	: mAUGraph{rhs.mAUGraph}
 	{
 		rhs.mAUGraph = nullptr;
 	}
@@ -470,7 +468,7 @@ public:
 private:
 
 	/// The underlying @c AUGraph object
-	AUGraph _Nullable mAUGraph;
+	AUGraph _Nullable mAUGraph = nullptr;
 
 };
 

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -24,19 +24,6 @@ inline constexpr uint32_t NextPowerOfTwo(uint32_t x) noexcept
 	return static_cast<uint32_t>(1 << (32 - __builtin_clz(x - 1)));
 }
 
-}
-
-#pragma mark Creation and Destruction
-
-SFB::RingBuffer::RingBuffer() noexcept
-: mBuffer(nullptr), mCapacityBytes(0), mCapacityBytesMask(0), mWritePosition(0), mReadPosition(0)
-{
-	assert(mWritePosition.is_lock_free());
-}
-
-SFB::RingBuffer::~RingBuffer()
-{
-	std::free(mBuffer);
 }
 
 #pragma mark Buffer Management
@@ -81,6 +68,8 @@ void SFB::RingBuffer::Reset() noexcept
 	mWritePosition = 0;
 }
 
+#pragma mark Buffer Information
+
 uint32_t SFB::RingBuffer::BytesAvailableToRead() const noexcept
 {
 	auto writePosition = mWritePosition.load(std::memory_order_acquire);
@@ -107,7 +96,7 @@ uint32_t SFB::RingBuffer::BytesAvailableToWrite() const noexcept
 
 #pragma mark Reading and Writing Data
 
-uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCount) noexcept
+uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCount, bool allowPartial) noexcept
 {
 	if(!destinationBuffer || byteCount == 0)
 		return 0;
@@ -121,7 +110,7 @@ uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCoun
 	else
 		bytesAvailable = (writePosition - readPosition + mCapacityBytes) & mCapacityBytesMask;
 
-	if(bytesAvailable == 0)
+	if(bytesAvailable == 0 || (bytesAvailable < byteCount && !allowPartial))
 		return 0;
 
 	auto bytesToRead = std::min(bytesAvailable, byteCount);
@@ -138,7 +127,7 @@ uint32_t SFB::RingBuffer::Read(void * const destinationBuffer, uint32_t byteCoun
 	return bytesToRead;
 }
 
-uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCount) const noexcept
+uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCount, bool allowPartial) const noexcept
 {
 	if(!destinationBuffer || byteCount == 0)
 		return 0;
@@ -152,7 +141,7 @@ uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCoun
 	else
 		bytesAvailable = (writePosition - readPosition + mCapacityBytes) & mCapacityBytesMask;
 
-	if(bytesAvailable == 0)
+	if(bytesAvailable == 0 || (bytesAvailable < byteCount && !allowPartial))
 		return 0;
 
 	auto bytesToRead = std::min(bytesAvailable, byteCount);
@@ -167,7 +156,7 @@ uint32_t SFB::RingBuffer::Peek(void * const destinationBuffer, uint32_t byteCoun
 	return bytesToRead;
 }
 
-uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCount) noexcept
+uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCount, bool allowPartial) noexcept
 {
 	if(!sourceBuffer || byteCount == 0)
 		return 0;
@@ -183,7 +172,7 @@ uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCo
 	else
 		bytesAvailable = mCapacityBytes - 1;
 
-	if(bytesAvailable == 0)
+	if(bytesAvailable == 0 || (bytesAvailable < byteCount && !allowPartial))
 		return 0;
 
 	auto bytesToWrite = std::min(bytesAvailable, byteCount);
@@ -199,6 +188,8 @@ uint32_t SFB::RingBuffer::Write(const void * const sourceBuffer, uint32_t byteCo
 
 	return bytesToWrite;
 }
+
+#pragma mark Advanced Reading and Writing
 
 void SFB::RingBuffer::AdvanceReadPosition(uint32_t byteCount) noexcept
 {

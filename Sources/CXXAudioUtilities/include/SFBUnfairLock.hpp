@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2020 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -28,7 +28,7 @@ public:
 
 	/// Creates a new @c UnfairLock
 	inline UnfairLock() noexcept
-	: mLock(OS_UNFAIR_LOCK_INIT)
+	: mLock{OS_UNFAIR_LOCK_INIT}
 	{}
 
 	// This class is non-copyable
