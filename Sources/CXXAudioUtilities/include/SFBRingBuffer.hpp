@@ -103,15 +103,30 @@ public:
 	/// Read a type from the @c RingBuffer, advancing the read pointer.
 	/// @tparam T A trivially copyable type to read
 	/// @return A @c std::optional containing an instance of @c T if sufficient bytes were available for reading
-	template <typename T, typename std::enable_if_t<std::is_trivially_copyable_v<T>>>
-	std::optional<T> ReadValue() noexcept;
+	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T>>>
+	std::optional<T> ReadValue() noexcept
+	{
+		T value;
+		auto size = sizeof(T);
+		auto bytesRead = Read(static_cast<void *>(&value), size, false);
+		if(bytesRead != size)
+			return std::nullopt;
+		return value;
+	}
 
 	/// Write a type to the @c RingBuffer, advancing the write pointer.
 	/// @tparam T A trivially copyable type to write
 	/// @param value The value to write
 	/// @return @c true if @c value was successfully written
-	template <typename T, typename std::enable_if_t<std::is_trivially_copyable_v<T>>>
-	bool WriteValue(const T& value) noexcept;
+	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T>>>
+	bool WriteValue(const T& value) noexcept
+	{
+		auto size = sizeof(T);
+		auto bytesWritten = Write(static_cast<const void *>(&value), size, false);
+		if(bytesWritten != size)
+			return false;
+		return true;
+	}
 
 #pragma mark Advanced reading and writing
 

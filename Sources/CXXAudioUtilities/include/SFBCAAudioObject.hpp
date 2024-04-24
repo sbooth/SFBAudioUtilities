@@ -126,7 +126,7 @@ public:
 	}
 
 
-	template <typename T, typename std::enable_if_t<std::is_arithmetic_v<T>>>
+	template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 	T ArithmeticProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
 	{
 		T value;
@@ -135,7 +135,7 @@ public:
 		return value;
 	}
 
-	template <typename T, typename std::enable_if_t<std::is_trivial_v<T>>>
+	template <typename T, typename = std::enable_if_t<std::is_trivial_v<T>>>
 	T StructProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
 	{
 		T value;
@@ -144,7 +144,7 @@ public:
 		return value;
 	}
 
-	template <typename T, typename std::enable_if_t<std::is_trivial_v<T>>>
+	template <typename T, typename = std::enable_if_t<std::is_trivial_v<T>>>
 	std::vector<T> ArrayProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
 	{
 		auto size = GetPropertyDataSize(inAddress, inQualifierDataSize, inQualifierData);
@@ -154,7 +154,7 @@ public:
 		return vec;
 	}
 
-	template <typename T, typename std::enable_if_t</*std::is_class_v<T> &&*/ std::is_pointer_v<T>>>
+	template <typename T, typename = std::enable_if_t</*std::is_class_v<T> &&*/ std::is_pointer_v<T>>>
 	CFWrapper<T> CFTypeProperty(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize = 0, const void * _Nullable inQualifierData = nullptr) const
 	{
 		T value;
