@@ -81,7 +81,7 @@ public:
 	/// Read data from the @c RingBuffer, advancing the read pointer.
 	/// @param destinationBuffer An address to receive the data
 	/// @param byteCount The desired number of bytes to read
-	/// @param allowPartial Whether any bytes should be read If the number of bytes available for reading is less than @c byteCount
+	/// @param allowPartial Whether any bytes should be read if the number of bytes available for reading is less than @c byteCount
 	/// @return The number of bytes actually read
 	uint32_t Read(void * const _Nonnull destinationBuffer, uint32_t byteCount, bool allowPartial = true) noexcept;
 
@@ -94,7 +94,7 @@ public:
 	/// Write data to the @c RingBuffer, advancing the write pointer.
 	/// @param sourceBuffer An address containing the data to copy
 	/// @param byteCount The desired number of bytes to write
-	/// @param allowPartial Whether any bytes should be written If the free space available for writing is less than @c byteCount
+	/// @param allowPartial Whether any bytes should be written if the free space available for writing is less than @c byteCount
 	/// @return The number of bytes actually written
 	uint32_t Write(const void * const _Nonnull sourceBuffer, uint32_t byteCount, bool allowPartial = true) noexcept;
 
