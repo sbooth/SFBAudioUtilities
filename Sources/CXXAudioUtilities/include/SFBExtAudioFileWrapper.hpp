@@ -26,7 +26,7 @@ public:
 	ExtAudioFileWrapper& operator=(const ExtAudioFileWrapper& rhs) = delete;
 
 	/// Calls @c ExtAudioFileDispose on the managed @c ExtAudioFile
-	inline ~ExtAudioFileWrapper() noexcept
+	inline ~ExtAudioFileWrapper()
 	{
 		reset();
 	}

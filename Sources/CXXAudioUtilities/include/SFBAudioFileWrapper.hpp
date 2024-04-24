@@ -26,7 +26,7 @@ public:
 	AudioFileWrapper& operator=(const AudioFileWrapper& rhs) = delete;
 
 	/// Calls @c AudioFileClose on the managed @c AudioFile
-	inline ~AudioFileWrapper() noexcept
+	inline ~AudioFileWrapper()
 	{
 		reset();
 	}
