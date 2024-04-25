@@ -109,7 +109,7 @@ public:
 	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T>>>
 	bool ReadValue(T& value) noexcept
 	{
-		auto size = sizeof(T);
+		auto size = static_cast<uint32_t>(sizeof(T));
 		auto bytesRead = Read(static_cast<void *>(&value), size, false);
 		if(bytesRead != size)
 			return false;
@@ -135,7 +135,7 @@ public:
 	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T>>>
 	bool PeekValue(T& value) const noexcept
 	{
-		auto size = sizeof(T);
+		auto size = static_cast<uint32_t>(sizeof(T));
 		auto bytesRead = Peek(static_cast<void *>(&value), size, false);
 		if(bytesRead != size)
 			return false;
@@ -161,7 +161,7 @@ public:
 	template <typename T, typename = std::enable_if_t<std::is_trivially_copyable_v<T>>>
 	bool WriteValue(const T& value) noexcept
 	{
-		auto size = sizeof(T);
+		auto size = static_cast<uint32_t>(sizeof(T));
 		auto bytesWritten = Write(static_cast<const void *>(&value), size, false);
 		if(bytesWritten != size)
 			return false;
