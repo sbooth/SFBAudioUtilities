@@ -67,7 +67,7 @@ SFB::CABufferList& SFB::CABufferList::operator=(CABufferList&& rhs) noexcept
 }
 
 SFB::CABufferList::CABufferList(const CAStreamBasicDescription& format, UInt32 frameCapacity)
-: CABufferList()
+: CABufferList{}
 {
 	if(format.mBytesPerFrame == 0)
 		throw std::invalid_argument("format.mBytesPerFrame == 0");
