@@ -90,7 +90,7 @@ bool SFB::CARingBuffer::Allocate(const CAStreamBasicDescription& format, uint32_
 	Deallocate();
 
 	// Round up to the next power of two
-	capacityFrames = NextPowerOfTwo(static_cast<uint32_t>(capacityFrames));
+	capacityFrames = NextPowerOfTwo(capacityFrames);
 
 	mFormat = format;
 

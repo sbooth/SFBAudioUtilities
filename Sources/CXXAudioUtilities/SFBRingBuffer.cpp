@@ -36,7 +36,7 @@ bool SFB::RingBuffer::Allocate(uint32_t capacityBytes) noexcept
 	Deallocate();
 
 	// Round up to the next power of two
-	capacityBytes = NextPowerOfTwo(static_cast<uint32_t>(capacityBytes));
+	capacityBytes = NextPowerOfTwo(capacityBytes);
 
 	mBuffer = static_cast<uint8_t *>(std::malloc(capacityBytes));
 	if(!mBuffer)

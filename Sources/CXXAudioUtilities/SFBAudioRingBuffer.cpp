@@ -67,7 +67,7 @@ bool SFB::AudioRingBuffer::Allocate(const CAStreamBasicDescription& format, uint
 	Deallocate();
 
 	// Round up to the next power of two
-	capacityFrames = NextPowerOfTwo(static_cast<uint32_t>(capacityFrames));
+	capacityFrames = NextPowerOfTwo(capacityFrames);
 
 	mFormat = format;
 
