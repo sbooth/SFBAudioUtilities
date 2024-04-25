@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2014 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -136,7 +136,7 @@ public:
 	/// Returns @c true if this format is PCM
 	inline bool IsPCM() const noexcept
 	{
-		return kAudioFormatLinearPCM == mFormatID;
+		return mFormatID == kAudioFormatLinearPCM;
 	}
 
 	/// Returns @c true if this format is big-endian
