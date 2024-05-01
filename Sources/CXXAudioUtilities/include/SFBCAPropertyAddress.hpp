@@ -6,6 +6,8 @@
 
 #pragma once
 
+#import <cstring>
+
 #import <CoreAudio/AudioHardware.h>
 
 namespace SFB {
@@ -62,7 +64,7 @@ public:
 	/// Returns @c true if @c rhs is equal to @c this
 	inline bool operator==(const AudioObjectPropertyAddress& rhs) const noexcept
 	{
-		return mSelector == rhs.mSelector && mScope == rhs.mScope && mElement == rhs.mElement;
+		return !std::memcmp(this, &rhs, sizeof(AudioObjectPropertyAddress));
 	}
 
 	/// Returns @c true if @c rhs is not equal to @c this
