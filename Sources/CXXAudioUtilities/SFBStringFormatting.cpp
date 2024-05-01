@@ -40,7 +40,7 @@ std::string fourcc_fourchar_string(uint32_t fourcc)
 std::string fourcc_hex_string(uint32_t fourcc)
 {
 	char buf [10 + 1];
-	const auto n = std::snprintf(buf, sizeof buf, "0x%.8x", static_cast<int>(fourcc));
+	const auto n = std::snprintf(buf, sizeof buf, "0x%0.8x", static_cast<int>(fourcc));
 	if(n < 0)
 		return {};
 	return { buf, static_cast<std::string::size_type>(n) };
