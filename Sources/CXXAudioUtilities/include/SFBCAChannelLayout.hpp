@@ -10,7 +10,7 @@
 
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
-#ifdef __OBJC
+#ifdef __OBJC__
 #import <AVFAudio/AVFAudio.h>
 #endif /* __OBJC__ */
 
@@ -174,7 +174,7 @@ public:
 	CFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
 
 
-#ifdef __OBJC
+#ifdef __OBJC__
 	/// Returns an  @c AVAudioChannelLayout object initialized with this object's internal @c AudioChannelLayout
 	inline operator AVAudioChannelLayout * _Nullable () const noexcept
 	{
