@@ -48,6 +48,30 @@ std::string fourcc_hex_string(uint32_t fourcc)
 
 } // namespace
 
+std::string SFB::string_from_cfstring(CFStringRef str) noexcept
+{
+	if(!str)
+		return {};
+
+	auto range = CFRange{ .location = 0, .length = CFStringGetLength(str) };
+	auto max_size = CFStringGetMaximumSizeForEncoding(range.length, kCFStringEncodingUTF8);
+
+	std::string result;
+	result.reserve(max_size);
+
+	char buf [128];
+	while(range.length > 0) {
+		CFIndex bytesWritten = 0;
+		auto converted = CFStringGetBytes(str, range, kCFStringEncodingUTF8, 0, false, reinterpret_cast<UInt8 *>(buf), sizeof buf, &bytesWritten);
+		result.append(buf, static_cast<std::string::size_type>(bytesWritten));
+
+		range.location += converted;
+		range.length -= converted;
+	}
+
+	return result;
+}
+
 std::string SFB::string_format(const char *format, ...)
 {
 	char buf [256];
