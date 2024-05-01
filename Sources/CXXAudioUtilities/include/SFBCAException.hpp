@@ -764,36 +764,23 @@ inline void ThrowIfCAExtAudioFileError(OSStatus result, const char * const opera
 		throw std::system_error(result, CAExtAudioFileErrorCategory(), operation);
 }
 
-#if 0
-class FourCCString
-{
-
-public:
-
-	FourCCString(OSStatus errorCode)
-	{
-		auto err = CFSwapInt32HostToBig(errorCode);
-		std::memcpy(&mString[0] + 1, &err, 4);
-		if(std::isprint(mString[1]) && std::isprint(mString[2]) && std::isprint(mString[3]) && std::isprint(mString[4])) {
-			mString[0] = mString[5] = '\'';
-			mString[6] = '\0';
-		}
-		else if(errorCode > -200000 && errorCode < 200000)
-			snprintf(mString, sizeof(mString), "%d", static_cast<int>(errorCode));
-		else
-			snprintf(mString, sizeof(mString), "0x%x", static_cast<int>(errorCode));
-	}
-
-	operator const char * const () const
-	{
-		return mString;
-	}
-
-private:
-
-	char mString [16];
-
-};
-#endif
-
 } // namespace SFB
+
+#pragma mark - Macros
+
+// In cases where `operation` is non-constant these macros may be used for efficiency
+
+#define SFBThrowIfCAError(result, category, operation) \
+{ \
+	if(__builtin_expect(result != 0, 0)) \
+		throw std::system_error(result, category, operation); \
+}
+
+#define SFBThrowIfCAAudioObjectError(result, operation) 	SFBThrowIfCAError(result, CAAudioObjectErrorCategory(), operation)
+#define SFBThrowIfCAAudioUnitError(result, operation) 		SFBThrowIfCAError(result, CAAudioUnitErrorCategory(), operation)
+#define SFBThrowIfCAAUGraphError(result, operation) 		SFBThrowIfCAError(result, CAAUGraphErrorCategory(), operation)
+#define SFBThrowIfCAAudioFormatError(result, operation) 	SFBThrowIfCAError(result, CAAudioFormatErrorCategory(), operation)
+#define SFBThrowIfCAAudioCodecError(result, operation) 		SFBThrowIfCAError(result, CAAudioCodecErrorCategory(), operation)
+#define SFBThrowIfCAAudioConverterError(result, operation) 	SFBThrowIfCAError(result, CAAudioConverterErrorCategory(), operation)
+#define SFBThrowIfCAAudioFileError(result, operation) 		SFBThrowIfCAError(result, CAAudioFileErrorCategory(), operation)
+#define SFBThrowIfCAExtAudioFileError(result, operation) 	SFBThrowIfCAError(result, CAExtAudioFileErrorCategory(), operation)
