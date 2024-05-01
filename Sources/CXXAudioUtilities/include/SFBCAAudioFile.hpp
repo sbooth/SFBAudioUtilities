@@ -12,6 +12,7 @@
 
 #import "SFBCAException.hpp"
 #import "SFBCAStreamBasicDescription.hpp"
+#import "SFBCFWrapper.hpp"
 
 CF_ASSUME_NONNULL_BEGIN
 
