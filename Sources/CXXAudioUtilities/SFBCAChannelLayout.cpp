@@ -295,10 +295,8 @@ SFB::CAChannelLayout::CAChannelLayout(const CAChannelLayout& rhs)
 
 SFB::CAChannelLayout& SFB::CAChannelLayout::operator=(const CAChannelLayout& rhs)
 {
-	if(this != &rhs) {
-		std::free(mChannelLayout);
-		mChannelLayout = CopyChannelLayout(rhs.mChannelLayout);
-	}
+	if(this != &rhs)
+		Reset(CopyChannelLayout(rhs.mChannelLayout));
 	return *this;
 }
 
@@ -322,8 +320,7 @@ SFB::CAChannelLayout::CAChannelLayout(const AudioChannelLayout *rhs)
 
 SFB::CAChannelLayout& SFB::CAChannelLayout::operator=(const AudioChannelLayout *rhs)
 {
-	std::free(mChannelLayout);
-	mChannelLayout = CopyChannelLayout(rhs);
+	Reset(CopyChannelLayout(rhs));
 	return *this;
 }
 
@@ -393,13 +390,6 @@ bool SFB::CAChannelLayout::MapToLayout(const CAChannelLayout& outputLayout, std:
 	channelMap.assign(start, start + outputChannelCount);
 
 	return true;
-}
-
-AudioChannelLayout * SFB::CAChannelLayout::RelinquishACL() noexcept
-{
-	auto channelLayout = mChannelLayout;
-	mChannelLayout = nullptr;
-	return channelLayout;
 }
 
 SFB::CFString SFB::CAChannelLayout::Description(const char * const prefix) const noexcept
