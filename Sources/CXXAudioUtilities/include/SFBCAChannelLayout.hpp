@@ -10,6 +10,10 @@
 
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
+#ifdef __OBJC
+#import <AVFAudio/AVFAudio.h>
+#endif /* __OBJC__ */
+
 #import "SFBCFWrapper.hpp"
 
 namespace SFB {
@@ -52,23 +56,19 @@ public:
 	/// Destroys the @c CAChannelLayout and release all associated resources.
 	inline ~CAChannelLayout()
 	{
-		std::free(mChannelLayout);
+		Reset();
 	}
 
 	/// Move constructor
 	CAChannelLayout(CAChannelLayout&& rhs) noexcept
-	: mChannelLayout{rhs.mChannelLayout}
-	{
-		rhs.mChannelLayout = nullptr;
-	}
+	: mChannelLayout{rhs.Release()}
+	{}
 
 	/// Move assignment operator
 	CAChannelLayout& operator=(CAChannelLayout&& rhs) noexcept
 	{
-		if(this != &rhs) {
-			mChannelLayout = rhs.mChannelLayout;
-			rhs.mChannelLayout = nullptr;
-		}
+		if(this != &rhs)
+			Reset(rhs.Release());
 		return *this;
 	}
 
@@ -119,9 +119,23 @@ public:
 		return AudioChannelLayoutSize(mChannelLayout);
 	}
 
-	/// Relinquishes ownership of the object's internal @c AudioChannelLayout and returns it
+	/// Releases ownership of the object's internal @c AudioChannelLayout and returns it
 	/// @note The caller assumes responsiblity for deallocating the returned @c AudioChannelLayout using @c std::free
-	AudioChannelLayout * _Nullable RelinquishACL() noexcept;
+	inline AudioChannelLayout * _Nullable Release() noexcept
+	{
+		auto channelLayout = mChannelLayout;
+		mChannelLayout = nullptr;
+		return channelLayout;
+	}
+
+	/// Replaces the object's internal @c AudioChannelLayout with @c channelLayout and then deallocates it
+	/// @note The object assumes responsiblity for deallocating the passed @c AudioChannelLayout using @c std::free
+	inline void Reset(AudioChannelLayout * _Nullable channelLayout = nullptr) noexcept
+	{
+		auto oldChannelLayout = mChannelLayout;
+		mChannelLayout = channelLayout;
+		std::free(oldChannelLayout);
+	}
 
 	/// Retrieves a const pointer to this object's internal @c AudioChannelLayout
 	inline const AudioChannelLayout * _Nullable ACL() const noexcept
@@ -158,6 +172,15 @@ public:
 
 	/// Returns a string representation of this channel layout suitable for logging
 	CFString Description(const char * const _Nullable prefix = nullptr) const noexcept;
+
+
+#ifdef __OBJC
+	/// Returns an  @c AVAudioChannelLayout object initialized with this object's internal @c AudioChannelLayout
+	inline operator AVAudioChannelLayout * _Nullable () const noexcept
+	{
+		return [[AVAudioChannelLayout alloc] initWithLayout:mChannelLayout];
+	}
+#endif /* __OBJC__ */
 
 private:
 
