@@ -8,6 +8,10 @@
 
 #import <AudioToolbox/ExtendedAudioFile.h>
 
+#ifdef __OBJC__
+#import <AVFAudio/AVFAudio.h>
+#endif /* __OBJC__ */
+
 #import "SFBCAException.hpp"
 #import "SFBCABufferList.hpp"
 #import "SFBCAChannelLayout.hpp"
@@ -195,22 +199,28 @@ public:
 	/// @param inNumberFrames The number of frames to write
 	/// @param ioData The buffer(s) from which audio data is written to the file
 	/// @throw @c std::system_error
+#if TARGET_OS_IPHONE
 	OSStatus Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
+#else
+	void Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
+#endif /* TARGET_OS_IPHONE */
 	{
 		auto result = ExtAudioFileWrite(mExtAudioFile, inNumberFrames, ioData);
+#if TARGET_OS_IPHONE
 		switch(result) {
 			case noErr:
-				break;
-#if TARGET_OS_IPHONE
 			case kExtAudioFileError_CodecUnavailableInputConsumed:
 			case kExtAudioFileError_CodecUnavailableInputNotConsumed:
 				break;
-#endif
+
 			default:
 				ThrowIfCAExtAudioFileError(result, "ExtAudioFileWrite");
 				break;
 		}
 		return result;
+#else
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileWrite");
+#endif /* TARGET_OS_IPHONE */
 	}
 
 	/// Performs an asynchronous sequential write
@@ -410,6 +420,41 @@ public:
 		GetProperty(kExtAudioFileProperty_FileLengthFrames, size, &frameLength);
 		return frameLength;
 	}
+
+#ifdef __OBJC__
+	/// Returns the file's data format (@c kExtAudioFileProperty_FileDataFormat) and channel layout (@c kExtAudioFileProperty_FileChannelLayout)
+	/// @throw @c std::system_error
+	/// @throw @c std::bad_alloc
+	AVAudioFormat * FileFormat() const
+	{
+		auto dataFormat = FileDataFormat();
+		auto channelLayout = FileChannelLayout();
+		if(dataFormat.ChannelCount() > 2 && !channelLayout)
+			throw std::system_error(kExtAudioFileError_InvalidChannelMap, CAExtAudioFileErrorCategory(), "File data format > 2 channels with no file channel layout");
+		return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
+	}
+
+	/// Returns the client data format (@c kExtAudioFileProperty_ClientDataFormat) and channel layout (@c kExtAudioFileProperty_ClientChannelLayout)
+	/// @throw @c std::system_error
+	/// @throw @c std::bad_alloc
+	AVAudioFormat * ClientFormat() const
+	{
+		auto dataFormat = ClientDataFormat();
+		auto channelLayout = ClientChannelLayout();
+		if(dataFormat.ChannelCount() > 2 && !channelLayout)
+			throw std::system_error(kExtAudioFileError_InvalidChannelMap, CAExtAudioFileErrorCategory(), "Client data format > 2 channels with no client channel layout");
+		return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
+	}
+
+	/// Sets the client data format (@c kExtAudioFileProperty_ClientDataFormat) and channel layout (@c kExtAudioFileProperty_ClientChannelLayout)
+	/// @throw @c std::system_error
+	/// @throw @c std::bad_alloc
+	void SetClientFormat(AVAudioFormat *format)
+	{
+		SetClientDataFormat(format.streamDescription);
+		SetClientChannelLayout(format.channelLayout);
+	}
+#endif /* __OBJC__ */
 
 private:
 
