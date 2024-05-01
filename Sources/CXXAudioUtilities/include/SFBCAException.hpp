@@ -674,6 +674,24 @@ template <> struct is_error_code_enum<SFB::CAExtAudioFileErrorCode> : true_type 
 
 } // namespace std
 
+// In cases where `what` is non-constant these macros may be used for efficiency
+// in lieu of the lambda-based functions if desired
+
+#define SFBThrowIfCAError(err, ecat, what) \
+{ \
+	if(__builtin_expect(err != 0, 0)) \
+		throw std::system_error(err, ecat, what); \
+}
+
+#define SFBThrowIfCAAudioObjectError(err, what) 		SFBThrowIfCAError(err, CAAudioObjectErrorCategory(), what)
+#define SFBThrowIfCAAudioUnitError(err, what) 			SFBThrowIfCAError(err, CAAudioUnitErrorCategory(), what)
+#define SFBThrowIfCAAUGraphError(err, what) 			SFBThrowIfCAError(err, CAAUGraphErrorCategory(), what)
+#define SFBThrowIfCAAudioFormatError(err, what) 		SFBThrowIfCAError(err, CAAudioFormatErrorCategory(), what)
+#define SFBThrowIfCAAudioCodecError(err, what) 			SFBThrowIfCAError(err, CAAudioCodecErrorCategory(), what)
+#define SFBThrowIfCAAudioConverterError(err, what) 		SFBThrowIfCAError(err, CAAudioConverterErrorCategory(), what)
+#define SFBThrowIfCAAudioFileError(err, what) 			SFBThrowIfCAError(err, CAAudioFileErrorCategory(), what)
+#define SFBThrowIfCAExtAudioFileError(err, what) 		SFBThrowIfCAError(err, CAExtAudioFileErrorCategory(), what)
+
 namespace SFB {
 
 /// Throws a @c std::system_error in the @c CAAudioObjectErrorCategory if @c result!=0
@@ -683,8 +701,18 @@ namespace SFB {
 /// @throw @c std::system_error in the @c CAAudioObjectErrorCategory
 inline void ThrowIfCAAudioObjectError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, CAAudioObjectErrorCategory(), operation);
+	SFBThrowIfCAAudioObjectError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c CAAudioObjectErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioObject API
+/// @param result An @c OSStatus result code
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAAudioObjectErrorCategory
+template <typename F>
+inline void ThrowIfCAAudioObjectError(OSStatus result, const F&& lambda)
+{
+	SFBThrowIfCAAudioObjectError(result, lambda());
 }
 
 /// Throws a @c std::system_error in the @c CAAudioUnitErrorCategory if @c result!=0
@@ -694,8 +722,18 @@ inline void ThrowIfCAAudioObjectError(OSStatus result, const char * const operat
 /// @throw @c std::system_error in the @c CAAudioUnitErrorCategory
 inline void ThrowIfCAAudioUnitError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, CAAudioUnitErrorCategory(), operation);
+	SFBThrowIfCAAudioUnitError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c CAAudioUnitErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioUnit API
+/// @param result An @c OSStatus result code
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAAudioUnitErrorCategory
+template <typename F>
+inline void ThrowIfCAAudioUnitError(OSStatus result, const F&& lambda)
+{
+	SFBThrowIfCAAudioUnitError(result, lambda());
 }
 
 /// Throws a @c std::system_error in the @c CAAUGraphErrorCategory if @c result!=0
@@ -705,8 +743,18 @@ inline void ThrowIfCAAudioUnitError(OSStatus result, const char * const operatio
 /// @throw @c std::system_error in the @c CAAUGraphErrorCategory
 inline void ThrowIfCAAUGraphError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, CAAUGraphErrorCategory(), operation);
+	SFBThrowIfCAAUGraphError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c CAAUGraphErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AUGraph API
+/// @param result An @c OSStatus result code
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAAUGraphErrorCategory
+template <typename F>
+inline void ThrowIfCAAUGraphError(OSStatus result, const F&& lambda)
+{
+	SFBThrowIfCAAUGraphError(result, lambda());
 }
 
 /// Throws a @c std::system_error in the @c CAAudioFormatErrorCategory if @c result!=0
@@ -716,8 +764,18 @@ inline void ThrowIfCAAUGraphError(OSStatus result, const char * const operation 
 /// @throw @c std::system_error in the @c CAAudioFormatErrorCategory
 inline void ThrowIfCAAudioFormatError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, CAAudioFormatErrorCategory(), operation);
+	SFBThrowIfCAAudioFormatError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c CAAudioFormatErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioFormat API
+/// @param result An @c OSStatus result code
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAAudioFormatErrorCategory
+template <typename F>
+inline void ThrowIfCAAudioFormatError(OSStatus result, const F&& lambda)
+{
+	SFBThrowIfCAAudioFormatError(result, lambda());
 }
 
 /// Throws a @c std::system_error in the @c CAAudioCodecErrorCategory if @c result!=0
@@ -727,8 +785,18 @@ inline void ThrowIfCAAudioFormatError(OSStatus result, const char * const operat
 /// @throw @c std::system_error in the @c CAAudioCodecErrorCategory
 inline void ThrowIfCAAudioCodecError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, CAAudioCodecErrorCategory(), operation);
+	SFBThrowIfCAAudioCodecError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c CAAudioCodecErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioCodec API
+/// @param result An @c OSStatus result code
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAAudioCodecErrorCategory
+template <typename F>
+inline void ThrowIfCAAudioCodecError(OSStatus result, const F&& lambda)
+{
+	SFBThrowIfCAAudioCodecError(result, lambda());
 }
 
 /// Throws a @c std::system_error in the @c CAAudioConverterErrorCategory if @c result!=0
@@ -738,8 +806,18 @@ inline void ThrowIfCAAudioCodecError(OSStatus result, const char * const operati
 /// @throw @c std::system_error in the @c CAAudioConverterErrorCategory
 inline void ThrowIfCAAudioConverterError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, CAAudioConverterErrorCategory(), operation);
+	SFBThrowIfCAAudioConverterError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c CAAudioConverterErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioConverter API
+/// @param result An @c OSStatus result code
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAAudioConverterErrorCategory
+template <typename F>
+inline void ThrowIfCAAudioConverterError(OSStatus result, const F&& lambda)
+{
+	SFBThrowIfCAAudioConverterError(result, lambda());
 }
 
 /// Throws a @c std::system_error in the @c CAAudioFileErrorCategory if @c result!=0
@@ -749,8 +827,18 @@ inline void ThrowIfCAAudioConverterError(OSStatus result, const char * const ope
 /// @throw @c std::system_error in the @c CAAudioFileErrorCategory
 inline void ThrowIfCAAudioFileError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, CAAudioFileErrorCategory(), operation);
+	SFBThrowIfCAAudioFileError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c CAAudioFileErrorCategory if @c result!=0
+/// @note This is intended for results from the @c AudioFile API
+/// @param result An @c OSStatus result code
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAAudioFileErrorCategory
+template <typename F>
+inline void ThrowIfCAAudioFileError(OSStatus result, const F&& lambda)
+{
+	SFBThrowIfCAAudioFileError(result, lambda());
 }
 
 /// Throws a @c std::system_error in the @c CAExtAudioFileErrorCategory if @c result!=0
@@ -760,27 +848,18 @@ inline void ThrowIfCAAudioFileError(OSStatus result, const char * const operatio
 /// @throw @c std::system_error in the @c CAExtAudioFileErrorCategory
 inline void ThrowIfCAExtAudioFileError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != 0, 0))
-		throw std::system_error(result, CAExtAudioFileErrorCategory(), operation);
+	SFBThrowIfCAExtAudioFileError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c CAExtAudioFileErrorCategory if @c result!=0
+/// @note This is intended for results from the @c ExtAudioFile API
+/// @param result An @c OSStatus result code
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c CAExtAudioFileErrorCategory
+template <typename F>
+inline void ThrowIfCAExtAudioFileError(OSStatus result, const F&& lambda)
+{
+	SFBThrowIfCAExtAudioFileError(result, lambda());
 }
 
 } // namespace SFB
-
-#pragma mark - Macros
-
-// In cases where `operation` is non-constant these macros may be used for efficiency
-
-#define SFBThrowIfCAError(result, category, operation) \
-{ \
-	if(__builtin_expect(result != 0, 0)) \
-		throw std::system_error(result, category, operation); \
-}
-
-#define SFBThrowIfCAAudioObjectError(result, operation) 	SFBThrowIfCAError(result, CAAudioObjectErrorCategory(), operation)
-#define SFBThrowIfCAAudioUnitError(result, operation) 		SFBThrowIfCAError(result, CAAudioUnitErrorCategory(), operation)
-#define SFBThrowIfCAAUGraphError(result, operation) 		SFBThrowIfCAError(result, CAAUGraphErrorCategory(), operation)
-#define SFBThrowIfCAAudioFormatError(result, operation) 	SFBThrowIfCAError(result, CAAudioFormatErrorCategory(), operation)
-#define SFBThrowIfCAAudioCodecError(result, operation) 		SFBThrowIfCAError(result, CAAudioCodecErrorCategory(), operation)
-#define SFBThrowIfCAAudioConverterError(result, operation) 	SFBThrowIfCAError(result, CAAudioConverterErrorCategory(), operation)
-#define SFBThrowIfCAAudioFileError(result, operation) 		SFBThrowIfCAError(result, CAAudioFileErrorCategory(), operation)
-#define SFBThrowIfCAExtAudioFileError(result, operation) 	SFBThrowIfCAError(result, CAExtAudioFileErrorCategory(), operation)
