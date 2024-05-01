@@ -236,7 +236,7 @@ public:
 	void WriteAsync(UInt32 inNumberFrames, const AudioBufferList * _Nullable ioData)
 	{
 		auto result = ExtAudioFileWriteAsync(mExtAudioFile, inNumberFrames, ioData);
-		ThrowIfCAExtAudioFileError(result, "ExtAudioFileOpenURL");
+		ThrowIfCAExtAudioFileError(result, "ExtAudioFileWriteAsync");
 	}
 
 	/// Seeks to a specific frame position.
