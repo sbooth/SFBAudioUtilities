@@ -121,7 +121,7 @@ public:
 
 	/// Releases ownership of the object's internal @c AudioChannelLayout and returns it
 	/// @note The caller assumes responsiblity for deallocating the returned @c AudioChannelLayout using @c std::free
-	inline AudioChannelLayout * _Nullable Release() noexcept
+	AudioChannelLayout * _Nullable Release() noexcept
 	{
 		auto channelLayout = mChannelLayout;
 		mChannelLayout = nullptr;
@@ -130,7 +130,7 @@ public:
 
 	/// Replaces the object's internal @c AudioChannelLayout with @c channelLayout and then deallocates it
 	/// @note The object assumes responsiblity for deallocating the passed @c AudioChannelLayout using @c std::free
-	inline void Reset(AudioChannelLayout * _Nullable channelLayout = nullptr) noexcept
+	void Reset(AudioChannelLayout * _Nullable channelLayout = nullptr) noexcept
 	{
 		auto oldChannelLayout = mChannelLayout;
 		mChannelLayout = channelLayout;
@@ -138,7 +138,7 @@ public:
 	}
 
 	/// Retrieves a const pointer to this object's internal @c AudioChannelLayout
-	inline const AudioChannelLayout * _Nullable ACL() const noexcept
+	inline const AudioChannelLayout * _Nullable ChannelLayout() const noexcept
 	{
 		return mChannelLayout;
 	}
