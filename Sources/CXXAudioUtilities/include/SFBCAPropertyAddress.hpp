@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 - 2023 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2021 - 2024 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SFBAudioUtilities
 // MIT license
 //
@@ -57,7 +57,28 @@ public:
 		return *this;
 	}
 
-	// Comparison not defined because of wildcards
+#pragma mark Comparison
+
+	/// Returns @c true if @c rhs is equal to @c this
+	inline bool operator==(const AudioObjectPropertyAddress& rhs) const noexcept
+	{
+		return mSelector == rhs.mSelector && mScope == rhs.mScope && mElement == rhs.mElement;
+	}
+
+	/// Returns @c true if @c rhs is not equal to @c this
+	inline bool operator!=(const AudioObjectPropertyAddress& rhs) const noexcept
+	{
+		return !operator==(rhs);
+	}
+
+	/// Returns @c true if @c rhs is congruent to @c this
+	/// @note Congruence relations consider wildcards
+	inline bool Congruent(const AudioObjectPropertyAddress& rhs) const noexcept
+	{
+		return (mSelector == rhs.mSelector || mSelector == kAudioObjectPropertySelectorWildcard || rhs.mSelector == kAudioObjectPropertySelectorWildcard)
+		&& (mScope == rhs.mScope || mScope == kAudioObjectPropertyScopeWildcard || rhs.mScope == kAudioObjectPropertyScopeWildcard)
+		&& (mElement == rhs.mElement || mElement == kAudioObjectPropertyElementWildcard || rhs.mElement == kAudioObjectPropertyElementWildcard);
+	}
 
 };
 
