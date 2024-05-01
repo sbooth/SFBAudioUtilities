@@ -451,8 +451,8 @@ public:
 	/// @throw @c std::bad_alloc
 	void SetClientFormat(AVAudioFormat *format)
 	{
-		SetClientDataFormat(format.streamDescription);
-		SetClientChannelLayout(format.channelLayout);
+		SetClientDataFormat(*format.streamDescription);
+		SetClientChannelLayout(format.channelLayout.layout);
 	}
 #endif /* __OBJC__ */
 
