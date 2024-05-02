@@ -85,7 +85,7 @@ public:
 		ThrowIfCAAudioConverterError(result, "AudioConverterNew");
 	}
 
-	/// Creates a new audio converter.
+	/// Creates a new AudioConverter using specific codecs.
 	/// @throw @c std::system_error
 	void NewSpecific(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat, UInt32 inNumberClassDescriptions, const AudioClassDescription *inClassDescriptions)
 	{
@@ -113,6 +113,7 @@ public:
 		ThrowIfCAAudioConverterError(result, "AudioConverterReset");
 	}
 
+	/// Returns information about an audio converter property.
 	/// @throw @c std::system_error
 	void GetPropertyInfo(AudioConverterPropertyID inPropertyID, UInt32 * __nullable outSize, Boolean * __nullable outWritable)
 	{
@@ -120,6 +121,7 @@ public:
 		ThrowIfCAAudioConverterError(result, "AudioConverterGetPropertyInfo");
 	}
 
+	/// Returns an audio converter property value.
 	/// @throw @c std::system_error
 	void GetProperty(AudioConverterPropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData)
 	{
@@ -127,6 +129,7 @@ public:
 		ThrowIfCAAudioConverterError(result, "AudioConverterGetProperty");
 	}
 
+	/// Sets an audio converter property value.
 	/// @throw @c std::system_error
 	void SetProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 	{
@@ -134,6 +137,7 @@ public:
 		ThrowIfCAAudioConverterError(result, "AudioConverterSetProperty");
 	}
 
+	/// Converts data from an input buffer to an output buffer.
 	/// @throw @c std::system_error
 	void ConvertBuffer(UInt32 inInputDataSize, const void *inInputData, UInt32& ioOutputDataSize, void *outOutputData)
 	{
@@ -141,6 +145,7 @@ public:
 		ThrowIfCAAudioConverterError(result, "AudioConverterConvertBuffer");
 	}
 
+	/// Converts data supplied by an input callback function, supporting non-interleaved and packetized formats.
 	/// @throw @c std::system_error
 	void FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc, void * __nullable inInputDataProcUserData, UInt32& ioOutputDataPacketSize, AudioBufferList *outOutputData, AudioStreamPacketDescription * __nullable outPacketDescription)
 	{
@@ -148,6 +153,7 @@ public:
 		ThrowIfCAAudioConverterError(result, "AudioConverterFillComplexBuffer");
 	}
 
+	/// Converts PCM data from an input buffer list to an output buffer list.
 	/// @throw @c std::system_error
 	void ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData)
 	{
