@@ -128,14 +128,14 @@ public:
 	}
 
 	/// @throw @c std::system_error
-	void SetProperty(AudioConverterPropertyID inPropertyID, const UInt32& inPropertyDataSize, const void *inPropertyData)
+	void SetProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 	{
 		auto result = AudioConverterSetProperty(mConverter, inPropertyID, inPropertyDataSize, inPropertyData);
 		ThrowIfCAAudioConverterError(result, "AudioConverterSetProperty");
 	}
 
 	/// @throw @c std::system_error
-	void ConvertBuffer(const UInt32& inInputDataSize, const void *inInputData, UInt32& ioOutputDataSize, void *outOutputData)
+	void ConvertBuffer(UInt32 inInputDataSize, const void *inInputData, UInt32& ioOutputDataSize, void *outOutputData)
 	{
 		auto result = AudioConverterConvertBuffer(mConverter, inInputDataSize, inInputData, &ioOutputDataSize, outOutputData);
 		ThrowIfCAAudioConverterError(result, "AudioConverterConvertBuffer");
@@ -149,7 +149,7 @@ public:
 	}
 
 	/// @throw @c std::system_error
-	void ConvertComplexBuffer(const UInt32& inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData)
+	void ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData)
 	{
 		auto result = AudioConverterConvertComplexBuffer(mConverter, inNumberPCMFrames, inInputData, outOutputData);
 		ThrowIfCAAudioConverterError(result, "AudioConverterConvertComplexBuffer");
