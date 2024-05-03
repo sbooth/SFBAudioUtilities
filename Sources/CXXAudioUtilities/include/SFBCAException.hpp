@@ -12,7 +12,7 @@
 #import <string>
 #import <system_error>
 
-#import <CoreAudio/CoreAudio.h>
+#import <CoreAudioTypes/CoreAudioTypes.h>
 #import <AudioToolbox/AudioToolbox.h>
 
 namespace SFB {
@@ -30,6 +30,8 @@ enum class CAGeneralErrorCode {
 	paramError 				= kAudio_ParamError,
 	memFullError 			= kAudio_MemFullError,
 };
+
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
 
 /// AudioObject error codes
 enum class CAAudioObjectErrorCode {
@@ -49,6 +51,8 @@ enum class CAAudioObjectErrorCode {
 	deviceUnsupportedFormatError 		= kAudioDeviceUnsupportedFormatError,
 	devicePermissionsError 				= kAudioDevicePermissionsError,
 };
+
+#endif /* TARGET_OS_OSX || TARGET_OS_MACCATALYST */
 
 /// AudioUnit error codes
 enum class CAAudioUnitErrorCode {
@@ -202,6 +206,8 @@ enum class CAExtAudioFileErrorCode {
 
 namespace detail {
 
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
+
 class CAAudioObjectErrorCategory : public std::error_category
 {
 
@@ -244,6 +250,8 @@ public:
 		}
 	}
 };
+
+#endif /* TARGET_OS_OSX || TARGET_OS_MACCATALYST */
 
 class CAAudioUnitErrorCategory : public std::error_category
 {
@@ -571,11 +579,15 @@ public:
 
 } // namespace detail
 
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
+
 extern inline const detail::CAAudioObjectErrorCategory& CAAudioObjectErrorCategory()
 {
 	static detail::CAAudioObjectErrorCategory c;
 	return c;
 }
+
+#endif /* TARGET_OS_OSX || TARGET_OS_MACCATALYST */
 
 extern inline const detail::CAAudioUnitErrorCategory& CAAudioUnitErrorCategory()
 {
@@ -619,10 +631,14 @@ extern inline const detail::CAExtAudioFileErrorCategory& CAExtAudioFileErrorCate
 	return c;
 }
 
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
+
 inline std::error_code make_error_code(CAAudioObjectErrorCode e)
 {
 	return { static_cast<int>(e), CAAudioObjectErrorCategory() };
 }
+
+#endif /* TARGET_OS_OSX || TARGET_OS_MACCATALYST */
 
 inline std::error_code make_error_code(CAAudioUnitErrorCode e)
 {
@@ -663,7 +679,9 @@ inline std::error_code make_error_code(CAExtAudioFileErrorCode e)
 
 namespace std {
 
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
 template <> struct is_error_code_enum<SFB::CAAudioObjectErrorCode> : true_type {};
+#endif /* TARGET_OS_OSX || TARGET_OS_MACCATALYST */
 template <> struct is_error_code_enum<SFB::CAAudioUnitErrorCode> : true_type {};
 template <> struct is_error_code_enum<SFB::CAAUGraphErrorCode> : true_type {};
 template <> struct is_error_code_enum<SFB::CAAudioFormatErrorCode> : true_type {};
@@ -676,6 +694,8 @@ template <> struct is_error_code_enum<SFB::CAExtAudioFileErrorCode> : true_type 
 
 namespace SFB {
 
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
+
 /// Throws a @c std::system_error in the @c CAAudioObjectErrorCategory if @c result!=0
 /// @note This is intended for results from the @c AudioObject API
 /// @param result An @c OSStatus result code
@@ -686,6 +706,8 @@ inline void ThrowIfCAAudioObjectError(OSStatus result, const char * const operat
 	if(__builtin_expect(result != 0, 0))
 		throw std::system_error(result, CAAudioObjectErrorCategory(), operation);
 }
+
+#endif /* TARGET_OS_OSX || TARGET_OS_MACCATALYST */
 
 /// Throws a @c std::system_error in the @c CAAudioUnitErrorCategory if @c result!=0
 /// @note This is intended for results from the @c AudioUnit API
