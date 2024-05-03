@@ -17,10 +17,10 @@ class CAAudioDevice : public CAAudioObject
 public:
 
 	/// Creates an unknown @c SFBCAAudioObject
-	constexpr CAAudioDevice() noexcept = default;
+	CAAudioDevice() noexcept = default;
 
 	/// Copy constructor
-	constexpr CAAudioDevice(const CAAudioDevice& rhs) noexcept = default;
+	CAAudioDevice(const CAAudioDevice& rhs) noexcept = default;
 
 	/// Assignment operator
 	CAAudioDevice& operator=(const CAAudioDevice& rhs) noexcept = default;
@@ -36,7 +36,7 @@ public:
 
 
 	/// Creates a @c CAAudioDevice with the specified objectID
-	inline constexpr CAAudioDevice(AudioObjectID objectID) noexcept
+	inline CAAudioDevice(AudioObjectID objectID) noexcept
 	: CAAudioObject{objectID}
 	{}
 

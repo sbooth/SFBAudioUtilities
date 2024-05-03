@@ -30,13 +30,13 @@ public:
 #pragma mark Creation and Destruction
 
 	/// Creates an unknown @c CAAudioObject
-	constexpr CAAudioObject() noexcept = default;
+	CAAudioObject() noexcept = default;
 
 	/// Copy constructor
-	constexpr CAAudioObject(const CAAudioObject& rhs) noexcept = default;
+	CAAudioObject(const CAAudioObject& rhs) noexcept = default;
 
 	/// Assignment operator
-	constexpr CAAudioObject& operator=(const CAAudioObject& rhs) noexcept = default;
+	CAAudioObject& operator=(const CAAudioObject& rhs) noexcept = default;
 
 	/// Destructor
 	virtual ~CAAudioObject() = default;
@@ -49,7 +49,7 @@ public:
 
 
 	/// Creates a @c CAAudioObject with the specified objectID
-	inline constexpr CAAudioObject(AudioObjectID objectID) noexcept
+	inline CAAudioObject(AudioObjectID objectID) noexcept
 	: mObjectID{objectID}
 	{}
 

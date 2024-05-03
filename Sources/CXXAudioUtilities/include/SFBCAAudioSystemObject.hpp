@@ -17,12 +17,12 @@ class CAAudioSystemObject : public CAAudioObject
 public:
 
 	/// Creates a @c CAAudioSystemObject
-	inline constexpr CAAudioSystemObject() noexcept
+	inline CAAudioSystemObject() noexcept
 	: CAAudioObject{kAudioObjectSystemObject}
 	{}
 
 	/// Copy constructor
-	constexpr CAAudioSystemObject(const CAAudioSystemObject& rhs) = default;
+	CAAudioSystemObject(const CAAudioSystemObject& rhs) = default;
 
 	/// Assignment operator
 	CAAudioSystemObject& operator=(const CAAudioSystemObject& rhs) = default;

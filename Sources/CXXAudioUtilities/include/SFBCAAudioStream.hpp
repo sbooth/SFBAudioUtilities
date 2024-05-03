@@ -17,10 +17,10 @@ class CAAudioStream : public CAAudioObject
 public:
 
 	/// Creates an unknown @c CAAudioStream
-	constexpr CAAudioStream() noexcept = default;
+	CAAudioStream() noexcept = default;
 
 	/// Copy constructor
-	constexpr CAAudioStream(const CAAudioStream& rhs) noexcept = default;
+	CAAudioStream(const CAAudioStream& rhs) noexcept = default;
 
 	/// Assignment operator
 	CAAudioStream& operator=(const CAAudioStream& rhs) noexcept = default;
@@ -36,7 +36,7 @@ public:
 
 
 	/// Creates a @c CAAudioStream with the specified objectID
-	inline constexpr CAAudioStream(AudioObjectID objectID) noexcept
+	inline CAAudioStream(AudioObjectID objectID) noexcept
 	: CAAudioObject{objectID}
 	{}
 
