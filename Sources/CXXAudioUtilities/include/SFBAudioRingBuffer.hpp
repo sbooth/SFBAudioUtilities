@@ -7,6 +7,7 @@
 #pragma once
 
 #import <atomic>
+#import <cstdlib>
 
 #import <CoreAudioTypes/CoreAudioTypes.h>
 
